@@ -125,7 +125,7 @@ command! -nargs=1 Workspace call s:Workspace("<args>")
 command! -nargs=? Bd :BufClose <args>
 command! Dev call s:Dev()
 command! Notes edit ~/notes/inbox.txt
-command! Todo edit ~/notes/todo.txt
+command! Todo edit ~/notes/todo.md
 
 function! s:GoToShell()
 	if bufexists('shell')
