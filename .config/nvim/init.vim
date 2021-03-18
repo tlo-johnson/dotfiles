@@ -81,7 +81,7 @@ augroup Terminal
 augroup end
 
 " coc settings
-let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier', 'coc-tsserver']
+let g:coc_global_extensions = ['coc-json', 'coc-html', 'coc-prettier', 'coc-eslint', 'coc-tsserver']
 nmap <localleader>d <Plug>(coc-definition)
 nmap <localleader>i <Plug>(coc-implementation)
 nmap <localleader>u <Plug>(coc-references)
