@@ -126,6 +126,7 @@ command! -nargs=? Bd :BufClose <args>
 command! Dev call s:Dev()
 command! Notes edit ~/notes/inbox.txt
 command! Todo edit ~/notes/todo.md
+command! Investments edit ~/notes/investments.md
 
 function! s:GoToShell()
 	if bufexists('shell')
