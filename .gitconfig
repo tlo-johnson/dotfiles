@@ -9,9 +9,9 @@
   b = branch
   bd = branch -D
   bf = branch -f
-  c = commit
-  ca = commit -a --amend --no-edit
-  cm = commit -am
+  c = commit --no-verify
+  ca = commit -a --amend --no-edit --no-verify
+  cm = commit -a --no-verify -m
   d = diff
   f = fetch
   fo = fetch origin
