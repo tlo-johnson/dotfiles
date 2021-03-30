@@ -20,7 +20,6 @@
   ms = merge --squash
   o = checkout
   ob = checkout -b
-  oo = checkout origin/master
   pl = pull
   ps = push
   rh = reset --hard
@@ -32,3 +31,5 @@
 	program = gpg2
 [pull]
 	rebase = true
+[advice]
+  detachedHead = false
