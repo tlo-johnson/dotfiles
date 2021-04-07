@@ -1,7 +1,7 @@
 {
-    "coc.preferences.formatOnSaveFiletypes": ["javascript"],
-    "coc.preferences.promptWorkspaceEdit": false,
-    "prettier.eslintIntegration": true,
-    "prettier.printWidth": 120,
-    "suggest.autoTrigger": "none"
+  "coc.preferences.formatOnSaveFiletypes": ["javascript"],
+  "coc.preferences.promptWorkspaceEdit": false,
+  "prettier.eslintIntegration": true,
+  "prettier.printWidth": 120,
+  "suggest.autoTrigger": "none"
 }

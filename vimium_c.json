@@ -1,11 +1,12 @@
 {
 	"name": "Vimium C",
-	"@time": "4/3/2021, 3:40:08 PM",
-	"time": 1617486008339,
+	"@time": "4/3/2021, 7:37:03 PM",
+	"time": 1617500223888,
 	"environment": {
 		"extension": "1.88.2",
 		"platform": "linux"
 	},
 	"filterLinkHints": true,
+	"grabBackFocus": true,
 	"searchEngines": "# this is a comment"
 }
