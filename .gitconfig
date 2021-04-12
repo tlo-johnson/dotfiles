@@ -14,7 +14,7 @@
   cm = commit -a --no-verify -m
   d = diff
   f = fetch
-  fo = fetch origin
+  fo = fetch origin --prune
   l = log
   m = merge
   ms = merge --squash
