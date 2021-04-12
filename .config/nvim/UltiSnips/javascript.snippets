@@ -46,13 +46,13 @@ snippet e "export"
 export { ${0} };
 endsnippet
 
-
-
-snippet ef "export function"
-export const ${1:functionName} = () => {
-	${0:throw Error('not yet implemented');}
-}
+snippet ue "useEffect"
+useEffect(() => {
+	${0}
+}${1});
 endsnippet
+
+
 
 snippet efe "export function expression"
 export const ${1:functionName} = () => ${0:{ throw Error('not yet implemented'); }}
