@@ -3,7 +3,7 @@ set -o vi
 alias ls='ls --color=auto'
 
 export EDITOR=nvim
-export PATH="~/tools/automation:/home/tlo/bin:$PATH"
+export PATH="~/tools/automation:~/tools/scripts:/home/tlo/bin:$PATH"
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
 currDir=$(cd $(dirname "${BASH_SOURCE[0]}") >/dev/null 2>&1 && pwd)
