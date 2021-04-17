@@ -8,5 +8,12 @@
 	},
 	"filterLinkHints": true,
 	"grabBackFocus": true,
-	"searchEngines": "# this is a comment"
+	"searchEngines": "# this is a comment",
+  "keyMappings": [
+    "map <c-f> scrollFullPageDown",
+    "map <c-b> scrollFullPageUp",
+    "map S goForward",
+    "map <c-h> previousTab",
+    "map <c-s> nextTab"
+  ]
 }
