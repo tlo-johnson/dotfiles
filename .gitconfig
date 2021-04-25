@@ -27,6 +27,7 @@
   rh = reset --hard
   rs = reset
   rv = revert
+  rc = rebase --continue
   s = status
   sw = switch
 [gpg]

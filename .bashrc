@@ -11,3 +11,6 @@ source $currDir/dotfiles/bash/git
 source $currDir/dotfiles/bash/centralmarket.sh
 source $currDir/dotfiles/bash/prompt
 source $currDir/dotfiles/bash/pass.sh
+
+# load nvm - sadness cause I don't really want nvm
+source /usr/share/nvm/init-nvm.sh
