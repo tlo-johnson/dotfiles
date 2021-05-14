@@ -1,14 +1,5 @@
 " ✓ - '<mapleader>-' in a text file
 
-nmap h <nop>
-nmap j <nop>
-nmap k <nop>
-nmap l <nop>
-vmap h <nop>
-vmap j <nop>
-vmap k <nop>
-vmap l <nop>
-
 call plug#begin(stdpath('data') . '/plugged')
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() }}
 	Plug 'junegunn/fzf.vim'
@@ -126,6 +117,7 @@ command! Dev call s:Dev()
 command! Notes edit ~/notes/inbox.txt
 command! Todo edit ~/notes/todo.md
 command! Investments edit ~/notes/investments.md
+command! Hackerrank cd ~/dev/fundamentals/hackerrank/c
 
 function! s:GoToShell()
 	if bufexists('shell')
