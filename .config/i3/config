@@ -189,3 +189,9 @@ bar {
 # i3-gaps
 for_window [class=".*"] border pixel 2
 gaps inner 10
+
+# run applications on startup
+for_window [title="Slack.*"] move container to workspace number $ws2
+exec /usr/bin/slack
+exec /usr/bin/firefox
+exec /usr/bin/st
