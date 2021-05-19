@@ -190,8 +190,11 @@ bar {
 for_window [class=".*"] border pixel 2
 gaps inner 10
 
+# colors
+client.focused #555555 #555555 #ffffff #2e9ef4 #ff7043
+
 # run applications on startup
 for_window [title="Slack.*"] move container to workspace number $ws2
-exec /usr/bin/slack
-exec /usr/bin/firefox
-exec /usr/bin/st
+exec --no-startup-id /usr/bin/slack
+exec --no-startup-id /usr/bin/firefox
+exec --no-startup-id /usr/bin/st
