@@ -1,0 +1,3 @@
+[ ! -d "$HOME/.config/nvim" ] && ln -s "$(pwd)/nvim" "$HOME/.config/nvim" 
+[ ! -d "$HOME/.config/ghostty" ] && ln -s "$(pwd)/ghostty" "$HOME/.config/ghostty" 
+[ ! -f "$HOME/.config/karabiner/karabiner.json" ] && ln -s "$(pwd)/karabiner.json" "$HOME/.config/karabiner/karabiner.json" 
