@@ -68,6 +68,18 @@
           },
 
           {
+            "description": "Hyper-layer: Backspace",
+            "manipulators": [
+              {
+                "type":"basic",
+                "from": { "key_code":"f", "modifiers": { "optional":["any"] } },
+                "to": [ { "key_code":"delete_or_backspace", "modifiers":["any"] } ],
+                "conditions": [ { "type":"variable_if","name":"hyper_mode","value":1 } ]
+              }
+            ]
+          },
+
+          {
             "description": "Hyper-layer: Arrow Keys",
             "manipulators": [
               {
