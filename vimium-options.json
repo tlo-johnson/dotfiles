@@ -1,0 +1,27 @@
+{
+  "filterLinkHints": true,
+  "keyMappings": "# Insert your preferred key mappings here.\n\nunmap J\nunmap K\n\nmap j previousTab\nmap k nextTab",
+  "settingsVersion": "2.3.1",
+  "exclusionRules": [
+    {
+      "passKeys": "",
+      "pattern": "https?://mail.google.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://excalidraw.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://leetcode.com/*"
+    },
+    {
+      "passKeys": "12345",
+      "pattern": "https?://www.hellointerview.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://jsfiddle.net/*"
+    }
+  ]
+}
