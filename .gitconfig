@@ -1,0 +1,32 @@
+[init]
+  defaultBranch = main
+[user]
+	name = Tolu A.
+  email = tolu@adesegha.ca
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZ5QBOD0NG2jE9aO62i9EU6kO9A/8eFfJwcI9NW0AJc
+[pull]
+	rebase = true
+[core]
+	editor = nvim
+[push]
+	autoSetupRemote = true
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
+[alias]
+  aa = add -A
+  b = branch
+  co = commit
+  coa = commit -a --amend --no-edit
+  d = diff
+  l = log
+  m = merge
+  ms = merge --squash
+  ch = checkout
+  pl = pll
+  ps = push
+  rh = reset --hard
+  s = status
