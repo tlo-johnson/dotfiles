@@ -17,16 +17,16 @@
 [commit]
 	gpgsign = true
 [alias]
-  aa = add -A
+  a = add .
   b = branch
-  co = commit
-  coa = commit -a --amend --no-edit
+  c = commit
+  ca = commit -a --amend --no-edit
   d = diff
   l = log
   m = merge
   ms = merge --squash
-  ch = checkout
-  pl = pll
+  co = checkout
+  pl = pull
   ps = push
   rh = reset --hard
   s = status
