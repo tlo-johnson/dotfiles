@@ -1,24 +1,30 @@
 require("config.lazy")
 
+local opts = { silent = true }
+
 -- Keymaps
 vim.keymap.set("n", "<leader>x", ":bdelete<cr>", opts)
 vim.keymap.set("n", "<leader><leader>", "<c-^>", opts)
 
-vim.keymap.set({"n", "v"}, "<leader>p", '"+p', opts)
-vim.keymap.set({"n", "v"}, "<leader>P", '"+P', opts)
-vim.keymap.set({"n", "v"}, "<leader>y", '"+y', opts)
+vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', opts)
+vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', opts)
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', opts)
 
 vim.keymap.set("n", "-", ":update<cr>", opts)
-vim.keymap.set("n", "<c-h>", "<c-w>h", opts)
-vim.keymap.set("n", "<c-t>", "<c-w>j", opts)
-vim.keymap.set("n", "<c-n>", "<c-w>k", opts)
-vim.keymap.set("n", "<c-s>", "<c-w>l", opts)
+-- vim.keymap.set("n", "<c-h>", "<c-w>h", opts)
+-- vim.keymap.set("n", "<c-t>", "<c-w>j", opts)
+-- vim.keymap.set("n", "<c-n>", "<c-w>k", opts)
+-- vim.keymap.set("n", "<c-s>", "<c-w>l", opts)
+vim.keymap.set("n", "<C-h>", ":TmuxNavigateLeft<CR>", opts)
+vim.keymap.set("n", "<C-t>", ":TmuxNavigateDown<CR>", opts)
+vim.keymap.set("n", "<C-n>", ":TmuxNavigateUp<CR>", opts)
+vim.keymap.set("n", "<C-s>", ":TmuxNavigateRight<CR>", opts)
 
-vim.keymap.set("t", "<c-h>", "<c-\\><c-n><c-w>h", opts)
-vim.keymap.set("t", "<c-t>", "<c-\\><c-n><c-w>j", opts)
-vim.keymap.set("t", "<c-n>", "<c-\\><c-n><c-w>k", opts)
-vim.keymap.set("t", "<c-s>", "<c-\\><c-n><c-w>l", opts)
-vim.keymap.set("t", "<c-d>", "<c-\\><c-n>", opts)
+vim.keymap.set("t", "<c-h>", "<c-\\><c-n>:TmuxNavigateLeft<cr>", opts)
+vim.keymap.set("t", "<c-t>", "<c-\\><c-n>:TmuxNavigateDown<cr>", opts)
+vim.keymap.set("t", "<c-n>", "<c-\\><c-n>:TmuxNavigateUp<cr>", opts)
+vim.keymap.set("t", "<c-s>", "<c-\\><c-n>:TmuxNavigateRight<cr>", opts)
+vim.keymap.set("t", "<c-x>", "<c-\\><c-n>", opts)
 
 
 -- Transparent background
@@ -79,4 +85,4 @@ vim.lsp.config('tsserver', {
   end
 })
 vim.lsp.enable('tsserver')
-]]--
+]] --

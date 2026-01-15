@@ -17,7 +17,7 @@
 [commit]
 	gpgsign = true
 [alias]
-  a = add .
+  a = add
   b = branch
   c = commit
   ca = commit -a --amend --no-edit
@@ -25,8 +25,13 @@
   l = log
   m = merge
   ms = merge --squash
-  co = checkout
+  o = checkout
   pl = pull
   ps = push
   rh = reset --hard
+  r = restore
   s = status
+  f = fetch
+  sw = switch
+  st = stash
+  rb = rebase
