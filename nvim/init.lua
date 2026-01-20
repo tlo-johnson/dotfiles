@@ -1,5 +1,24 @@
 require("config.lazy")
 
+-- Settings
+vim.opt.expandtab = true
+vim.opt.hidden = true
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.shiftwidth = 2
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.smartindent = true
+vim.opt.swapfile = false
+vim.opt.tabstop = 2
+vim.opt.termguicolors = true
+vim.opt.signcolumn = 'yes'
+vim.opt.undofile = true
+vim.opt.list = true
+vim.opt.listchars = "trail:·,tab:·┈"
+vim.opt.hlsearch = false
+vim.opt.winborder = 'rounded'
+
 local opts = { silent = true }
 
 -- Keymaps

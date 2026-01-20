@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
+      { out,                            "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -21,25 +21,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Settings
-vim.opt.expandtab = true
-vim.opt.hidden = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.shiftwidth = 2
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.smartindent = true
-vim.opt.swapfile = false
-vim.opt.tabstop = 2
-vim.opt.termguicolors = true
-vim.opt.signcolumn = 'yes'
-vim.opt.undofile = true
-vim.opt.list = true
-vim.opt.listchars = "trail:·,tab:·┈"
-vim.opt.hlsearch = false
-vim.opt.winborder = 'rounded'
-
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
@@ -50,5 +31,14 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = true, notify = false },
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+  once = true,
+  callback = function()
+    require("lazy").sync({
+      show = false, -- don't open Lazy UI
+    })
+  end,
 })
