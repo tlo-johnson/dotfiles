@@ -1,8 +1,12 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
 
-; Karabiner-Elements config converted to AutoHotkey
-; CapsLock acts as a "Hyper" layer key, Escape when tapped alone
+; Karabiner-Elements config converted to AutoHotkey (DVORAK)
+; IMPORTANT: AHK hotkeys use the *active layout* (Dvorak), while Karabiner rules are typically
+; specified by physical (QWERTY-position) keys. This script maps your intended QWERTY-position
+; triggers to the corresponding Dvorak characters.
+;
+; CapsLock acts as a "Hyper" layer key, Escape when tapped alone.
 
 ; Track hyper mode state and whether another key was pressed
 global hyperMode := false
@@ -41,58 +45,71 @@ HyperSend(key) {
 }
 
 ; ============================================================
-; Hyper-layer: Brackets & Symbols
+; Hyper-layer (DVORAK triggers for QWERTY-position intent)
 ; ============================================================
-; Hyper + U → (
 #HotIf hyperMode
-*u:: HyperSend("{(}")
-; Hyper + P → )
-*p:: HyperSend("{)}")
-; Hyper + M → -
-*m:: HyperSend("{-}")
-; Hyper + / → =
-*/:: HyperSend("{=}")
-; Hyper + H → _ (underscore)
-*h:: HyperSend("{_}")
-; Hyper + ' → + (plus)
-*':: HyperSend("{+}")
 
-; ============================================================
-; Hyper-layer: Enter (Hyper + F)
-; ============================================================
-*f:: HyperSend("{Enter}")
+; ------------------------------------------------------------
+; Brackets & Symbols
+; Intended (physical/QWERTY): U P M / H '  ->  ( ) - = _ +
+; Dvorak chars on those physical keys: g l m z d - respectively
+; ------------------------------------------------------------
 
-; ============================================================
-; Hyper-layer: Backspace
-; ============================================================
-; Hyper + V → Backspace
-*v:: HyperSend("{Backspace}")
-; Hyper + C → Ctrl+Backspace (delete word - Windows equivalent of Option+Backspace)
-*c:: {
+; Hyper + (physical U) -> "("
+*g:: HyperSend("(")
+
+; Hyper + (physical P) -> ")"
+*l:: HyperSend(")")
+
+; Hyper + (physical M) -> "-"
+*m:: HyperSend("-")
+
+; Hyper + (physical /) -> "="
+*z:: HyperSend("=")
+
+; Hyper + (physical H) -> "_"
+*d:: HyperSend("_")
+
+; Hyper + (physical ') -> "+"
+*-:: HyperSend("+")
+
+; ------------------------------------------------------------
+; Enter (intended physical F -> Enter)
+; Dvorak char on physical F is "u"
+; ------------------------------------------------------------
+*u:: HyperSend("{Enter}")
+
+; ------------------------------------------------------------
+; Backspace (intended physical V -> Backspace)
+; Dvorak char on physical V is "k"
+; ------------------------------------------------------------
+*k:: HyperSend("{Backspace}")
+
+; Hyper + (physical C) -> Ctrl+Backspace (delete word)
+; Dvorak char on physical C is "j"
+*j:: {
     global hyperUsed
     hyperUsed := true
     Send "^{Backspace}"
 }
 
-; ============================================================
-; Hyper-layer: Arrow Keys (JKIL layout - left/down/up/right)
-; ============================================================
-; Hyper + J → Left
-*j:: HyperSend("{Left}")
-; Hyper + K → Down
-*k:: HyperSend("{Down}")
-; Hyper + L → Up
-*l:: HyperSend("{Up}")
-; Hyper + ; → Right
-*`;:: HyperSend("{Right}")
+; ------------------------------------------------------------
+; Arrow Keys (intended physical JK L ; -> Left/Down/Up/Right)
+; Physical QWERTY: J K L ;  -> Dvorak: h t n s
+; ------------------------------------------------------------
+*h:: HyperSend("{Left}")   ; physical J
+*t:: HyperSend("{Down}")   ; physical K
+*n:: HyperSend("{Up}")     ; physical L
+*s:: HyperSend("{Right}")  ; physical ;
 
 #HotIf  ; End hyper mode context
 
 ; ============================================================
 ; Disable Enter and Backspace (only accessible via Hyper layer)
+; NOTE: Use $ so that Sends from this script still work.
 ; ============================================================
-*Enter:: return
-*Backspace:: return
+$Enter:: return
+$Backspace:: return
 
 ; ============================================================
 ; Toggle CapsLock with Left Shift + Right Shift
