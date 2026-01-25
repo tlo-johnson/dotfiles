@@ -8,6 +8,9 @@ return {
       nerd_font_variant = "mono",
     },
     completion = {
+      menu = {
+        auto_show = false,
+      },
       accept = {
         auto_brackets = { enabled = true }, -- auto-insert () after function/method
       },
@@ -22,6 +25,7 @@ return {
     },
     keymap = {
       preset = "enter", -- Enter to confirm
+      ["<C-p>"] = { "show" },
     },
   },
 }
