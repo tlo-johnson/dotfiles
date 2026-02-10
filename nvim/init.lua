@@ -45,6 +45,33 @@ vim.keymap.set("t", "<c-n>", "<c-\\><c-n>:TmuxNavigateUp<cr>", opts)
 vim.keymap.set("t", "<c-s>", "<c-\\><c-n>:TmuxNavigateRight<cr>", opts)
 vim.keymap.set("t", "<c-x>", "<c-\\><c-n>", opts)
 
+-- Lsp Key Bindings
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local map = function(lhs, rhs, desc)
+      vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+    end
+
+    map('ga', vim.lsp.buf.code_action, "Code action")
+    map('gd', vim.lsp.buf.definition, "Goto definition")
+    map('gu', vim.lsp.buf.references, "Find references")
+    map('g]', function()
+      vim.diagnostic.jump({ count = 1 })
+      vim.schedule(function()
+        vim.diagnostic.open_float(nil, { focusable = false })
+      end)
+    end, "Next diagnostic")
+    map('g[', function()
+      vim.diagnostic.jump({ count = -1 })
+      vim.schedule(function()
+        vim.diagnostic.open_float(nil, { focusable = false })
+      end)
+    end, "Previous diagnostic")
+  end,
+})
+
+
 
 -- Transparent background
 vim.cmd [[

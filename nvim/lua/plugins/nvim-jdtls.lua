@@ -1,32 +1,34 @@
-local diagnostic_goto = function(next, severity)
-  return function()
-    vim.diagnostic.jump({
-      count = (next and 1 or -1) * vim.v.count1,
-      severity = severity and vim.diagnostic.severity[severity] or nil,
-      float = true,
-    })
-  end
-end
+return { }
 
-return {
-  "mfussenegger/nvim-jdtls",
-  config = function()
-  end,
-  keys = {
-    { "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
-    { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
-    { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
-    { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
-    { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
-    { "K", function() return vim.lsp.buf.hover() end, desc = "Hover" },
-    { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help" },
-    { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" } },
-    { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" } },
-    { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" } },
-    { "<leader>cr", vim.lsp.buf.rename, desc = "Rename" },
-    { "]d", diagnostic_goto(true), desc = "Next Diagnostic" },
-    { "[d", diagnostic_goto(false), desc = "Prev Diagnostic" },
-    { "]e", diagnostic_goto(true, "ERROR"), desc = "Next Error" },
-    { "[e", diagnostic_goto(false, "ERROR"), desc = "Prev Error" },
-  }
-}
+-- local diagnostic_goto = function(next, severity)
+--   return function()
+--     vim.diagnostic.jump({
+--       count = (next and 1 or -1) * vim.v.count1,
+--       severity = severity and vim.diagnostic.severity[severity] or nil,
+--       float = true,
+--     })
+--   end
+-- end
+--
+-- return {
+--   "mfussenegger/nvim-jdtls",
+--   config = function()
+--   end,
+--   keys = {
+--     { "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
+--     { "gr", vim.lsp.buf.references, desc = "References", nowait = true },
+--     { "gI", vim.lsp.buf.implementation, desc = "Goto Implementation" },
+--     { "gy", vim.lsp.buf.type_definition, desc = "Goto T[y]pe Definition" },
+--     { "gD", vim.lsp.buf.declaration, desc = "Goto Declaration" },
+--     { "K", function() return vim.lsp.buf.hover() end, desc = "Hover" },
+--     { "gK", function() return vim.lsp.buf.signature_help() end, desc = "Signature Help" },
+--     { "<leader>ca", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "x" } },
+--     { "<leader>cc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "x" } },
+--     { "<leader>cC", vim.lsp.codelens.refresh, desc = "Refresh & Display Codelens", mode = { "n" } },
+--     { "<leader>cr", vim.lsp.buf.rename, desc = "Rename" },
+--     { "]d", diagnostic_goto(true), desc = "Next Diagnostic" },
+--     { "[d", diagnostic_goto(false), desc = "Prev Diagnostic" },
+--     { "]e", diagnostic_goto(true, "ERROR"), desc = "Next Error" },
+--     { "[e", diagnostic_goto(false, "ERROR"), desc = "Prev Error" },
+--   }
+-- }
