@@ -33,10 +33,39 @@
                         ]
                     },
                     {
+                      "description": "Hyper + Space = App Layer, Space alone still types space",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "spacebar",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            { "set_variable": { "name": "app_mode", "value": 1 } }
+                          ],
+                          "to_after_key_up": [
+                            { "set_variable": { "name": "app_mode", "value": 0 } }
+                          ],
+                          "to_if_alone": [
+                            { "key_code": "spacebar" }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                         "description": "Hyper-layer: Brackets & symbols",
                         "manipulators": [
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -58,6 +87,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -77,6 +111,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -98,6 +137,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -118,6 +162,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -137,6 +186,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -163,6 +217,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -188,6 +247,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -207,6 +271,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -233,6 +302,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -252,6 +326,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -273,6 +352,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -292,6 +376,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -318,6 +407,11 @@
                             {
                                 "conditions": [
                                     {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
                                         "value": 1
@@ -337,6 +431,11 @@
                             },
                             {
                                 "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
                                     {
                                         "name": "hyper_mode",
                                         "type": "variable_if",
@@ -385,6 +484,46 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                      "description": "App Mode: i -> capture",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "app_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "i",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            {
+                              "key_code": "f14"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "description": "App Mode: j -> app launcher",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "app_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "j",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            {
+                              "key_code": "f13"
+                            }
+                          ]
+                        }
+                      ]
                     }
                 ]
             },

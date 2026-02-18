@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -euo pipefail
+
+NOTES_DIR="$HOME/notes/capture"
+mkdir -p "$NOTES_DIR"
+
+FILENAME="$(date '+%Y-%m-%d_%H-%M-%S').md"
+PATH_TO_NOTE="$NOTES_DIR/$FILENAME"
+
+# Open Terminal and run nvim, with cwd set to notes dir
+osascript <<OSA
+tell application "Terminal"
+  activate
+  do script "cd $(printf %q "$NOTES_DIR") && nvim $(printf %q "$PATH_TO_NOTE")"
+end tell
+OSA
