@@ -1,10 +1,3 @@
--- Capture: Hyper+N (Cmd+Ctrl+Alt+Shift+N) runs ~/.hammerspoon/scripts/capture
--- Uses zsh so PATH variable is loaded, since `nvim` is used in the script
-hs.hotkey.bind({}, "F14", function()
-  local script = os.getenv("HOME") .. "/.hammerspoon/scripts/capture"
-  hs.task.new("/bin/zsh", nil, { "-lc", script }):start()
-end)
-
 local apps = {
   c = "com.openai.chat",
   f = "com.apple.finder",
@@ -31,5 +24,12 @@ for key, app in pairs(apps) do
 end
 
 appLauncher:bind({}, "escape", function()
+  appLauncher:exit()
+end)
+
+appLauncher:bind({}, "n", function()
+  local script = os.getenv("HOME") .. "/.hammerspoon/scripts/capture"
+  hs.task.new("/bin/zsh", nil, { "-lc", script }):start()
+
   appLauncher:exit()
 end)
