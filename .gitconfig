@@ -35,3 +35,6 @@
   sw = switch
   st = stash
   rb = rebase
+
+[includeIf "gitdir:~/ds/"]
+  path = ~/.gitconfig-ds

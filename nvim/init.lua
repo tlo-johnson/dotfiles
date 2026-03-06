@@ -52,10 +52,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local map = function(lhs, rhs, desc)
       vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
     end
+    local telescope = require("telescope.builtin")
 
     map('ga', vim.lsp.buf.code_action, "Code action")
     map('gd', vim.lsp.buf.definition, "Goto definition")
-    map('gu', vim.lsp.buf.references, "Find references")
+    map('gu', telescope.lsp_references, "Find references")
     map('g]', function()
       vim.diagnostic.jump({ count = 1 })
       vim.schedule(function()
@@ -68,6 +69,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.diagnostic.open_float(nil, { focusable = false })
       end)
     end, "Previous diagnostic")
+    map('gf', vim.lsp.buf.format, "Format code")
   end,
 })
 
