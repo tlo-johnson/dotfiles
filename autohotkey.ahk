@@ -1,4 +1,4 @@
-#Requires AutoHotkey v2.0
+﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
 
 ; Karabiner-Elements config converted to AutoHotkey (DVORAK)
@@ -11,14 +11,16 @@
 ; Track hyper mode state and whether another key was pressed
 global hyperMode := false
 global hyperUsed := false
+global windowMode := false
 
 ; ============================================================
 ; CapsLock = Hyper Layer (Esc if tapped alone)
 ; ============================================================
 *CapsLock:: {
-    global hyperMode, hyperUsed
+    global hyperMode, hyperUsed, windowMode
     hyperMode := true
     hyperUsed := false
+    windowMode := false
 }
 
 *CapsLock up:: {
@@ -62,16 +64,16 @@ HyperSend(key) {
 *l:: HyperSend(")")
 
 ; Hyper + (physical M) -> "-"
-*m:: HyperSend("-")
+*m:: HyperSend("[")
 
 ; Hyper + (physical /) -> "="
-*z:: HyperSend("=")
+*z:: HyperSend("]")
 
 ; Hyper + (physical H) -> "_"
-*d:: HyperSend("_")
+*d:: HyperSend("{{}")
 
 ; Hyper + (physical ') -> "+"
-*-:: HyperSend("+")
+*-:: HyperSend("{}}")
 
 ; ------------------------------------------------------------
 ; Enter (intended physical F -> Enter)
@@ -102,17 +104,52 @@ HyperSend(key) {
 *n:: HyperSend("{Up}")     ; physical L
 *s:: HyperSend("{Right}")  ; physical ;
 
+*Space:: {
+    global windowMode, hyperUsed
+    windowMode := true
+    hyperUsed := true
+
+    ToolTip "WINDOW MODE"
+    SetTimer () => ToolTip(), -800
+}
+
 #HotIf  ; End hyper mode context
 
-; ============================================================
-; Disable Enter and Backspace (only accessible via Hyper layer)
-; NOTE: Use $ so that Sends from this script still work.
-; ============================================================
-$Enter:: return
-$Backspace:: return
+ActivateOrRun(exe, cmd)
+{
+    global windowMode
 
+    if WinExist("ahk_exe " exe)
+        WinActivate
+    else
+        Run cmd
+
+    windowMode := false
+}
+
+#HotIf windowMode
+
+*t:: ActivateOrRun("WindowsTerminal.exe","wt.exe")
+*b:: ActivateOrRun("chrome.exe","chrome.exe")
+
+#HotIf ; End window mode context
 ; ============================================================
 ; Toggle CapsLock with Left Shift + Right Shift
 ; ============================================================
 ~LShift & RShift:: SetCapsLockState(!GetKeyState("CapsLock", "T"))
 ~RShift & LShift:: SetCapsLockState(!GetKeyState("CapsLock", "T"))
+
+
+; =====================
+; Replace Alt with Ctrl
+; =====================
+
+!a:: ^a
+!c:: ^c
+!v:: ^v
+!l:: ^l
+!z:: ^z
+!s:: ^s
+!t:: ^t
+!w:: ^w
+!q:: Send "!{F4}"
