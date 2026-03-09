@@ -453,6 +453,16 @@
                         ]
                     },
                     {
+                        "description": "Fn to Control",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": { "apple_vendor_top_case_key_code": "keyboard_fn" },
+                                "to": [{ "key_code": "left_control" }]
+                            }
+                        ]
+                    },
+                    {
                         "description": "Toggle CAPS_LOCK with LEFT_SHIFT + RIGHT_SHIFT",
                         "manipulators": [
                             {
