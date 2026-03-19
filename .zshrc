@@ -16,7 +16,7 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
-export PATH="/opt/homebrew/Cellar/libpq/18.2/bin:$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/Cellar/libpq/18.3/bin:$HOME/.local/bin:$PATH"
 
 alias docker=/Applications/Docker.app/Contents/Resources/bin/docker
 alias g=git
