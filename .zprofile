@@ -26,3 +26,7 @@ export PATH="$PATH:/Users/tlo/Library/Application Support/Coursier/bin"
 # <<< coursier install directory <<<
 
 export PATH="$HOME/ds/bin:$HOME/bin:$HOME/bin/ds:$PATH"
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
