@@ -208,6 +208,36 @@
                         ]
                     },
                     {
+                        "description": "Hyper-layer: Show Hints (cmd+shift+y)",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "name": "app_mode",
+                                        "type": "variable_if",
+                                        "value": 0
+                                    },
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "y",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "y",
+                                        "modifiers": ["left_command", "left_shift"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Hyper-layer: Enter",
                         "manipulators": [
                             {
