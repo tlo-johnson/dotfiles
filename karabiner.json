@@ -53,6 +53,26 @@
                       ]
                     },
                     {
+                      "description": "Hyper + W = Window Layer",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "w",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            {
+                              "key_code": "f14"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                         "description": "Hyper-layer: Brackets & symbols",
                         "manipulators": [
                             {
