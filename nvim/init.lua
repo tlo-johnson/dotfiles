@@ -57,6 +57,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map('ga', vim.lsp.buf.code_action, "Code action")
     map('gd', vim.lsp.buf.definition, "Goto definition")
     map('gi', vim.lsp.buf.implementation, "Goto definition")
+    map('gr', vim.lsp.buf.rename, "Rename")
     map('gu', telescope.lsp_references, "Find references")
     map('g]', function()
       vim.diagnostic.jump({ count = 1 })
