@@ -7,13 +7,16 @@ local apps = {
   w = "net.whatsapp.WhatsApp",
 }
 
+local utils = require("utils")
+
 local appLauncher = hs.hotkey.modal.new({}, "F13")
 
 function appLauncher:entered()
-  hs.alert.show("Apps")
+  utils.showAlert("Apps")
 end
 
 function appLauncher:exited()
+  utils.hideAlert()
 end
 
 for key, app in pairs(apps) do
@@ -25,6 +28,11 @@ end
 
 appLauncher:bind({}, "escape", function()
   appLauncher:exit()
+end)
+
+appLauncher:bind({}, "h", function()
+  appLauncher:exit()
+  hs.eventtap.keyStroke({"cmd"}, "tab")
 end)
 
 appLauncher:bind({}, "n", function()

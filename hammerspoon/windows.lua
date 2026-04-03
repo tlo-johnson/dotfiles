@@ -1,10 +1,13 @@
+local utils = require("utils")
+
 local windowManager = hs.hotkey.modal.new({}, "F14")
 
 function windowManager:entered()
-  hs.alert.show("Window")
+  utils.showAlert("Window")
 end
 
 function windowManager:exited()
+  utils.hideAlert()
 end
 
 local function moveWindow(unit)
@@ -15,14 +18,14 @@ local function moveWindow(unit)
   windowManager:exit()
 end
 
-windowManager:bind({}, "h", function() moveWindow({x=0,   y=0,   w=0.5, h=1  }) end) -- left half
-windowManager:bind({}, "s", function() moveWindow({x=0.5, y=0,   w=0.5, h=1  }) end) -- right half
-windowManager:bind({}, "n", function() moveWindow({x=0,   y=0,   w=1,   h=0.5}) end) -- top half
-windowManager:bind({}, "t", function() moveWindow({x=0,   y=0.5, w=1,   h=0.5}) end) -- bottom half
-windowManager:bind({}, "g", function() moveWindow({x=0,   y=0,   w=0.5, h=0.5}) end) -- top-left quarter
-windowManager:bind({}, "l", function() moveWindow({x=0.5, y=0,   w=0.5, h=0.5}) end) -- top-right quarter
-windowManager:bind({}, "m", function() moveWindow({x=0,   y=0.5, w=0.5, h=0.5}) end) -- bottom-left quarter
-windowManager:bind({}, "z", function() moveWindow({x=0.5, y=0.5, w=0.5, h=0.5}) end) -- bottom-right quarter
+windowManager:bind({}, "left",  function() moveWindow({x=0,   y=0,   w=0.5, h=1  }) end) -- left half
+windowManager:bind({}, "right", function() moveWindow({x=0.5, y=0,   w=0.5, h=1  }) end) -- right half
+windowManager:bind({}, "up",    function() moveWindow({x=0,   y=0,   w=1,   h=0.5}) end) -- top half
+windowManager:bind({}, "down",  function() moveWindow({x=0,   y=0.5, w=1,   h=0.5}) end) -- bottom half
+windowManager:bind({}, "h", function() moveWindow({x=0,   y=0,   w=0.5, h=0.5}) end) -- top-left quarter
+windowManager:bind({}, "s", function() moveWindow({x=0.5, y=0,   w=0.5, h=0.5}) end) -- top-right quarter
+windowManager:bind({}, "n", function() moveWindow({x=0,   y=0.5, w=0.5, h=0.5}) end) -- bottom-left quarter
+windowManager:bind({}, "t", function() moveWindow({x=0.5, y=0.5, w=0.5, h=0.5}) end) -- bottom-right quarter
 
 local prevFrames = {}
 
