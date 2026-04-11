@@ -21,7 +21,7 @@
   b = branch
   c = commit
   ca = commit -a --amend --no-edit
-  d = diff
+  d = diff -w
   l = log
   m = merge
   ms = merge --squash

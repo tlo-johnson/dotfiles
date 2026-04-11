@@ -1,3 +1,5 @@
+autoload -Uz compinit && compinit
+
 # Use vi mode in shell
 set -o vi
 

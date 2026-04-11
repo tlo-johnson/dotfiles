@@ -73,6 +73,46 @@
                       ]
                     },
                     {
+                      "description": "Hyper + / = Config Layer",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "slash",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            {
+                              "key_code": "f16"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "description": "Hyper + N = Bluetooth Layer",
+                      "manipulators": [
+                        {
+                          "type": "basic",
+                          "conditions": [
+                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
+                          ],
+                          "from": {
+                            "key_code": "n",
+                            "modifiers": { "optional": ["any"] }
+                          },
+                          "to": [
+                            {
+                              "key_code": "f15"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
                         "description": "Hyper-layer: Brackets & symbols",
                         "manipulators": [
                             {
