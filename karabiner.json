@@ -93,7 +93,7 @@
                       ]
                     },
                     {
-                      "description": "Hyper + / = Config Layer",
+                      "description": "Hyper + Z = Config Layer",
                       "manipulators": [
                         {
                           "type": "basic",
@@ -101,7 +101,7 @@
                             { "type": "variable_if", "name": "hyper_mode", "value": 1 }
                           ],
                           "from": {
-                            "key_code": "slash",
+                            "key_code": "z",
                             "modifiers": { "optional": ["any"] }
                           },
                           "to": [
