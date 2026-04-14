@@ -20,6 +20,18 @@ end
 function bluetoothModal:entered() utils.showAlert("BT") end
 function bluetoothModal:exited() utils.hideAlert() end
 
+local BT_ICON      = hs.image.imageFromName("NSBluetoothTemplate")
+local SPEAKER_ICON = hs.image.imageFromName("NSSpeakerTemplate")
+local SEARCH_ICON  = hs.image.imageFromName("NSRevealFreestandingTemplate")
+
+local function styleChooser(chooser)
+  chooser:width(30)
+  chooser:rows(8)
+  chooser:bgDark(true)
+  chooser:fgColor({white = 1, alpha = 1})
+  chooser:subTextColor({white = 0.5, alpha = 1})
+end
+
 local function findOutputDevice(namePart)
   for _, d in ipairs(hs.audiodevice.allOutputDevices()) do
     if d:name():lower():find(namePart:lower(), 1, true) then return d end
@@ -65,6 +77,31 @@ local function switchToBuiltIn()
 end
 
 
+local function selectAudioDevice()
+  local devices = hs.audiodevice.allOutputDevices()
+  if not devices or #devices == 0 then notifyError("No audio output devices found") ; return end
+
+  local choices = {}
+  for _, d in ipairs(devices) do
+    local current = d:uid() == hs.audiodevice.defaultOutputDevice():uid()
+    table.insert(choices, {
+      text    = d:name() .. (current and " ✓" or ""),
+      uid     = d:uid(),
+      image   = SPEAKER_ICON,
+    })
+  end
+
+  local chooser = hs.chooser.new(function(choice)
+    if not choice then return end
+    local d = hs.audiodevice.findOutputByUID(choice.uid)
+    if d then switchToDevice(d) end
+  end)
+
+  styleChooser(chooser)
+  chooser:choices(choices)
+  chooser:show()
+end
+
 local function pairNewDevice()
   local found = {}  -- keyed by address to deduplicate across scans
 
@@ -87,6 +124,7 @@ local function pairNewDevice()
       end, {"--pair", addr}):start()
     end)
 
+    styleChooser(chooser)
     chooser:placeholderText("Scanning for " .. duration .. "s...")
     chooser:choices({})
     chooser:show()
@@ -106,9 +144,14 @@ local function pairNewDevice()
           subText = dev.address,
           address = dev.address,
           devName = dev.name or dev.address,
+          image   = BT_ICON,
         })
       end
-      table.insert(choices, {text = "Scan more (" .. (duration * 2) .. "s)", scanDuration = duration * 2})
+      table.insert(choices, {
+        text          = "Scan more (" .. (duration * 2) .. "s)",
+        image         = SEARCH_ICON,
+        scanDuration  = duration * 2,
+      })
 
       chooser:placeholderText("Select a device")
       chooser:choices(choices)
@@ -120,5 +163,6 @@ end
 
 bluetoothModal:bind({}, "a", function() switchToAirPods() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "m", function() switchToBuiltIn() ; bluetoothModal:exit() end)
+bluetoothModal:bind({}, "s", function() selectAudioDevice() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "p", function() pairNewDevice() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "escape", function() bluetoothModal:exit() end)
