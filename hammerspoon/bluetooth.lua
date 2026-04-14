@@ -64,6 +64,61 @@ local function switchToBuiltIn()
   else notifyError("Built-in audio device not found") end
 end
 
+
+local function pairNewDevice()
+  local found = {}  -- keyed by address to deduplicate across scans
+
+  local function scan(duration)
+    log("Inquiry for " .. duration .. "s")
+
+    local chooser = hs.chooser.new(function(choice)
+      if not choice then return end
+      if choice.scanDuration then
+        scan(choice.scanDuration)
+        return
+      end
+      local addr, name = choice.address, choice.devName
+      log("Pairing " .. name .. " (" .. addr .. ")")
+      hs.notify.new({title="Bluetooth", informativeText="Pairing " .. name .. "..."}):send()
+      hs.task.new("/opt/homebrew/bin/blueutil", function(exitCode, _, err)
+        log("pair " .. addr .. " exit=" .. exitCode .. " stderr=" .. err)
+        if exitCode ~= 0 then notifyError("Failed to pair " .. name .. ": " .. err) ; return end
+        hs.notify.new({title="Bluetooth", informativeText="Paired " .. name}):send()
+      end, {"--pair", addr}):start()
+    end)
+
+    chooser:placeholderText("Scanning for " .. duration .. "s...")
+    chooser:choices({})
+    chooser:show()
+
+    hs.task.new("/opt/homebrew/bin/blueutil", function(code, stdout, stderr)
+      log("inquiry exit=" .. code .. " stderr=" .. stderr)
+      if code == 0 then
+        for _, dev in ipairs(hs.json.decode(stdout) or {}) do
+          found[dev.address] = dev
+        end
+      end
+
+      local choices = {}
+      for _, dev in pairs(found) do
+        table.insert(choices, {
+          text    = dev.name or dev.address,
+          subText = dev.address,
+          address = dev.address,
+          devName = dev.name or dev.address,
+        })
+      end
+      table.insert(choices, {text = "Scan more (" .. (duration * 2) .. "s)", scanDuration = duration * 2})
+
+      chooser:placeholderText("Select a device")
+      chooser:choices(choices)
+    end, {"--inquiry", tostring(duration), "--format", "json"}):start()
+  end
+
+  scan(2)
+end
+
 bluetoothModal:bind({}, "a", function() switchToAirPods() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "m", function() switchToBuiltIn() ; bluetoothModal:exit() end)
+bluetoothModal:bind({}, "p", function() pairNewDevice() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "escape", function() bluetoothModal:exit() end)
