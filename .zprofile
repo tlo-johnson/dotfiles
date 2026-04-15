@@ -15,7 +15,7 @@ export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 
 # Java 21
 export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export JAVA_HOME="/opt/homebrew/Cellar/openjdk@21/21.0.10"
+export JAVA_HOME="$(brew --prefix openjdk@21)"
 
 # >>> JVM installed by coursier >>>
 # export JAVA_HOME="/Users/tlo/Library/Caches/Coursier/arc/https/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.24%252B8/OpenJDK11U-jdk_x64_mac_hotspot_11.0.24_8.tar.gz/jdk-11.0.24+8/Contents/Home"

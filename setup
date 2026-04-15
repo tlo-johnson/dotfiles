@@ -1,3 +1,68 @@
-[ ! -d "$HOME/.config/nvim" ] && ln -s "$(pwd)/nvim" "$HOME/.config/nvim" 
-[ ! -d "$HOME/.config/ghostty" ] && ln -s "$(pwd)/ghostty" "$HOME/.config/ghostty" 
-[ ! -f "$HOME/.config/karabiner/karabiner.json" ] && ln -s "$(pwd)/karabiner.json" "$HOME/.config/karabiner/karabiner.json" 
+#!/usr/bin/env zsh
+set -e
+
+DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+
+echo "==> Installing Homebrew packages..."
+if ! command -v brew &>/dev/null; then
+  echo "    Homebrew not found. Installing..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+brew bundle --file="$DOTFILES/Brewfile"
+
+echo "==> Creating symlinks..."
+
+# Helpers
+link_file() {
+  local src="$1" dst="$2"
+  mkdir -p "$(dirname "$dst")"
+  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    echo "    SKIP $dst (exists and is not a symlink — move it manually)"
+    return
+  fi
+  ln -sf "$src" "$dst"
+  echo "    $dst -> $src"
+}
+
+link_dir() {
+  local src="$1" dst="$2"
+  mkdir -p "$(dirname "$dst")"
+  if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+    echo "    SKIP $dst (exists and is not a symlink — move it manually)"
+    return
+  fi
+  ln -sf "$src" "$dst"
+  echo "    $dst -> $src"
+}
+
+# Shell
+link_file "$DOTFILES/.zshrc"    "$HOME/.zshrc"
+link_file "$DOTFILES/.zprofile" "$HOME/.zprofile"
+
+# Git
+link_file "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
+
+# Tmux
+link_file "$DOTFILES/.tmux.conf" "$HOME/.tmux.conf"
+
+# Neovim
+link_dir "$DOTFILES/nvim" "$HOME/.config/nvim"
+
+# Ghostty
+link_dir "$DOTFILES/ghostty" "$HOME/.config/ghostty"
+
+# Hammerspoon
+link_dir "$DOTFILES/hammerspoon" "$HOME/.hammerspoon"
+
+# Karabiner
+mkdir -p "$HOME/.config/karabiner"
+link_file "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+
+echo ""
+echo "==> Done. A few manual steps remain:"
+echo "    1. Open 1Password > Settings > Developer > enable SSH agent"
+echo "    2. Open Hammerspoon > grant Accessibility permission > enable 'Launch at Login'"
+echo "    3. Open Karabiner-Elements and enable it"
+echo "    4. Import vimium-options.json in the Vimium browser extension"
+echo "    5. Sign in to 1Password CLI: 'op signin'"
