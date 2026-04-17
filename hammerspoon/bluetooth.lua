@@ -21,7 +21,7 @@ function bluetoothModal:entered() utils.showAlert("BT") end
 function bluetoothModal:exited() utils.hideAlert() end
 
 local BT_ICON      = hs.image.imageFromName("NSBluetoothTemplate")
-local SPEAKER_ICON = hs.image.imageFromName("NSSpeakerTemplate")
+local SPEAKER_ICON = hs.image.imageFromName("NSTouchBarAudioOutputVolumeLowTemplate")
 local SEARCH_ICON  = hs.image.imageFromName("NSRevealFreestandingTemplate")
 
 local function styleChooser(chooser)
@@ -78,28 +78,108 @@ end
 
 
 local function selectAudioDevice()
-  local devices = hs.audiodevice.allOutputDevices()
-  if not devices or #devices == 0 then notifyError("No audio output devices found") ; return end
+  local audioDevices = hs.audiodevice.allOutputDevices()
+  if not audioDevices or #audioDevices == 0 then notifyError("No audio output devices found") ; return end
 
-  local choices = {}
-  for _, d in ipairs(devices) do
-    local current = d:uid() == hs.audiodevice.defaultOutputDevice():uid()
-    table.insert(choices, {
-      text    = d:name() .. (current and " ✓" or ""),
-      uid     = d:uid(),
-      image   = SPEAKER_ICON,
-    })
+  local currentUID = hs.audiodevice.defaultOutputDevice():uid()
+
+  local function extractMac(uid)
+    local mac = uid:match("(%x%x%-%x%x%-%x%x%-%x%x%-%x%x%-%x%x)")
+    if mac then return mac:gsub("-", ":"):lower() end
+  end
+
+  -- Index audio devices by MAC and name for lookup
+  local audioByMac  = {}
+  local audioByName = {}
+  for _, d in ipairs(audioDevices) do
+    local mac = extractMac(d:uid())
+    if mac then audioByMac[mac] = d end
+    audioByName[d:name():lower()] = d
+  end
+
+  local function findAudioDevice(dev)
+    local addr = dev.address and dev.address:lower():gsub("-", ":")
+    if addr and audioByMac[addr] then return audioByMac[addr] end
+    return audioByName[(dev.name or dev.address):lower()]
+  end
+
+  local function connectAndSwitch(name, address)
+    log("Connecting " .. name .. " (" .. address .. ") via blueutil")
+    hs.notify.new({title="Bluetooth", informativeText="Connecting " .. name .. "..."}):send()
+    hs.task.new("/opt/homebrew/bin/blueutil", function(code, _, stderr)
+      log("blueutil connect exit=" .. code .. " stderr=" .. stderr)
+      if code ~= 0 then notifyError("Failed to connect " .. name .. ": " .. stderr) ; return end
+      waitForAudioDevice(name, 10, function(found)
+        if found then switchToDevice(found)
+        else notifyError(name .. " connected but never appeared as audio device") end
+      end)
+    end, {"--connect", address}):start()
   end
 
   local chooser = hs.chooser.new(function(choice)
     if not choice then return end
-    local d = hs.audiodevice.findOutputByUID(choice.uid)
-    if d then switchToDevice(d) end
+    if choice.audioUID then
+      local d = hs.audiodevice.findOutputByUID(choice.audioUID)
+      if d then switchToDevice(d) end
+    else
+      connectAndSwitch(choice.devName, choice.address)
+    end
   end)
 
+  -- Show CoreAudio devices immediately while blueutil loads
+  local function buildFallbackChoices()
+    local choices = {}
+    for _, d in ipairs(audioDevices) do
+      table.insert(choices, {
+        text     = d:name() .. (d:uid() == currentUID and " ✓" or ""),
+        audioUID = d:uid(),
+        image    = SPEAKER_ICON,
+      })
+    end
+    return choices
+  end
+
   styleChooser(chooser)
-  chooser:choices(choices)
+  chooser:choices(buildFallbackChoices())
   chooser:show()
+
+  -- Rebuild with blueutil as primary source, CoreAudio-only devices appended
+  hs.task.new("/opt/homebrew/bin/blueutil", function(code, stdout, _)
+    if code ~= 0 then return end
+    local btDevices = hs.json.decode(stdout) or {}
+
+    local btMacs = {}
+    local choices = {}
+    for _, dev in ipairs(btDevices) do
+      local name = dev.name or dev.address
+      local audioDevice = findAudioDevice(dev)
+      local isCurrent = audioDevice and audioDevice:uid() == currentUID
+      local addr = dev.address:lower():gsub("-", ":")
+      btMacs[addr] = true
+      table.insert(choices, {
+        text     = name .. (isCurrent and " ✓" or ""),
+        subText  = dev.address .. (dev.connected and " · connected" or " · not connected"),
+        address  = dev.address,
+        devName  = name,
+        audioUID = audioDevice and audioDevice:uid(),
+        image    = BT_ICON,
+      })
+    end
+
+    -- Append CoreAudio devices not matched to any BT device
+    for _, d in ipairs(audioDevices) do
+      local mac = extractMac(d:uid())
+      if not (mac and btMacs[mac]) then
+        table.insert(choices, {
+          text     = d:name() .. (d:uid() == currentUID and " ✓" or ""),
+          audioUID = d:uid(),
+          image    = SPEAKER_ICON,
+        })
+      end
+    end
+
+    chooser:choices(choices)
+  end, {"--paired", "--format", "json"}):start()
 end
 
 local function pairNewDevice()
