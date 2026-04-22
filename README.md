@@ -27,7 +27,8 @@ After running `./setup`:
 | Neovim | `nvim/` | lazy.nvim, LSP (jdtls, gopls, lua), completion, treesitter |
 | Zsh | `.zshrc`, `.zprofile` | vi mode, vcs prompt, history search |
 | Git | `.gitconfig` | SSH commit signing via 1Password, aliases, rebase on pull |
-| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching |
+| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching, project sessionizer |
+| Scripts | `bin/` | Personal scripts symlinked to `~/bin` |
 | Ghostty | `ghostty/config` | Terminal with Monaspace font |
 | Hammerspoon | `hammerspoon/` | Window management, app launcher, Bluetooth switching |
 | Karabiner | `karabiner.json` | Caps Lock as Hyper + Esc, app switcher (Hyper+Space) |
@@ -79,3 +80,4 @@ Prefix is `Ctrl+Space`.
 | Prefix+\ | Split horizontal |
 | Prefix+- | Split vertical |
 | Ctrl+H/N/T/S | Navigate panes (vim-aware) |
+| Prefix+F | Project sessionizer (fzf, recents-first) |

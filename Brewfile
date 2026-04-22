@@ -13,6 +13,8 @@ brew "tree"
 brew "dos2unix"
 brew "fswatch"
 brew "blueutil"
+brew "fzf"
+brew "jj"
 
 # Languages & runtimes
 brew "node"
@@ -22,9 +24,6 @@ brew "oven-sh/bun/bun"
 brew "colima", restart_service: :changed
 brew "docker-compose"
 brew "docker-credential-helper"
-
-# Other
-brew "jj"
 
 # macOS apps
 cask "1password"

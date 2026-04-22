@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Jump to a project session by fuzzy-finding git repos across configured directories.
+# Search dirs are read from ~/.config/tlo/sessionizer-dirs (one per line, $HOME expanded).
+# Recently used projects float to the top of the list.
+# Usage: tmux-sessionizer [path]  — pass a path to skip fzf
+
+CONFIG="$HOME/.config/tlo/sessionizer-dirs"
+RECENTS="$HOME/.config/tlo/sessionizer-recents"
+
+if [[ $# -eq 1 ]]; then
+    selected="$1"
+else
+    if [[ ! -f "$CONFIG" ]]; then
+        echo "No config found at $CONFIG" >&2
+        exit 1
+    fi
+
+    dirs=()
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ -z "$line" || "$line" == \#* ]] && continue
+        dirs+=("${line/\$HOME/$HOME}")
+    done < "$CONFIG"
+
+    all=$(find "${dirs[@]}" -mindepth 1 -maxdepth 2 -type d 2>/dev/null)
+    recents=$([[ -f "$RECENTS" ]] && cat "$RECENTS" || true)
+
+    # recents first, then remaining dirs (deduped, recents excluded from tail)
+    selected=$({ echo "$recents"; echo "$all" | grep -vxF "$recents"; } \
+        | grep -v '^$' \
+        | fzf --prompt="session> " --height=40% --reverse)
+fi
+
+[[ -z "$selected" ]] && exit 0
+
+# Update recents: prepend selected, dedupe, keep top 50
+touch "$RECENTS"
+{ echo "$selected"; grep -vxF "$selected" "$RECENTS"; } | head -50 > "$RECENTS.tmp" && mv "$RECENTS.tmp" "$RECENTS"
+
+name=$(basename "$selected" | tr '.' '_')
+
+if ! tmux has-session -t "=$name" 2>/dev/null; then
+    tmux new-session -ds "$name" -c "$selected"
+fi
+
+if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "=$name"
+else
+    tmux attach-session -t "=$name"
+fi
