@@ -33,19 +33,19 @@ local function switchToProject(path)
 
   local name = path:match("([^/]+)$"):gsub("%.", "_")
 
-  if hs.application.get("com.mitchellh.ghostty") then
-    hs.task.new("/bin/zsh", nil, { "-lc", string.format(
-      "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'; tmux switch-client -t '=%s'",
-      name, name, path, name
-    )}):start()
-    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
-  else
-    hs.task.new("/bin/zsh", nil, { "-lc", string.format(
-      "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'",
-      name, name, path
-    )}):start()
-    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
-    hs.timer.doAfter(1, function()
+  local ghosttyRunning = hs.application.get("com.mitchellh.ghostty") ~= nil
+  local hasTmuxClient  = hs.execute("/bin/zsh -lc 'tmux list-clients 2>/dev/null'"):gsub("%s+$", "") ~= ""
+
+  hs.task.new("/bin/zsh", nil, { "-lc", string.format(
+    "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'%s",
+    name, name, path,
+    hasTmuxClient and ("; tmux switch-client -t '=" .. name .. "'") or ""
+  )}):start()
+
+  hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+
+  if not hasTmuxClient then
+    hs.timer.doAfter(ghosttyRunning and 0.3 or 1, function()
       local app = hs.application.get("com.mitchellh.ghostty")
       if app then app:activate() end
       hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
