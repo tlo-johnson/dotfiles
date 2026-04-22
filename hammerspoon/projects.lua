@@ -32,12 +32,26 @@ local function switchToProject(path)
   writeLines(recentsFile, result)
 
   local name = path:match("([^/]+)$"):gsub("%.", "_")
-  local cmd = string.format(
-    "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'; tmux switch-client -t '=%s'",
-    name, name, path, name
-  )
-  hs.task.new("/bin/zsh", nil, { "-lc", cmd }):start()
-  hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+
+  if hs.application.get("com.mitchellh.ghostty") then
+    hs.task.new("/bin/zsh", nil, { "-lc", string.format(
+      "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'; tmux switch-client -t '=%s'",
+      name, name, path, name
+    )}):start()
+    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+  else
+    hs.task.new("/bin/zsh", nil, { "-lc", string.format(
+      "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'",
+      name, name, path
+    )}):start()
+    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+    hs.timer.doAfter(1, function()
+      local app = hs.application.get("com.mitchellh.ghostty")
+      if app then app:activate() end
+      hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
+      hs.eventtap.keyStroke({}, "return")
+    end)
+  end
 end
 
 local function buildChoices()
