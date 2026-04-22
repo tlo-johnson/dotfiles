@@ -1,5 +1,7 @@
-local DIRS_FILE    = os.getenv("HOME") .. "/.config/tlo/sessionizer-dirs"
-local RECENTS_FILE = os.getenv("HOME") .. "/.config/tlo/sessionizer-recents"
+local CONFIG_DIR   = os.getenv("HOME") .. "/.config/tlo/projects"
+local DIRS_FILE    = CONFIG_DIR .. "/dirs"
+local RECENTS_FILE = CONFIG_DIR .. "/recents"
+local IGNORE_FILE  = CONFIG_DIR .. "/ignore"
 
 local function readLines(path)
   local lines = {}
@@ -47,10 +49,39 @@ local function switchToProject(path)
   hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
 end
 
+local function readIgnoreList()
+  local f = io.open(IGNORE_FILE, "r")
+  if not f then
+    hs.execute("mkdir -p " .. CONFIG_DIR)
+    writeLines(IGNORE_FILE, { "node_modules" })
+    return { "node_modules" }
+  end
+  local list = {}
+  for line in f:lines() do
+    line = line:gsub("^%s+", ""):gsub("%s+$", "")
+    if line ~= "" and not line:match("^#") then
+      list[#list + 1] = line
+    end
+  end
+  f:close()
+  return list
+end
+
+local function isIgnored(path, ignoreList)
+  for _, pattern in ipairs(ignoreList) do
+    for component in path:gmatch("[^/]+") do
+      if component == pattern then return true end
+    end
+  end
+  return false
+end
+
 local function buildChoices()
   local recents = readLines(RECENTS_FILE)
   local recentSet = {}
   for _, p in ipairs(recents) do recentSet[p] = true end
+
+  local ignoreList = readIgnoreList()
 
   local dirs = readLines(DIRS_FILE)
   local allDirs, _ = hs.execute(
@@ -61,7 +92,7 @@ local function buildChoices()
 
   local function addChoice(path)
     path = path:gsub("%s+$", "")
-    if path == "" or seen[path] then return end
+    if path == "" or seen[path] or isIgnored(path, ignoreList) then return end
     seen[path] = true
     choices[#choices + 1] = {
       text    = path:match("([^/]+)$"),
