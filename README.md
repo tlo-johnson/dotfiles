@@ -27,8 +27,7 @@ After running `./setup`:
 | Neovim | `nvim/` | lazy.nvim, LSP (jdtls, gopls, lua), completion, treesitter |
 | Zsh | `.zshrc`, `.zprofile` | vi mode, vcs prompt, history search |
 | Git | `.gitconfig` | SSH commit signing via 1Password, aliases, rebase on pull |
-| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching, project sessionizer |
-| Scripts | `bin/` | Personal scripts symlinked to `~/bin` |
+| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching |
 | Ghostty | `ghostty/config` | Terminal with Monaspace font |
 | Hammerspoon | `hammerspoon/` | Window management, app launcher, Bluetooth switching |
 | Karabiner | `karabiner.json` | Caps Lock as Hyper + Esc, app switcher (Hyper+Space) |
@@ -60,6 +59,7 @@ Caps Lock acts as a Hyper key. Tap alone = Escape.
 | W | WhatsApp |
 | H | Previous app |
 | N | Capture note |
+| P | Open project |
 
 ### Window manager (Hyper+W, then...)
 
@@ -80,4 +80,3 @@ Prefix is `Ctrl+Space`.
 | Prefix+\ | Split horizontal |
 | Prefix+- | Split vertical |
 | Ctrl+H/N/T/S | Navigate panes (vim-aware) |
-| Prefix+F | Project sessionizer (fzf, recents-first) |

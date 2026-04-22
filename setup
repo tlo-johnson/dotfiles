@@ -59,12 +59,6 @@ link_dir "$DOTFILES/hammerspoon" "$HOME/.hammerspoon"
 mkdir -p "$HOME/.config/karabiner"
 link_file "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 
-# bin scripts
-mkdir -p "$HOME/bin"
-for script in "$DOTFILES/bin/"*; do
-  link_file "$script" "$HOME/bin/$(basename "$script")"
-done
-
 echo ""
 echo "==> Done. A few manual steps remain:"
 echo "    1. Open 1Password > Settings > Developer > enable SSH agent"

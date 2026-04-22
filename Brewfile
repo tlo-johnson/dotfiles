@@ -13,7 +13,6 @@ brew "tree"
 brew "dos2unix"
 brew "fswatch"
 brew "blueutil"
-brew "fzf"
 brew "jj"
 
 # Languages & runtimes
