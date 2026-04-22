@@ -14,6 +14,7 @@ brew "dos2unix"
 brew "fswatch"
 brew "blueutil"
 brew "jj"
+brew "fzf"
 
 # Languages & runtimes
 brew "node"
