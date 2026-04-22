@@ -48,6 +48,18 @@ windowManager:bind({}, "f", function()
   windowManager:exit()
 end)
 
+local function gotoSpace(n)
+  local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
+  if spaces and spaces[n] then
+    hs.spaces.gotoSpace(spaces[n])
+  end
+  windowManager:exit()
+end
+
+for i = 1, 9 do
+  windowManager:bind({}, tostring(i), function() gotoSpace(i) end)
+end
+
 windowManager:bind({}, "escape", function()
   windowManager:exit()
 end)
