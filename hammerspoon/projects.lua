@@ -21,8 +21,11 @@ local function writeLines(path, lines)
   f:close()
 end
 
+local function exists(path)
+  return hs.fs.attributes(path) ~= nil
+end
+
 local function switchToProject(path)
-  -- prepend to recents, dedupe, cap at 50
   local recentsFile = CONFIG .. "/recents"
   local seen, result = { [path] = true }, { path }
   for _, p in ipairs(readLines(recentsFile)) do
@@ -32,7 +35,6 @@ local function switchToProject(path)
   writeLines(recentsFile, result)
 
   local name = path:match("([^/]+)$"):gsub("%.", "_")
-
   local ghosttyRunning = hs.application.get("com.mitchellh.ghostty") ~= nil
   local hasTmuxClient  = hs.execute("/bin/zsh -lc 'tmux list-clients 2>/dev/null'"):gsub("%s+$", "") ~= ""
 
@@ -56,31 +58,47 @@ end
 
 local function buildChoices()
   local ignoreFile = CONFIG .. "/ignore"
-  if not io.open(ignoreFile, "r") then
+  if not exists(ignoreFile) then
     hs.execute("mkdir -p " .. CONFIG)
     writeLines(ignoreFile, { "node_modules" })
   end
-  local ignore  = readLines(ignoreFile)
-  local recents = readLines(CONFIG .. "/recents")
-  local dirs    = readLines(CONFIG .. "/dirs")
-  local found   = hs.execute(
-    "find " .. table.concat(dirs, " ") .. " -mindepth 1 -maxdepth 2 -type d 2>/dev/null"
-  )
+  local ignore = readLines(ignoreFile)
+
+  local recentsFile = CONFIG .. "/recents"
+  local recents = {}
+  for _, p in ipairs(readLines(recentsFile)) do
+    if exists(p) then recents[#recents + 1] = p end
+  end
+  writeLines(recentsFile, recents)
+
+  local direct, parent = {}, {}
+  for _, line in ipairs(readLines(CONFIG .. "/dirs")) do
+    if line:sub(1, 1) == "=" then
+      direct[#direct + 1] = line:sub(2)
+    else
+      parent[#parent + 1] = line
+    end
+  end
+
+  local found = ""
+  if #parent > 0 then
+    found = hs.execute(
+      "find " .. table.concat(parent, " ") .. " -mindepth 1 -maxdepth 1 -type d -not -name '.*' 2>/dev/null"
+    )
+  end
 
   local seen, choices = {}, {}
   local function add(path)
-    path = path:gsub("%s+$", "")
-    if path == "" or seen[path] then return end
+    if path == "" or seen[path] or not exists(path) then return end
     for _, pat in ipairs(ignore) do
-      for component in path:gmatch("[^/]+") do
-        if component == pat then return end
-      end
+      if ("/" .. path .. "/"):find("/" .. pat .. "/", 1, true) then return end
     end
     seen[path] = true
     choices[#choices + 1] = { text = path:match("([^/]+)$"), subText = path, path = path }
   end
 
   for _, p in ipairs(recents) do add(p) end
+  for _, p in ipairs(direct) do add(p) end
   for p in found:gmatch("[^\n]+") do add(p) end
   return choices
 end

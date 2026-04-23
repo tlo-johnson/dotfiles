@@ -1,4 +1,15 @@
 local utils = require("utils")
+local log = hs.logger.new("windows", "info")
+
+local function logSpaces()
+  local allSpaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
+  if not allSpaces then log.w("no spaces found") return end
+  for i, id in ipairs(allSpaces) do
+    log.i("space", i, "id=" .. id)
+  end
+end
+
+logSpaces()
 
 local windowManager = hs.hotkey.modal.new({}, "F14")
 
@@ -51,13 +62,40 @@ end)
 local function gotoSpace(n)
   local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
   if spaces and spaces[n] then
+    log.i("going to space", n, "(id=" .. spaces[n] .. ")")
     hs.spaces.gotoSpace(spaces[n])
+  else
+    log.w("no space at index", n)
+  end
+  windowManager:exit()
+end
+
+local function moveWindowToSpace(n)
+  local win = hs.window.focusedWindow()
+  if not win then
+    log.w("moveWindowToSpace: no focused window")
+    windowManager:exit()
+    return
+  end
+  local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
+  if spaces and spaces[n] then
+    log.i("moving", win:title(), "to space", n, "(id=" .. spaces[n] .. ")")
+    local ok, err = hs.spaces.moveWindowToSpace(win:id(), spaces[n], true)
+    if ok then
+      log.i("move succeeded")
+    else
+      log.e("move failed:", err)
+    end
+    -- hs.spaces.gotoSpace(spaces[n])
+  else
+    log.w("no space at index", n)
   end
   windowManager:exit()
 end
 
 for i = 1, 9 do
   windowManager:bind({}, tostring(i), function() gotoSpace(i) end)
+  windowManager:bind({"shift"}, tostring(i), function() moveWindowToSpace(i) end)
 end
 
 windowManager:bind({}, "escape", function()
