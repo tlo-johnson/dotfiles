@@ -25,6 +25,32 @@ local function exists(path)
   return hs.fs.attributes(path) ~= nil
 end
 
+local function readSpaces()
+  local map = {}
+  for _, line in ipairs(readLines(CONFIG .. "/spaces")) do
+    local p, n = line:match("^(.+)%s+(%d+)$")
+    if p and n then map[p] = tonumber(n) end
+  end
+  return map
+end
+
+local function switchToSpace(n)
+  local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
+  if spaces and spaces[n] then hs.spaces.gotoSpace(spaces[n]) end
+end
+
+local function ghosttyWindowOnCurrentSpace()
+  local app = hs.application.get("com.mitchellh.ghostty")
+  if not app then return nil end
+  local currentSpace = hs.spaces.focusedSpace()
+  for _, win in ipairs(app:allWindows()) do
+    for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
+      if ws == currentSpace then return win end
+    end
+  end
+  return nil
+end
+
 local function switchToProject(path)
   local recentsFile = CONFIG .. "/recents"
   local seen, result = { [path] = true }, { path }
@@ -34,25 +60,41 @@ local function switchToProject(path)
   end
   writeLines(recentsFile, result)
 
+  local spaceN = readSpaces()[path]
   local name = path:match("([^/]+)$"):gsub("%.", "_")
-  local ghosttyRunning = hs.application.get("com.mitchellh.ghostty") ~= nil
-  local hasTmuxClient  = hs.execute("/bin/zsh -lc 'tmux list-clients 2>/dev/null'"):gsub("%s+$", "") ~= ""
 
   hs.task.new("/bin/zsh", nil, { "-lc", string.format(
-    "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'%s",
-    name, name, path,
-    hasTmuxClient and ("; tmux switch-client -t '=" .. name .. "'") or ""
+    "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'",
+    name, name, path
   )}):start()
 
-  hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+  local function focus()
+    local win = ghosttyWindowOnCurrentSpace()
+    if win then
+      win:focus()
+      hs.execute("/bin/zsh -lc 'tmux switch-client -t =" .. name .. "'")
+    else
+      local wf
+      wf = hs.window.filter.new({"Ghostty"}):subscribe(hs.window.filter.windowCreated, function(win)
+        wf:unsubscribeAll()
+        win:focus()
+        hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
+        hs.eventtap.keyStroke({}, "return")
+      end)
+      hs.execute("open -na 'Ghostty'")
+    end
+  end
 
-  if not hasTmuxClient then
-    hs.timer.doAfter(ghosttyRunning and 0.3 or 1, function()
-      local app = hs.application.get("com.mitchellh.ghostty")
-      if app then app:activate() end
-      hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
-      hs.eventtap.keyStroke({}, "return")
+  if spaceN then
+    local watcher
+    watcher = hs.spaces.watcher.new(function()
+      watcher:stop()
+      focus()
     end)
+    watcher:start()
+    switchToSpace(spaceN)
+  else
+    focus()
   end
 end
 

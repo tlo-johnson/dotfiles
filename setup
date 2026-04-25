@@ -55,6 +55,15 @@ link_dir "$DOTFILES/ghostty" "$HOME/.config/ghostty"
 # Hammerspoon
 link_dir "$DOTFILES/hammerspoon" "$HOME/.hammerspoon"
 
+# PaperWM.spoon
+PAPERWM_SRC="$HOME/development/PaperWM.spoon"
+PAPERWM_DST="$DOTFILES/hammerspoon/Spoons/PaperWM.spoon"
+if [ ! -d "$PAPERWM_SRC" ]; then
+  echo "==> Cloning PaperWM.spoon..."
+  git clone https://github.com/mogenson/PaperWM.spoon "$PAPERWM_SRC"
+fi
+link_dir "$PAPERWM_SRC" "$PAPERWM_DST"
+
 # Karabiner
 mkdir -p "$HOME/.config/karabiner"
 link_file "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
@@ -66,3 +75,7 @@ echo "    2. Open Hammerspoon > grant Accessibility permission > enable 'Launch 
 echo "    3. Open Karabiner-Elements and enable it"
 echo "    4. Import vimium-options.json in the Vimium browser extension"
 echo "    5. Sign in to 1Password CLI: 'op signin'"
+echo "    6. System Settings > Desktop & Dock > Mission Control:"
+echo "       - Uncheck 'Automatically rearrange Spaces based on most recent use'"
+echo "       - Check 'Displays have separate Spaces'"
+echo "    7. Create ~/.config/tlo/projects/dirs with directories to index"

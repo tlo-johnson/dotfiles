@@ -30,11 +30,6 @@ appLauncher:bind({}, "escape", function()
   appLauncher:exit()
 end)
 
-appLauncher:bind({}, "h", function()
-  appLauncher:exit()
-  hs.eventtap.keyStroke({"cmd"}, "tab")
-end)
-
 appLauncher:bind({}, "n", function()
   local script = os.getenv("HOME") .. "/.hammerspoon/scripts/capture"
   hs.task.new("/bin/zsh", nil, { "-lc", script }):start()
