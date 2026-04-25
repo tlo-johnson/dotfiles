@@ -42,7 +42,3 @@ appLauncher:bind({}, "n", function()
   appLauncher:exit()
 end)
 
-appLauncher:bind({}, "p", function()
-  appLauncher:exit()
-  require("projects").show()
-end)

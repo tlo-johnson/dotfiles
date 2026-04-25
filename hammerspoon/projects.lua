@@ -125,19 +125,23 @@ chooser:queryChangedCallback(function(query)
   chooser:choices(results)
 end)
 
-return {
-  show = function()
-    allChoices = buildChoices()
-    pathToChoice = {}
-    local lines = {}
-    for _, c in ipairs(allChoices) do
-      pathToChoice[c.path] = c
-      lines[#lines + 1] = c.path
-    end
-    local f = io.open(inputFile, "w")
-    f:write(table.concat(lines, "\n"))
-    f:close()
-    chooser:choices(allChoices)
-    chooser:show()
+local function show()
+  allChoices = buildChoices()
+  pathToChoice = {}
+  local lines = {}
+  for _, c in ipairs(allChoices) do
+    pathToChoice[c.path] = c
+    lines[#lines + 1] = c.path
   end
+  local f = io.open(inputFile, "w")
+  f:write(table.concat(lines, "\n"))
+  f:close()
+  chooser:choices(allChoices)
+  chooser:show()
+end
+
+hs.hotkey.bind({}, "F18", show)
+
+return {
+  show = show
 }
