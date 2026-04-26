@@ -26,12 +26,28 @@ local function exists(path)
 end
 
 local function readSpaces()
-  local map = {}
+  local direct, parents = {}, {}
   for _, line in ipairs(readLines(CONFIG .. "/spaces")) do
     local p, n = line:match("^(.+)%s+(%d+)$")
-    if p and n then map[p] = tonumber(n) end
+    if p and n then
+      if p:sub(1, 1) == "=" then
+        direct[p:sub(2)] = tonumber(n)
+      else
+        parents[#parents + 1] = { path = p, space = tonumber(n) }
+      end
+    end
   end
-  return map
+  return direct, parents
+end
+
+local function lookupSpace(path)
+  local direct, parents = readSpaces()
+  if direct[path] then return direct[path] end
+  for _, entry in ipairs(parents) do
+    if path == entry.path or path:sub(1, #entry.path + 1) == entry.path .. "/" then
+      return entry.space
+    end
+  end
 end
 
 local function switchToSpace(n)
@@ -40,12 +56,13 @@ local function switchToSpace(n)
 end
 
 local function ghosttyWindowOnCurrentSpace()
-  local app = hs.application.get("com.mitchellh.ghostty")
-  if not app then return nil end
+  local apps = hs.application.applicationsForBundleID("com.mitchellh.ghostty")
   local currentSpace = hs.spaces.focusedSpace()
-  for _, win in ipairs(app:allWindows()) do
-    for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
-      if ws == currentSpace then return win end
+  for _, app in ipairs(apps) do
+    for _, win in ipairs(app:allWindows()) do
+      for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
+        if ws == currentSpace then return win end
+      end
     end
   end
   return nil
@@ -60,7 +77,6 @@ local function switchToProject(path)
   end
   writeLines(recentsFile, result)
 
-  local spaceN = readSpaces()[path]
   local name = path:match("([^/]+)$"):gsub("%.", "_")
 
   hs.task.new("/bin/zsh", nil, { "-lc", string.format(
@@ -72,7 +88,7 @@ local function switchToProject(path)
     local win = ghosttyWindowOnCurrentSpace()
     if win then
       win:focus()
-      hs.execute("/bin/zsh -lc 'tmux switch-client -t =" .. name .. "'")
+      hs.execute("/bin/zsh -lc 'tmux switch-client -t " .. name .. "'")
     else
       local wf
       wf = hs.window.filter.new({"Ghostty"}):subscribe(hs.window.filter.windowCreated, function(win)
@@ -81,11 +97,20 @@ local function switchToProject(path)
         hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
         hs.eventtap.keyStroke({}, "return")
       end)
-      hs.execute("open -na 'Ghostty'")
+      local apps = hs.application.applicationsForBundleID("com.mitchellh.ghostty")
+      if #apps > 0 then
+        apps[1]:selectMenuItem({"File", "New Window"})
+      else
+        hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+      end
     end
   end
 
-  if spaceN then
+  local spaceN = lookupSpace(path)
+  local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
+  local alreadyOnSpace = spaceN and spaces and spaces[spaceN] == hs.spaces.focusedSpace()
+
+  if spaceN and not alreadyOnSpace then
     local watcher
     watcher = hs.spaces.watcher.new(function()
       watcher:stop()
