@@ -1,3 +1,10 @@
+-- ~/.config/tlo/projects/dirs syntax:
+--   path            scan directory for immediate subdirs
+--   =path           add path directly (not scanned)
+--   path N / =path N  assign to macOS space N
+--   !pattern        ignore directories matching pattern
+-- ~/.config/tlo/projects/recents is auto-managed.
+
 local HOME   = os.getenv("HOME")
 local CONFIG = HOME .. "/.config/tlo/projects"
 
@@ -25,27 +32,32 @@ local function exists(path)
   return hs.fs.attributes(path) ~= nil
 end
 
-local function readSpaces()
-  local direct, parents = {}, {}
-  for _, line in ipairs(readLines(CONFIG .. "/spaces")) do
-    local p, n = line:match("^(.+)%s+(%d+)$")
-    if p and n then
-      if p:sub(1, 1) == "=" then
-        direct[p:sub(2)] = tonumber(n)
-      else
-        parents[#parents + 1] = { path = p, space = tonumber(n) }
-      end
+local function parseDirs()
+  local direct, parents, ignore = {}, {}, {}
+  for _, line in ipairs(readLines(CONFIG .. "/dirs")) do
+    if line:sub(1, 1) == "!" then
+      ignore[#ignore + 1] = line:sub(2)
+    else
+      local isDirect = line:sub(1, 1) == "="
+      local rest = isDirect and line:sub(2) or line
+      local path, space = rest:match("^(.-)%s+(%d+)$")
+      if not path then path = rest end
+      local entry = { path = path, space = space and tonumber(space) }
+      if isDirect then direct[#direct + 1] = entry
+      else parents[#parents + 1] = entry end
     end
   end
-  return direct, parents
+  return direct, parents, ignore
 end
 
 local function lookupSpace(path)
-  local direct, parents = readSpaces()
-  if direct[path] then return direct[path] end
-  for _, entry in ipairs(parents) do
-    if path == entry.path or path:sub(1, #entry.path + 1) == entry.path .. "/" then
-      return entry.space
+  local direct, parents = parseDirs()
+  for _, e in ipairs(direct) do
+    if e.space and e.path == path then return e.space end
+  end
+  for _, e in ipairs(parents) do
+    if e.space and (path == e.path or path:sub(1, #e.path + 1) == e.path .. "/") then
+      return e.space
     end
   end
 end
@@ -124,13 +136,6 @@ local function switchToProject(path)
 end
 
 local function buildChoices()
-  local ignoreFile = CONFIG .. "/ignore"
-  if not exists(ignoreFile) then
-    hs.execute("mkdir -p " .. CONFIG)
-    writeLines(ignoreFile, { "node_modules" })
-  end
-  local ignore = readLines(ignoreFile)
-
   local recentsFile = CONFIG .. "/recents"
   local recents = {}
   for _, p in ipairs(readLines(recentsFile)) do
@@ -138,14 +143,10 @@ local function buildChoices()
   end
   writeLines(recentsFile, recents)
 
+  local directEntries, parentEntries, ignore = parseDirs()
   local direct, parent = {}, {}
-  for _, line in ipairs(readLines(CONFIG .. "/dirs")) do
-    if line:sub(1, 1) == "=" then
-      direct[#direct + 1] = line:sub(2)
-    else
-      parent[#parent + 1] = line
-    end
-  end
+  for _, e in ipairs(directEntries) do direct[#direct + 1] = e.path end
+  for _, e in ipairs(parentEntries) do parent[#parent + 1] = e.path end
 
   local found = ""
   if #parent > 0 then
