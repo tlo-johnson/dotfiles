@@ -48,7 +48,7 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-# font-family = Monaspace Neon NF
+font-family = Monaspace Neon NF
 font-size = 12
 
 adjust-cell-height = 50%

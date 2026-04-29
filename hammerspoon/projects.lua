@@ -205,6 +205,7 @@ local function show()
   f:write(table.concat(lines, "\n"))
   f:close()
   chooser:choices(allChoices)
+  chooser:query("")
   chooser:show()
 end
 
