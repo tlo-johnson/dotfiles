@@ -91,7 +91,13 @@ local function switchToProject(path)
 
   local name = path:match("([^/]+)$"):gsub("%.", "_")
 
-  hs.task.new("/bin/zsh", nil, { "-lc", string.format(
+  local sessionReady = false
+  local pendingFocus = nil
+
+  hs.task.new("/bin/zsh", function()
+    sessionReady = true
+    if pendingFocus then pendingFocus() end
+  end, { "-lc", string.format(
     "tmux has-session -t '=%s' 2>/dev/null || tmux new-session -ds '%s' -c '%s'",
     name, name, path
   )}):start()
@@ -100,7 +106,10 @@ local function switchToProject(path)
     local win = ghosttyWindowOnCurrentSpace()
     if win then
       win:focus()
-      hs.execute("/bin/zsh -lc 'tmux switch-client -t " .. name .. "'")
+      local function doSwitch()
+        hs.execute("/bin/zsh -lc 'tmux switch-client -t " .. name .. "'")
+      end
+      if sessionReady then doSwitch() else pendingFocus = doSwitch end
     else
       local wf
       wf = hs.window.filter.new({"Ghostty"}):subscribe(hs.window.filter.windowCreated, function(win)
@@ -126,7 +135,7 @@ local function switchToProject(path)
     local watcher
     watcher = hs.spaces.watcher.new(function()
       watcher:stop()
-      focus()
+      hs.timer.doAfter(0.15, focus)
     end)
     watcher:start()
     switchToSpace(spaceN)
