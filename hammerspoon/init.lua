@@ -5,6 +5,7 @@ require("bluetooth")
 require("config")
 require("keypad")
 require("projects")
+require("onepassword")
 -- require("paperwm_config")
 
 hs.notify.new({title="Hammerspoon", informativeText="Config loaded"}):send()
