@@ -5,6 +5,24 @@ local allChoices = {}
 local clearTimer = nil
 local CLEAR_AFTER = 15
 
+local function copyValue(value, label)
+  hs.pasteboard.setContents(value)
+  hs.notify.new({title = "1Password", informativeText = "Copied " .. label .. " (clears in " .. CLEAR_AFTER .. "s)"}):send()
+  if clearTimer then clearTimer:stop() end
+  clearTimer = hs.timer.doAfter(CLEAR_AFTER, function()
+    if hs.pasteboard.getContents() == value then
+      hs.pasteboard.setContents("")
+      hs.notify.new({title = "1Password", informativeText = "Clipboard cleared"}):send()
+    end
+  end)
+end
+
+local fieldChooser = hs.chooser.new(function(choice)
+  if not choice then return end
+  copyValue(choice.value, choice.text)
+end)
+fieldChooser:placeholderText("Select field…")
+
 local chooser = hs.chooser.new(function(choice)
   if not choice then return end
   hs.task.new(opPath, function(code, stdout, stderr)
@@ -14,27 +32,25 @@ local chooser = hs.chooser.new(function(choice)
     end
     local ok, item = pcall(hs.json.decode, stdout)
     if not ok or not item or not item.fields then return end
-    local value
+
+    local fields = {}
     for _, f in ipairs(item.fields) do
-      if f.purpose == "PASSWORD" then value = f.value; break end
-    end
-    if not value then
-      for _, f in ipairs(item.fields) do
-        if f.type == "CONCEALED" then value = f.value; break end
+      if f.value and f.value ~= "" then
+        local label = f.label or f.id or "unknown"
+        local subText = f.type or ""
+        if f.purpose == "PASSWORD" then subText = subText .. " (password)" end
+        fields[#fields + 1] = { text = label, subText = subText, value = f.value }
       end
     end
-    if value then
-      hs.pasteboard.setContents(value)
-      hs.notify.new({title = "1Password", informativeText = "Copied " .. choice.text .. " (clears in " .. CLEAR_AFTER .. "s)"}):send()
-      if clearTimer then clearTimer:stop() end
-      clearTimer = hs.timer.doAfter(CLEAR_AFTER, function()
-        if hs.pasteboard.getContents() == value then
-          hs.pasteboard.setContents("")
-          hs.notify.new({title = "1Password", informativeText = "Clipboard cleared"}):send()
-        end
-      end)
+
+    if #fields == 0 then
+      hs.notify.new({title = "1Password", informativeText = "No fields found"}):send()
+    elseif #fields == 1 then
+      copyValue(fields[1].value, fields[1].text)
     else
-      hs.notify.new({title = "1Password", informativeText = "No password field found"}):send()
+      fieldChooser:choices(fields)
+      fieldChooser:query("")
+      fieldChooser:show()
     end
   end, {"item", "get", choice.id, "--format", "json", "--reveal"}):start()
 end)
