@@ -107,7 +107,13 @@ local function switchToProject(path)
     if win then
       win:focus()
       local function doSwitch()
-        hs.execute("/bin/zsh -lc 'tmux switch-client -t " .. name .. "'")
+        local pid = win:application():pid()
+        local ttyOut = hs.execute(string.format(
+          "ps -eo ppid,tty | awk '$1 == %d && $2 != \"??\" {print $2; exit}'", pid
+        ))
+        local tty = ttyOut:match("(ttys%d+)")
+        local clientArg = tty and ("-c /dev/" .. tty .. " ") or ""
+        hs.execute("/bin/zsh -lc 'tmux switch-client " .. clientArg .. "-t " .. name .. "'")
       end
       if sessionReady then doSwitch() else pendingFocus = doSwitch end
     else
@@ -118,12 +124,7 @@ local function switchToProject(path)
         hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
         hs.eventtap.keyStroke({}, "return")
       end)
-      local apps = hs.application.applicationsForBundleID("com.mitchellh.ghostty")
-      if #apps > 0 then
-        apps[1]:selectMenuItem({"File", "New Window"})
-      else
-        hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
-      end
+      hs.execute("open -na /Applications/Ghostty.app")
     end
   end
 
