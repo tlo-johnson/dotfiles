@@ -1,13 +1,13 @@
 local apps = {
   c = "com.openai.chat",
   f = "com.apple.finder",
-  t = "com.mitchellh.ghostty",
   b = "com.google.chrome",
   m = "com.apple.mail",
   w = "net.whatsapp.WhatsApp",
 }
 
 local utils = require("utils")
+local projects = require("projects")
 
 local appLauncher = hs.hotkey.modal.new({}, "F13")
 
@@ -25,6 +25,16 @@ for key, app in pairs(apps) do
     appLauncher:exit()
   end)
 end
+
+appLauncher:bind({}, "t", function()
+  local win = projects.ghosttyWindowOnCurrentSpace()
+  if win then
+    win:focus()
+  else
+    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+  end
+  appLauncher:exit()
+end)
 
 appLauncher:bind({}, "escape", function()
   appLauncher:exit()
