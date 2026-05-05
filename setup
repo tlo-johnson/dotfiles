@@ -62,15 +62,6 @@ if [ ! -d "$URLVIEW_DST" ]; then
   git clone https://github.com/tmux-plugins/tmux-urlview "$URLVIEW_DST"
 fi
 
-# PaperWM.spoon
-PAPERWM_SRC="$HOME/development/PaperWM.spoon"
-PAPERWM_DST="$DOTFILES/hammerspoon/Spoons/PaperWM.spoon"
-if [ ! -d "$PAPERWM_SRC" ]; then
-  echo "==> Cloning PaperWM.spoon..."
-  git clone https://github.com/mogenson/PaperWM.spoon "$PAPERWM_SRC"
-fi
-link_dir "$PAPERWM_SRC" "$PAPERWM_DST"
-
 # Karabiner
 mkdir -p "$HOME/.config/karabiner"
 link_file "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
