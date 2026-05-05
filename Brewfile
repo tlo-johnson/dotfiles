@@ -15,6 +15,7 @@ brew "fswatch"
 brew "blueutil"
 brew "jj"
 brew "fzf"
+brew "urlview"
 
 # Languages & runtimes
 brew "node"
