@@ -55,13 +55,6 @@ link_dir "$DOTFILES/ghostty" "$HOME/.config/ghostty"
 # Hammerspoon
 link_dir "$DOTFILES/hammerspoon" "$HOME/.hammerspoon"
 
-# tmux-urlview
-URLVIEW_DST="$HOME/.tmux/plugins/tmux-urlview"
-if [ ! -d "$URLVIEW_DST" ]; then
-  echo "==> Cloning tmux-urlview..."
-  git clone https://github.com/tmux-plugins/tmux-urlview "$URLVIEW_DST"
-fi
-
 # Karabiner
 mkdir -p "$HOME/.config/karabiner"
 link_file "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
