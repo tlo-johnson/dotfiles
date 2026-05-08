@@ -1,6 +1,6 @@
 {
   "filterLinkHints": true,
-  "keyMappings": "# Insert your preferred key mappings here.\n\nunmap J\nunmap K\n\nmap j previousTab\nmap k nextTab",
+  "keyMappings": "# Insert your preferred key mappings here.\n\nunmap J\nunmap K\n\nmap j previousTab\nmap k nextTab\n\nmap H goBack\nmap S goForward",
   "settingsVersion": "2.3.1",
   "exclusionRules": [
     {
