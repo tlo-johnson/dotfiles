@@ -4,6 +4,63 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Ducky One2 Mini: Swap Windows/Alt to match Mac layout",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "type": "device_if",
+                                        "identifiers": [
+                                            { "vendor_id": 1046, "product_id": 291 }
+                                        ]
+                                    }
+                                ],
+                                "from": { "key_code": "left_option", "modifiers": { "optional": ["any"] } },
+                                "to": [{ "key_code": "left_command" }]
+                            },
+                            {
+                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "type": "device_if",
+                                        "identifiers": [
+                                            { "vendor_id": 1046, "product_id": 291 }
+                                        ]
+                                    }
+                                ],
+                                "from": { "key_code": "left_command", "modifiers": { "optional": ["any"] } },
+                                "to": [{ "key_code": "left_option" }]
+                            },
+                            {
+                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "type": "device_if",
+                                        "identifiers": [
+                                            { "vendor_id": 1046, "product_id": 291 }
+                                        ]
+                                    }
+                                ],
+                                "from": { "key_code": "right_option", "modifiers": { "optional": ["any"] } },
+                                "to": [{ "key_code": "right_command" }]
+                            },
+                            {
+                                "type": "basic",
+                                "conditions": [
+                                    {
+                                        "type": "device_if",
+                                        "identifiers": [
+                                            { "vendor_id": 1046, "product_id": 291 }
+                                        ]
+                                    }
+                                ],
+                                "from": { "key_code": "right_command", "modifiers": { "optional": ["any"] } },
+                                "to": [{ "key_code": "right_option" }]
+                            }
+                        ]
+                    },
+                    {
                         "description": "Caps = Hyper Layer (variable) / Esc if alone",
                         "manipulators": [
                             {
