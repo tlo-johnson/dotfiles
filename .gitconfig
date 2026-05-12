@@ -36,5 +36,5 @@
   st = stash
   rb = rebase
 
-[includeIf "gitdir:~/ds/"]
-  path = ~/.gitconfig-ds
+[include]
+  path = ~/.gitconfig-specific
