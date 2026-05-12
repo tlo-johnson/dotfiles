@@ -8,7 +8,7 @@ cd ~/dotfiles
 ./setup
 ```
 
-This will install all Homebrew packages, clone PaperWM, and create all symlinks. Then follow the manual steps printed at the end.
+This will install all Homebrew packages, create all symlinks. Then follow the manual steps printed at the end.
 
 ## Manual steps
 
@@ -19,7 +19,7 @@ After running `./setup`:
 3. **Karabiner-Elements** — Open the app and enable it. The Hyper layer (Caps Lock) and all custom remaps are in `karabiner.json` and load automatically.
 4. **Vimium** — Install the Vimium browser extension, then import `vimium-options.json` via the extension's options page.
 5. **1Password CLI** — Run `op signin` and authenticate.
-6. **Mission Control** — Open System Settings > Desktop & Dock > Mission Control. Uncheck "Automatically rearrange Spaces based on most recent use" and check "Displays have separate Spaces". Required for PaperWM.
+6. **Mission Control** — Open System Settings > Desktop & Dock > Mission Control. Uncheck "Automatically rearrange Spaces based on most recent use" and check "Displays have separate Spaces"
 7. **Project switcher** — Create `~/.config/tlo/projects/dirs` and list the directories you want indexed. See [Project switcher config](#project-switcher-config) below.
 
 ## What's configured

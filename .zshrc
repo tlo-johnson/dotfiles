@@ -1,6 +1,6 @@
 # enable tab-completion (required for jj, git, etc.)
-fpath=(~/ds/bin $fpath)
-autoload -Uz compinit && compinit
+fpath=(~/bin $fpath)
+autoload -Uz compinit && compinit -u
 source <(jj util completion zsh)
 
 # Customize prompt
@@ -26,6 +26,5 @@ export PATH="/opt/homebrew/Cellar/libpq/18.3/bin:$HOME/.local/bin:$PATH"
 
 # alias docker=/Applications/Docker.app/Contents/Resources/bin/docker
 alias g=git
-alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
 
 source "$HOME/.config/op/plugins.sh"
