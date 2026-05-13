@@ -128,26 +128,6 @@
                       ]
                     },
                     {
-                      "description": "Hyper + O = 1Password",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "o",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
-                            {
-                              "key_code": "f19"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
                       "description": "Hyper + R = Projects",
                       "manipulators": [
                         {
