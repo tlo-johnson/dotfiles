@@ -1,14 +1,16 @@
 -- installs lsp servers
 local mason = {
   "mason-org/mason.nvim",
-  opts = { },
+  opts = {
+    ensure_installed = { "ktlint" },
+  },
 }
 
 -- makes nvim-lspconfig aware of installed lsp servers
 local masonLspConfig = {
   "mason-org/mason-lspconfig.nvim",
   opts = {
-      ensure_installed = { "lua_ls" },
+      ensure_installed = { "lua_ls", "kotlin_language_server" },
   },
   dependencies = mason,
 }
