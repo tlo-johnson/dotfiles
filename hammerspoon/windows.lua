@@ -92,4 +92,16 @@ for i = 1, 9 do
   windowManager:bind({"shift"}, tostring(i), function() moveWindowToSpace(i) end)
 end
 
+windowManager:bind({}, "]", function()
+  local win = hs.window.focusedWindow()
+  if win then win:moveToScreen(win:screen():next()) end
+  windowManager:exit()
+end)
+
+windowManager:bind({}, "[", function()
+  local win = hs.window.focusedWindow()
+  if win then win:moveToScreen(win:screen():previous()) end
+  windowManager:exit()
+end)
+
 windowManager:bind({}, "escape", function() windowManager:exit() end)
