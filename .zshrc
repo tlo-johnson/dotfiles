@@ -1,5 +1,6 @@
 # enable tab-completion (required for jj, git, etc.)
 fpath=(~/bin $fpath)
+[[ -d ~/ds/bin ]] && fpath=(~/ds/bin $fpath)
 autoload -Uz compinit && compinit -u
 source <(jj util completion zsh)
 
