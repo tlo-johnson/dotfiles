@@ -4,6 +4,7 @@ local apps = {
   b = "com.google.chrome",
   m = "com.apple.mail",
   w = "net.whatsapp.WhatsApp",
+  s = "com.tinyspeck.slackmacgap"
 }
 
 local utils = require("utils")
@@ -33,6 +34,11 @@ appLauncher:bind({}, "t", function()
   else
     hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
   end
+  appLauncher:exit()
+end)
+
+appLauncher:bind({}, "p", function()
+  hs.application.launchOrFocusByBundleID("app.tuple.app")
   appLauncher:exit()
 end)
 
