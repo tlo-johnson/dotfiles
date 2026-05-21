@@ -4,12 +4,11 @@
 --   path              scan directory for immediate subdirs
 --   =path             add path directly (not scanned)
 --   path -> N         assign to macOS space N
---   path -> P         link to Chrome profile directory P
---   path -> N -> P    space N and Chrome profile P
 --   !pattern          ignore directories matching pattern
 --
 -- [urls]
---   https://... -> ProfileDir   open this URL when switching to that Chrome profile
+--   https://...              open this URL
+--   https://... -> Label     open this URL, display as Label
 --
 -- ~/.config/tlo/projects/recents is auto-managed.
 
@@ -69,12 +68,11 @@ local function parseDirs()
         if seg ~= "" then segments[#segments + 1] = seg end
       end
       local path = segments[1] or rest
-      local space, chrome
+      local space
       for i = 2, #segments do
-        if segments[i]:match("^%d+$") then space = tonumber(segments[i])
-        else chrome = segments[i] end
+        if segments[i]:match("^%d+$") then space = tonumber(segments[i]) end
       end
-      local entry = { path = path, space = space, chrome = chrome }
+      local entry = { path = path, space = space }
       if isDirect then direct[#direct + 1] = entry
       else parents[#parents + 1] = entry end
     end
@@ -84,49 +82,16 @@ end
 
 local function lookupProject(path)
   local direct, parents = parseDirs()
-  local space, chrome
+  local space
   for _, e in ipairs(direct) do
-    if e.path == path then
-      space = space or e.space
-      chrome = chrome or e.chrome
-    end
+    if e.path == path then space = space or e.space end
   end
   for _, e in ipairs(parents) do
     if path == e.path or path:sub(1, #e.path + 1) == e.path .. "/" then
       space = space or e.space
-      chrome = chrome or e.chrome
     end
   end
-  return space, chrome
-end
-
-local function chromeWindowFrameForProfile(profile)
-  local direct, parents = parseDirs()
-  local spaceN
-  for _, e in ipairs(direct) do
-    if e.chrome and resolveProfile(e.chrome) == resolveProfile(profile) and e.space then
-      spaceN = e.space; break
-    end
-  end
-  if not spaceN then
-    for _, e in ipairs(parents) do
-      if e.chrome and resolveProfile(e.chrome) == resolveProfile(profile) and e.space then
-        spaceN = e.space; break
-      end
-    end
-  end
-  if not spaceN then return nil end
-  local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
-  local targetSpaceID = spaces and spaces[spaceN]
-  if not targetSpaceID then return nil end
-  local chromeApps = hs.application.applicationsForBundleID("com.google.Chrome")
-  for _, app in ipairs(chromeApps) do
-    for _, win in ipairs(app:allWindows()) do
-      for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
-        if ws == targetSpaceID then return win:frame() end
-      end
-    end
-  end
+  return space
 end
 
 local function switchToSpace(n)
@@ -145,89 +110,6 @@ local function ghosttyWindowOnCurrentSpace()
     end
   end
   return nil
-end
-
-local chromeProfileMap = nil
-local function resolveProfile(name)
-  if not chromeProfileMap then
-    chromeProfileMap = {}
-    local localState = HOME .. "/Library/Application Support/Google/Chrome/Local State"
-    local out = hs.execute(string.format(
-      "python3 -c \"import json; s=json.load(open('%s')); cache=s['profile']['info_cache']; [print(k+'\\\\t'+v['name']) for k,v in cache.items()]\"",
-      localState
-    ))
-    for dir, profileName in out:gmatch("([^\t\n]+)\t([^\n]+)") do
-      chromeProfileMap[profileName:lower()] = dir
-      chromeProfileMap[dir:lower()] = dir
-    end
-  end
-  return chromeProfileMap[name:lower()] or name
-end
-
-local CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-
-local function openUrl(url, profile)
-  local dir = profile and resolveProfile(profile) or nil
-  if dir then
-    local frame = chromeWindowFrameForProfile(profile)
-    if frame then
-      local left   = math.floor(frame.x)
-      local top    = math.floor(frame.y)
-      local script = string.format([[
-        tell application "Google Chrome"
-          repeat with w in windows
-            set wb to bounds of w
-            if item 1 of wb = %d and item 2 of wb = %d then
-              repeat with t in tabs of w
-                if URL of t starts with "%s" then
-                  set active tab index of w to index of t
-                  activate
-                  return "found"
-                end if
-              end repeat
-              exit repeat
-            end if
-          end repeat
-          return "not found"
-        end tell
-      ]], left, top, url)
-      local _, result = hs.osascript.applescript(script)
-      if result == "found" then return end
-    end
-    hs.execute(string.format('"%s" --profile-directory="%s" "%s" &', CHROME, dir, url))
-    return
-  end
-  local script = string.format([[
-    tell application "Google Chrome"
-      repeat with w in windows
-        repeat with t in tabs of w
-          if URL of t starts with "%s" then
-            set active tab index of w to index of t
-            return "found"
-          end if
-        end repeat
-      end repeat
-      return "not found"
-    end tell
-  ]], url)
-  local _, result = hs.osascript.applescript(script)
-  if result ~= "found" then
-    hs.execute(string.format("open -g 'Google Chrome' '%s'", url))
-  end
-end
-
-local function switchToChrome(profile)
-  local sections = parseSections()
-  local urls = {}
-  for _, line in ipairs(sections["urls"] or {}) do
-    local url, p = line:match("^(https?://%S+)%s*->%s*(.+)$")
-    if p == profile then urls[#urls + 1] = url end
-  end
-  if #urls == 0 then
-    hs.execute(string.format('"%s" --profile-directory="%s" &', CHROME, resolveProfile(profile)))
-    return
-  end
-  for _, url in ipairs(urls) do openUrl(url, profile) end
 end
 
 local function switchToProject(path)
@@ -278,7 +160,7 @@ local function switchToProject(path)
     end
   end
 
-  local spaceN, chromeProfile = lookupProject(path)
+  local spaceN = lookupProject(path)
   local spaces = hs.spaces.spacesForScreen(hs.screen.mainScreen())
   local alreadyOnSpace = spaceN and spaces and spaces[spaceN] == hs.spaces.focusedSpace()
 
@@ -286,16 +168,12 @@ local function switchToProject(path)
     local watcher
     watcher = hs.spaces.watcher.new(function()
       watcher:stop()
-      hs.timer.doAfter(0.15, function()
-        focus()
-        if chromeProfile then switchToChrome(chromeProfile) end
-      end)
+      hs.timer.doAfter(0.15, focus)
     end)
     watcher:start()
     switchToSpace(spaceN)
   else
     focus()
-    if chromeProfile then switchToChrome(chromeProfile) end
   end
 end
 
@@ -335,13 +213,13 @@ local function buildChoices()
 
   local sections = parseSections()
   for _, line in ipairs(sections["urls"] or {}) do
-    local url, profile = line:match("^(https?://%S+)%s*->%s*(.+)$")
+    local url, label = line:match("^(https?://%S+)%s*->%s*(.+)$")
+    if not url then url = line:match("^(https?://%S+)$") end
     if url then
       choices[#choices + 1] = {
-        text = url:gsub("^https?://", ""),
-        subText = profile,
+        text = label or url:gsub("^https?://", ""),
+        subText = url,
         url = url,
-        profile = profile,
       }
     end
   end
@@ -358,7 +236,7 @@ local pathToChoice = {}
 
 local chooser = hs.chooser.new(function(choice)
   if not choice then return end
-  if choice.url then openUrl(choice.url, choice.profile)
+  if choice.url then hs.urlevent.openURL(choice.url)
   else switchToProject(choice.path) end
 end)
 chooser:placeholderText("Open project…")
