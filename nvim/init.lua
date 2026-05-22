@@ -45,6 +45,25 @@ vim.keymap.set("t", "<c-n>", "<c-\\><c-n>:TmuxNavigateUp<cr>", opts)
 vim.keymap.set("t", "<c-s>", "<c-\\><c-n>:TmuxNavigateRight<cr>", opts)
 vim.keymap.set("t", "<c-x>", "<c-\\><c-n>", opts)
 
+-- Popup menu navigation
+vim.keymap.set("i", "<Tab>", function()
+  if vim.fn.pumvisible() == 1 then
+    return "<Tab>"
+  end
+  local col = vim.fn.col('.')
+  local char_before = vim.fn.getline('.'):sub(col - 1, col - 1)
+  if col > 1 and char_before:match('[%w%.]') then
+    return "<C-x><C-o>"
+  end
+  return "<Tab>"
+end, { expr = true, silent = true })
+vim.keymap.set("i", "<C-f>", function()
+  return vim.fn.pumvisible() == 1 and "<PageDown>" or "<C-f>"
+end, { expr = true, silent = true })
+vim.keymap.set("i", "<C-b>", function()
+  return vim.fn.pumvisible() == 1 and "<PageUp>" or "<C-b>"
+end, { expr = true, silent = true })
+
 -- Lsp Key Bindings
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
