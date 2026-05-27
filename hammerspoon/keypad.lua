@@ -1,14 +1,6 @@
 local utils = require("utils")
 
-local keypad = hs.hotkey.modal.new({}, "F17")
-
-function keypad:entered()
-  utils.showAlert("Keypad")
-end
-
-function keypad:exited()
-  utils.hideAlert()
-end
+local keypad = utils.createModal("F17", "Keypad")
 
 local function tap(key)
   return function()
@@ -32,4 +24,3 @@ keypad:bind({}, "c",     tap("8"))
 keypad:bind({}, "r",     tap("9"))
 keypad:bind({}, "space", tap("0"))
 
-keypad:bind({}, "escape", function() keypad:exit() end)

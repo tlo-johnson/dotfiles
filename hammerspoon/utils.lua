@@ -29,4 +29,12 @@ function M.hideAlert()
   end
 end
 
+function M.createModal(key, label)
+  local modal = hs.hotkey.modal.new({}, key)
+  function modal:entered() M.showAlert(label) end
+  function modal:exited()  M.hideAlert() end
+  modal:bind({}, "escape", function() modal:exit() end)
+  return modal
+end
+
 return M

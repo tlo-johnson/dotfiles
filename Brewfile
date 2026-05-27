@@ -17,6 +17,7 @@ brew "jj"
 brew "fzf"
 
 # Languages & runtimes
+brew "jenv" # https://github.com/jenv/jenv
 brew "node"
 brew "oven-sh/bun/bun"
 

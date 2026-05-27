@@ -4,14 +4,6 @@ fpath=(~/bin $fpath)
 autoload -Uz compinit && compinit -u
 source <(jj util completion zsh)
 
-# Customize prompt
-# autoload -Uz vcs_info
-# precmd() { vcs_info }
-
-# zstyle ':vcs_info:git:*' formats '%b '
-
-# setopt PROMPT_SUBST
-# PROMPT='%F{green}%*%f %~%f %F{red}${vcs_info_msg_0_}%f-> '
 PROMPT='%F{green}%~ %f-> '
 
 # Use vi mode in shell

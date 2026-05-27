@@ -1,15 +1,7 @@
 local utils = require("utils")
 local log = hs.logger.new("windows", "info")
 
-local windowManager = hs.hotkey.modal.new({}, "F14")
-
-function windowManager:entered()
-  utils.showAlert("Window")
-end
-
-function windowManager:exited()
-  utils.hideAlert()
-end
+local windowManager = utils.createModal("F14", "Window")
 
 local function moveWindow(unit)
   local win = hs.window.focusedWindow()
@@ -104,4 +96,3 @@ windowManager:bind({}, "[", function()
   windowManager:exit()
 end)
 
-windowManager:bind({}, "escape", function() windowManager:exit() end)

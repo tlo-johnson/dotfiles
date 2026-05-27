@@ -1,9 +1,5 @@
 EDITOR=nvim
 eval "$(/opt/homebrew/bin/brew shellenv)"
-alias g=git
-set -o vi
-
-bindkey -v
 
 alias obsidian="~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents"
 
@@ -13,17 +9,9 @@ export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agen
 # Ruby
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
 
-# Java 17
-# export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
-# export JAVA_HOME="$(brew --prefix openjdk@17)"
-
-# Java 21
-export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
-export JAVA_HOME="$(brew --prefix openjdk@21)"
-
-# >>> JVM installed by coursier >>>
-# export JAVA_HOME="/Users/tlo/Library/Caches/Coursier/arc/https/github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.24%252B8/OpenJDK11U-jdk_x64_mac_hotspot_11.0.24_8.tar.gz/jdk-11.0.24+8/Contents/Home"
-# <<< JVM installed by coursier <<<
+# Java (managed by jenv)
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
 
 # >>> coursier install directory >>>
 export PATH="$PATH:/Users/tlo/Library/Application Support/Coursier/bin"

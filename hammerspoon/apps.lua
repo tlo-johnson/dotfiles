@@ -9,16 +9,9 @@ local apps = {
 
 local utils = require("utils")
 local projects = require("projects")
+local tabs = require("tabs")
 
-local appLauncher = hs.hotkey.modal.new({}, "F13")
-
-function appLauncher:entered()
-  utils.showAlert("Apps")
-end
-
-function appLauncher:exited()
-  utils.hideAlert()
-end
+local appLauncher = utils.createModal("F13", "Apps")
 
 for key, app in pairs(apps) do
   appLauncher:bind({}, key, function()
@@ -42,7 +35,8 @@ appLauncher:bind({}, "p", function()
   appLauncher:exit()
 end)
 
-appLauncher:bind({}, "escape", function()
+appLauncher:bind({}, "u", function()
+  tabs.showTabChooser()
   appLauncher:exit()
 end)
 
