@@ -22,6 +22,14 @@ async function getAllTabs() {
   return wins.flatMap(w => (w.tabs || []).map(serializeTab));
 }
 
+async function getClientId() {
+  const result = await api.storage.local.get('clientId');
+  if (result.clientId) return result.clientId;
+  const id = BROWSER + ':' + crypto.randomUUID();
+  await api.storage.local.set({ clientId: id });
+  return id;
+}
+
 function wsSend(data) {
   if (ws && wsReady) {
     ws.send(JSON.stringify(data));
@@ -35,6 +43,8 @@ function connect() {
 
   ws.onopen = async () => {
     wsReady = true;
+    const clientId = await getClientId();
+    wsSend({ type: 'register', id: clientId });
     const tabs = await getAllTabs();
     wsSend({ type: 'tabs_all', browser: BROWSER, tabs });
   };
@@ -49,14 +59,13 @@ function connect() {
   ws.onmessage = ({ data }) => {
     let msg;
     try { msg = JSON.parse(data); } catch { return; }
-    if (msg.type === 'focus' && msg.browser === BROWSER) {
+    if (msg.type === 'focus') {
       api.tabs.update(msg.tabId, { active: true });
       api.windows.update(msg.windowId, { focused: true });
     }
   };
 }
 
-// Wake the service worker every 25s to reconnect if the socket dropped
 if (!IS_FIREFOX) {
   chrome.alarms.create('keepalive', { periodInMinutes: 25 / 60 });
   chrome.alarms.onAlarm.addListener(alarm => {

@@ -3,8 +3,11 @@ local M = {}
 local tabById = {}
 M.tabStore = {}
 
-local function makeId(browser, tabId, windowId)
-  return browser .. ":" .. tostring(tabId) .. ":" .. tostring(windowId)
+local ws = nil
+local reconnectTimer = nil
+
+local function makeId(clientId, tabId, windowId)
+  return clientId .. ":" .. tostring(tabId) .. ":" .. tostring(windowId)
 end
 
 local function rebuildStore()
@@ -16,21 +19,21 @@ local function rebuildStore()
 end
 
 local function upsertTab(entry)
-  local id = makeId(entry.browser, entry.tabId, entry.windowId)
+  local id = makeId(entry.clientId, entry.tabId, entry.windowId)
   entry.id = id
   tabById[id] = entry
   rebuildStore()
 end
 
-local function removeTab(browser, tabId, windowId)
-  local id = makeId(browser, tabId, windowId)
+local function removeTab(clientId, tabId, windowId)
+  local id = makeId(clientId, tabId, windowId)
   tabById[id] = nil
   rebuildStore()
 end
 
-local function clearBrowserTabs(browser)
+local function clearClientTabs(clientId)
   for id, entry in pairs(tabById) do
-    if entry.browser == browser then
+    if entry.clientId == clientId then
       tabById[id] = nil
     end
   end
@@ -39,12 +42,13 @@ end
 
 local function handleMessage(raw)
   local ok, msg = pcall(hs.json.decode, raw)
-  if not ok or not msg or not msg.browser then return end
+  if not ok or not msg then return end
 
   if msg.type == "tabs_all" then
-    clearBrowserTabs(msg.browser)
+    clearClientTabs(msg.clientId)
     for _, t in ipairs(msg.tabs or {}) do
       upsertTab({
+        clientId = msg.clientId,
         browser  = msg.browser,
         tabId    = t.id,
         windowId = t.windowId,
@@ -57,6 +61,7 @@ local function handleMessage(raw)
     local t = msg.tab
     if t then
       upsertTab({
+        clientId = msg.clientId,
         browser  = msg.browser,
         tabId    = t.id,
         windowId = t.windowId,
@@ -66,17 +71,22 @@ local function handleMessage(raw)
       })
     end
   elseif msg.type == "tab_removed" then
-    removeTab(msg.browser, msg.tabId, msg.windowId)
+    removeTab(msg.clientId, msg.tabId, msg.windowId)
+  elseif msg.type == "client_disconnected" then
+    clearClientTabs(msg.id)
   end
 end
 
-local httpServer = nil
+local function scheduleReconnect()
+  if reconnectTimer then reconnectTimer:stop() end
+  reconnectTimer = hs.timer.doAfter(2, M.start)
+end
 
 function M.focusTab(entry)
-  if httpServer then
-    httpServer:send(hs.json.encode({
+  if ws and ws:status() == "open" then
+    ws:send(hs.json.encode({
       type     = "focus",
-      browser  = entry.browser,
+      target   = entry.clientId,
       tabId    = entry.tabId,
       windowId = entry.windowId,
     }))
@@ -84,9 +94,13 @@ function M.focusTab(entry)
 end
 
 function M.stop()
-  if httpServer then
-    httpServer:stop()
-    httpServer = nil
+  if reconnectTimer then
+    reconnectTimer:stop()
+    reconnectTimer = nil
+  end
+  if ws then
+    ws:close()
+    ws = nil
   end
   tabById = {}
   M.tabStore = {}
@@ -95,19 +109,16 @@ end
 function M.start()
   M.stop()
 
-  httpServer = hs.httpserver.new(false, false)
-  httpServer:setPort(27124)
-  httpServer:websocket("/", function(message)
-    if message == "open" then
-      -- connection established
-    elseif message == "close" then
-      -- tabs refreshed when browser reconnects and sends tabs_all
-    else
+  ws = hs.websocket.new("ws://localhost:27124", function(event, message)
+    if event == "open" then
+      ws:send(hs.json.encode({ type = "register", id = "hammerspoon" }))
+    elseif event == "received" then
       handleMessage(message)
+    elseif event == "closed" or event == "fail" then
+      ws = nil
+      scheduleReconnect()
     end
-    return ""
   end)
-  httpServer:start()
 end
 
 return M

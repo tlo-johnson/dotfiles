@@ -1,0 +1,9 @@
+{
+  "name": "hammerspoon-tabs-relay",
+  "version": "1.0.0",
+  "description": "WebSocket relay for Hammerspoon tab switcher",
+  "main": "relay.js",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
