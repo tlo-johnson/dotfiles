@@ -40,6 +40,18 @@ local function clearClientTabs(clientId)
   rebuildStore()
 end
 
+local function makeEntry(clientId, browser, t)
+  return {
+    clientId = clientId,
+    browser  = browser,
+    tabId    = t.id,
+    windowId = t.windowId,
+    tabIndex = t.index,
+    title    = t.title or "",
+    url      = t.url or "",
+  }
+end
+
 local function handleMessage(raw)
   local ok, msg = pcall(hs.json.decode, raw)
   if not ok or not msg then return end
@@ -47,42 +59,26 @@ local function handleMessage(raw)
   if msg.type == "state_sync" then
     tabById = {}
     for _, t in ipairs(msg.tabs or {}) do
-      upsertTab({
-        clientId = t.clientId,
-        browser  = t.browser,
-        tabId    = t.id,
-        windowId = t.windowId,
-        tabIndex = t.index,
-        title    = t.title or "",
-        url      = t.url or "",
-      })
+      local entry = makeEntry(t.clientId, t.browser, t)
+      local id = makeId(t.clientId, t.id, t.windowId)
+      entry.id = id
+      tabById[id] = entry
     end
+    rebuildStore()
   elseif msg.type == "tabs_all" then
-    clearClientTabs(msg.clientId)
-    for _, t in ipairs(msg.tabs or {}) do
-      upsertTab({
-        clientId = msg.clientId,
-        browser  = msg.browser,
-        tabId    = t.id,
-        windowId = t.windowId,
-        tabIndex = t.index,
-        title    = t.title or "",
-        url      = t.url or "",
-      })
+    for id, entry in pairs(tabById) do
+      if entry.clientId == msg.clientId then tabById[id] = nil end
     end
+    for _, t in ipairs(msg.tabs or {}) do
+      local entry = makeEntry(msg.clientId, msg.browser, t)
+      local id = makeId(msg.clientId, t.id, t.windowId)
+      entry.id = id
+      tabById[id] = entry
+    end
+    rebuildStore()
   elseif msg.type == "tab_upsert" then
     local t = msg.tab
-    if t then
-      upsertTab({
-        clientId = msg.clientId,
-        browser  = msg.browser,
-        tabId    = t.id,
-        windowId = t.windowId,
-        tabIndex = t.index,
-        title    = t.title or "",
-        url      = t.url or "",
-      })
-    end
+    if t then upsertTab(makeEntry(msg.clientId, msg.browser, t)) end
   elseif msg.type == "tab_removed" then
     removeTab(msg.clientId, msg.tabId, msg.windowId)
   elseif msg.type == "client_disconnected" then

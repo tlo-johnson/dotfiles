@@ -13,7 +13,6 @@ function serializeTab(tab) {
     index:    tab.index,
     title:    tab.title || '',
     url:      tab.url || '',
-    active:   tab.active,
   };
 }
 
