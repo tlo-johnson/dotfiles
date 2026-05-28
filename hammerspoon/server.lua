@@ -44,7 +44,20 @@ local function handleMessage(raw)
   local ok, msg = pcall(hs.json.decode, raw)
   if not ok or not msg then return end
 
-  if msg.type == "tabs_all" then
+  if msg.type == "state_sync" then
+    tabById = {}
+    for _, t in ipairs(msg.tabs or {}) do
+      upsertTab({
+        clientId = t.clientId,
+        browser  = t.browser,
+        tabId    = t.id,
+        windowId = t.windowId,
+        tabIndex = t.index,
+        title    = t.title or "",
+        url      = t.url or "",
+      })
+    end
+  elseif msg.type == "tabs_all" then
     clearClientTabs(msg.clientId)
     for _, t in ipairs(msg.tabs or {}) do
       upsertTab({
