@@ -6,10 +6,6 @@
 --   path -> N         assign to macOS space N
 --   !pattern          ignore directories matching pattern
 --
--- [urls]
---   https://...              open this URL
---   https://... -> Label     open this URL, display as Label
---
 -- ~/.config/tlo/projects/recents is auto-managed.
 
 local HOME   = os.getenv("HOME")
@@ -211,19 +207,6 @@ local function buildChoices()
   for _, p in ipairs(direct) do add(p) end
   for p in found:gmatch("[^\n]+") do add(p) end
 
-  local sections = parseSections()
-  for _, line in ipairs(sections["urls"] or {}) do
-    local url, label = line:match("^(https?://%S+)%s*->%s*(.+)$")
-    if not url then url = line:match("^(https?://%S+)$") end
-    if url then
-      choices[#choices + 1] = {
-        text = label or url:gsub("^https?://", ""),
-        subText = url,
-        url = url,
-      }
-    end
-  end
-
   return choices
 end
 
@@ -236,8 +219,7 @@ local pathToChoice = {}
 
 local chooser = hs.chooser.new(function(choice)
   if not choice then return end
-  if choice.url then hs.urlevent.openURL(choice.url)
-  else switchToProject(choice.path) end
+  switchToProject(choice.path)
 end)
 chooser:placeholderText("Open project…")
 chooser:queryChangedCallback(function(query)
@@ -256,9 +238,8 @@ local function show()
   pathToChoice = {}
   local lines = {}
   for _, c in ipairs(allChoices) do
-    local key = c.url or c.path
-    pathToChoice[key] = c
-    lines[#lines + 1] = key
+    pathToChoice[c.path] = c
+    lines[#lines + 1] = c.path
   end
   local f = io.open(inputFile, "w")
   f:write(table.concat(lines, "\n"))
@@ -271,9 +252,6 @@ end
 return {
   show             = show,
   buildChoices     = buildChoices,
-  activate         = function(choice)
-    if choice.url then hs.urlevent.openURL(choice.url)
-    else switchToProject(choice.path) end
-  end,
+  activate         = function(choice) switchToProject(choice.path) end,
   ghosttyWindowOnCurrentSpace = ghosttyWindowOnCurrentSpace,
 }
