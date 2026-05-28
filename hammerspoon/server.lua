@@ -81,12 +81,6 @@ function M.focusTab(entry)
       windowId = entry.windowId,
     }))
   end
-  local bundleIds = {
-    chrome  = "com.google.Chrome",
-    firefox = "org.mozilla.firefox",
-  }
-  local bid = bundleIds[entry.browser]
-  if bid then hs.application.launchOrFocusByBundleID(bid) end
 end
 
 function M.stop()

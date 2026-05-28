@@ -3,7 +3,7 @@
   "name": "Hammerspoon Tab Switcher",
   "version": "1.0.0",
   "description": "Syncs browser tabs to Hammerspoon for keyboard-driven switching.",
-  "permissions": ["tabs", "windows"],
+  "permissions": ["tabs", "windows", "alarms"],
   "host_permissions": ["ws://localhost/*"],
   "background": {
     "service_worker": "background.js"

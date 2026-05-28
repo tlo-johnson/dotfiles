@@ -1,12 +1,10 @@
-const IS_FIREFOX = typeof browser !== 'undefined';
+const IS_FIREFOX = navigator.userAgent.includes('Firefox');
 const api = IS_FIREFOX ? browser : chrome;
 const WS_URL = 'ws://localhost:27124';
 const BROWSER = IS_FIREFOX ? 'firefox' : 'chrome';
 
 let ws = null;
 let wsReady = false;
-let reconnectDelay = 1000;
-const MAX_DELAY = 30000;
 
 function serializeTab(tab) {
   return {
@@ -31,11 +29,12 @@ function wsSend(data) {
 }
 
 function connect() {
+  if (ws && (ws.readyState === WebSocket.CONNECTING || ws.readyState === WebSocket.OPEN)) return;
+
   ws = new WebSocket(WS_URL);
 
   ws.onopen = async () => {
     wsReady = true;
-    reconnectDelay = 1000;
     const tabs = await getAllTabs();
     wsSend({ type: 'tabs_all', browser: BROWSER, tabs });
   };
@@ -43,8 +42,6 @@ function connect() {
   ws.onclose = () => {
     wsReady = false;
     ws = null;
-    setTimeout(connect, reconnectDelay);
-    reconnectDelay = Math.min(reconnectDelay * 2, MAX_DELAY);
   };
 
   ws.onerror = () => {};
@@ -57,6 +54,14 @@ function connect() {
       api.windows.update(msg.windowId, { focused: true });
     }
   };
+}
+
+// Wake the service worker every 25s to reconnect if the socket dropped
+if (!IS_FIREFOX) {
+  chrome.alarms.create('keepalive', { periodInMinutes: 25 / 60 });
+  chrome.alarms.onAlarm.addListener(alarm => {
+    if (alarm.name === 'keepalive') connect();
+  });
 }
 
 api.tabs.onCreated.addListener(tab => {
