@@ -1,5 +1,5 @@
 local M = {}
-local server = require("server")
+local server = require("browser-tab-store")
 
 -- hs.chooser only round-trips text/subText/image/uuid/valid — store entries by uuid
 local pendingEntries = {}

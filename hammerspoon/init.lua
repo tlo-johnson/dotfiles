@@ -1,10 +1,11 @@
 require("utils")
-require("server").start()
 require("apps")
 require("windows")
 require("bluetooth")
 require("config")
 require("keypad")
 require("projects")
+local tabstore = require("browser-tab-store")
 
 hs.notify.new({title="Hammerspoon", informativeText="Config loaded"}):send()
+tabstore.start()

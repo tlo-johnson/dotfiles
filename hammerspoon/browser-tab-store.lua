@@ -5,6 +5,7 @@ M.tabStore = {}
 
 local ws = nil
 local reconnectTimer = nil
+local connectStartTime = nil
 
 local function makeId(clientId, tabId, windowId)
   return clientId .. ":" .. tostring(tabId) .. ":" .. tostring(windowId)
@@ -46,7 +47,6 @@ local function makeEntry(clientId, browser, t)
     browser  = browser,
     tabId    = t.id,
     windowId = t.windowId,
-    tabIndex = t.index,
     title    = t.title or "",
     url      = t.url or "",
   }
@@ -86,9 +86,29 @@ local function handleMessage(raw)
   end
 end
 
-local function scheduleReconnect()
+local function connect()
+  ws = hs.websocket.new("ws://localhost:27124", function(event, message)
+    if event == "open" then
+      connectStartTime = nil
+      hs.notify.new({ title = "Browser Tabs", informativeText = "Connected to relay" }):send()
+      ws:send(hs.json.encode({ type = "register", id = "hammerspoon" }))
+    elseif event == "received" then
+      handleMessage(message)
+    elseif event == "closed" or event == "fail" then
+      ws = nil
+      scheduleReconnect()
+    end
+  end)
+end
+
+function scheduleReconnect()
   if reconnectTimer then reconnectTimer:stop() end
-  reconnectTimer = hs.timer.doAfter(2, M.start)
+  if os.time() - (connectStartTime or 0) >= 30 then
+    connectStartTime = nil
+    hs.notify.new({ title = "Browser Tabs", informativeText = "Could not connect to relay" }):send()
+    return
+  end
+  reconnectTimer = hs.timer.doAfter(2, connect)
 end
 
 function M.focusTab(entry)
@@ -106,6 +126,7 @@ function M.focusTab(entry)
 end
 
 function M.stop()
+  connectStartTime = nil
   if reconnectTimer then
     reconnectTimer:stop()
     reconnectTimer = nil
@@ -120,17 +141,9 @@ end
 
 function M.start()
   M.stop()
-
-  ws = hs.websocket.new("ws://localhost:27124", function(event, message)
-    if event == "open" then
-      ws:send(hs.json.encode({ type = "register", id = "hammerspoon" }))
-    elseif event == "received" then
-      handleMessage(message)
-    elseif event == "closed" or event == "fail" then
-      ws = nil
-      scheduleReconnect()
-    end
-  end)
+  connectStartTime = os.time()
+  hs.notify.new({ title = "Browser Tabs", informativeText = "Connecting to relay…" }):send()
+  connect()
 end
 
 return M
