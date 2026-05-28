@@ -268,9 +268,12 @@ local function show()
   chooser:show()
 end
 
-hs.hotkey.bind({}, "F18", show)
-
 return {
-  show = show,
+  show             = show,
+  buildChoices     = buildChoices,
+  activate         = function(choice)
+    if choice.url then hs.urlevent.openURL(choice.url)
+    else switchToProject(choice.path) end
+  end,
   ghosttyWindowOnCurrentSpace = ghosttyWindowOnCurrentSpace,
 }

@@ -9,7 +9,6 @@ local apps = {
 
 local utils = require("utils")
 local projects = require("projects")
-local tabs = require("tabs")
 
 local appLauncher = utils.createModal("F13", "Apps")
 
@@ -35,10 +34,6 @@ appLauncher:bind({}, "p", function()
   appLauncher:exit()
 end)
 
-appLauncher:bind({}, "u", function()
-  tabs.showTabChooser()
-  appLauncher:exit()
-end)
 
 appLauncher:bind({}, "n", function()
   local script = os.getenv("HOME") .. "/.hammerspoon/scripts/capture"
