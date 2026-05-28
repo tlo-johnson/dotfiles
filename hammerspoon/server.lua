@@ -91,6 +91,9 @@ function M.focusTab(entry)
       windowId = entry.windowId,
     }))
   end
+  if entry.browser == "firefox" then
+    hs.application.launchOrFocusByBundleID("org.mozilla.firefox")
+  end
 end
 
 function M.stop()
