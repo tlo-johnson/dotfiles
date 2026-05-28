@@ -1,4 +1,5 @@
 require("utils")
+require("server").start()
 require("apps")
 require("windows")
 require("bluetooth")
