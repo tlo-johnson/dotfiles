@@ -1,0 +1,29 @@
+[user]
+name = "Tolu A."
+email = "tolu@adesegha.ca"
+
+[ui]
+editor = "nvim"
+
+[aliases]
+# Shorter log with a compact template
+l = ["log", "-r", "::@"]
+la = ["log", "-r", "all()"]
+
+# Status shorthand
+s = ["status"]
+
+# Describe current change
+d = ["describe", "-m"]
+
+# New change (like git checkout -b)
+n = ["new"]
+
+# Squash into parent
+sq = ["squash"]
+
+# Push current branch
+ps = ["git", "push"]
+
+# Fetch from remote
+pl = ["git", "fetch"]
