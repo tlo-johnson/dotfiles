@@ -14,10 +14,13 @@ la = ["log", "-r", "all()"]
 s = ["status"]
 
 # Describe current change
-d = ["describe", "-m"]
+m = ["describe", "-m"]
 
 # New change (like git checkout -b)
 n = ["new"]
+
+# Edit change (like git checkout -b)
+e = ["edit"]
 
 # Squash into parent
 sq = ["squash"]
@@ -27,3 +30,10 @@ ps = ["git", "push"]
 
 # Fetch from remote
 pl = ["git", "fetch"]
+
+d = ["diff"]
+
+# Bookmark shorthand
+bc = ["bookmark", "create"]
+bt = ["bookmark", "track"]
+bs = ["bookmark", "set", "--allow-backwards"]
