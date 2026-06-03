@@ -7,7 +7,7 @@ editor = "nvim"
 
 [aliases]
 # Shorter log with a compact template
-l = ["log", "-r", "::@"]
+l = ["log", "--limit", "10"]
 la = ["log", "-r", "all()"]
 
 # Status shorthand
