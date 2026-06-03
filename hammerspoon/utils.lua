@@ -1,8 +1,12 @@
 local M = {}
 
 local alertCanvas = nil
+local hideTimer = nil
 
-function M.showAlert(text)
+function M.showAlert(text, duration)
+  if hideTimer then hideTimer:stop(); hideTimer = nil end
+  if alertCanvas then alertCanvas:delete(); alertCanvas = nil end
+
   local screen = hs.screen.mainScreen()
   local frame = screen:frame()
   local w, h, pad = 80, 28, 12
@@ -20,13 +24,12 @@ function M.showAlert(text)
     frame = { x = 0, y = 6, w = w, h = h },
   }
   alertCanvas:show()
+  if duration then hideTimer = hs.timer.doAfter(duration, M.hideAlert) end
 end
 
 function M.hideAlert()
-  if alertCanvas then
-    alertCanvas:delete()
-    alertCanvas = nil
-  end
+  if hideTimer then hideTimer:stop(); hideTimer = nil end
+  if alertCanvas then alertCanvas:delete(); alertCanvas = nil end
 end
 
 function M.createModal(key, label)

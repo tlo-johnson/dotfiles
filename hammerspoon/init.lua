@@ -6,6 +6,7 @@ require("config")
 require("keypad")
 require("projects")
 require("switcher")
+require("mic")
 local tabstore = require("browser-tab-store")
 
 hs.notify.new({title="Hammerspoon", informativeText="Config loaded"}):send()
