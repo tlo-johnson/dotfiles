@@ -1,8 +1,6 @@
 local apps = {
   c = "com.openai.chat",
   f = "com.apple.finder",
-  b = "com.google.chrome",
-  m = "com.apple.mail",
   w = "net.whatsapp.WhatsApp",
   s = "com.tinyspeck.slackmacgap"
 }
@@ -18,6 +16,26 @@ for key, app in pairs(apps) do
     appLauncher:exit()
   end)
 end
+
+appLauncher:bind({}, "b", function()
+  local browserIds = { "com.google.Chrome", "org.mozilla.firefox" }
+  local currentSpace = hs.spaces.focusedSpace()
+  for _, bundleId in ipairs(browserIds) do
+    local app = hs.application.get(bundleId)
+    if app then
+      for _, win in ipairs(app:allWindows()) do
+        for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
+          if ws == currentSpace then
+            win:focus()
+            appLauncher:exit()
+            return
+          end
+        end
+      end
+    end
+  end
+  appLauncher:exit()
+end)
 
 appLauncher:bind({}, "t", function()
   local win = projects.ghosttyWindowOnCurrentSpace()
