@@ -23,3 +23,4 @@ alias j=jj
 alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
 
 source "$HOME/.config/op/plugins.sh"
+[[ -f ~/ds/.zshrc ]] && source ~/ds/.zshrc
