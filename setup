@@ -41,11 +41,14 @@ link_dir() {
 }
 
 # Shell
-link_file "$DOTFILES/.zshrc"    "$HOME/.zshrc"
-link_file "$DOTFILES/.zprofile" "$HOME/.zprofile"
+link_file "$DOTFILES/.zshrc"        "$HOME/.zshrc"
+link_file "$DOTFILES/.zshrc.mac"    "$HOME/.zshrc.mac"
+link_file "$DOTFILES/.zprofile"     "$HOME/.zprofile"
+link_file "$DOTFILES/.zprofile.mac" "$HOME/.zprofile.mac"
 
 # Git
-link_file "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
+link_file "$DOTFILES/.gitconfig"     "$HOME/.gitconfig"
+link_file "$DOTFILES/.gitconfig.mac" "$HOME/.gitconfig.mac"
 
 # Tmux
 link_file "$DOTFILES/.tmux.conf" "$HOME/.tmux.conf"

@@ -1,0 +1,15 @@
+# can pull gpg signing settings from 1password:
+# view ssh key -> ellipsis menu -> configure commit signing
+
+[user]
+  email = <email>
+  signingkey = <obtain from 1password>
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = <obtain from 1password>
+
+[commit]
+  gpgsign = true

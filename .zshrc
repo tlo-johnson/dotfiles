@@ -15,12 +15,18 @@ zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 bindkey "^[[A" up-line-or-beginning-search
 bindkey "^[[B" down-line-or-beginning-search
-export PATH="/opt/homebrew/Cellar/libpq/18.3/bin:$HOME/.local/bin:$PATH"
 
-# alias docker=/Applications/Docker.app/Contents/Resources/bin/docker
+export PATH="$HOME/.local/bin:$PATH"
+
 alias g=git
 alias j=jj
 alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
 
-source "$HOME/.config/op/plugins.sh"
+[[ -f "$HOME/.config/op/plugins.sh" ]] && source "$HOME/.config/op/plugins.sh"
 [[ -f ~/ds/.zshrc ]] && source ~/ds/.zshrc
+
+# OS-specific config
+case "$OSTYPE" in
+  darwin*) [[ -f "$HOME/.zshrc.mac"   ]] && source "$HOME/.zshrc.mac" ;;
+  linux*)  [[ -f "$HOME/.zshrc.linux" ]] && source "$HOME/.zshrc.linux" ;;
+esac
