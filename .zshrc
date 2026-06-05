@@ -2,7 +2,7 @@
 fpath=(~/bin $fpath)
 [[ -d ~/ds/bin ]] && fpath=(~/ds/bin $fpath)
 autoload -Uz compinit && compinit -u
-source <(jj util completion zsh)
+command -v jj &>/dev/null && source <(jj util completion zsh)
 
 PROMPT='%F{green}%~ %f-> '
 

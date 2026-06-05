@@ -1,5 +1,10 @@
 # dotfiles
 
+Works on both **macOS** and **Linux / WSL**. `setup` detects the OS (`$OSTYPE`)
+and installs packages with Homebrew on macOS or apt on Linux, then symlinks the
+portable configs plus the matching OS variant. macOS-only GUI app configs
+(Hammerspoon, Karabiner, Ghostty) are skipped on Linux.
+
 ## Setup
 
 ```sh
@@ -8,9 +13,17 @@ cd ~/dotfiles
 ./setup
 ```
 
-This will install all Homebrew packages, create all symlinks. Then follow the manual steps printed at the end.
+This installs packages (Homebrew on macOS, apt on Linux), creates all symlinks,
+and bootstraps `~/.gitconfig.specific` from the template. Then follow the manual
+steps printed at the end.
 
 ## Manual steps
+
+### Both OSes
+
+- **Git identity & signing** — Edit `~/.gitconfig.specific` (created from `.gitconfig.specific.template`) with your email and commit-signing key.
+
+### macOS
 
 After running `./setup`:
 
@@ -21,6 +34,16 @@ After running `./setup`:
 5. **1Password CLI** — Run `op signin` and authenticate.
 6. **Mission Control** — Open System Settings > Desktop & Dock > Mission Control. Uncheck "Automatically rearrange Spaces based on most recent use" and check "Displays have separate Spaces"
 7. **Project switcher** — Create `~/.config/tlo/projects/dirs` and list the directories you want indexed. See [Project switcher config](#project-switcher-config) below.
+
+### Linux / WSL
+
+`apt` covers most core tools; a few aren't in the default repos:
+
+1. **jj (jujutsu)** — `cargo install --locked jj-cli`, or download a release binary. The `.zshrc` completion line is guarded, so a missing `jj` won't break shell startup.
+2. **node / bun** — `sudo apt install nodejs npm`; bun via `curl -fsSL https://bun.sh/install | bash`.
+3. **SSH agent / signing** — Configure in `~/.zprofile.linux` and `~/.gitconfig.specific` (e.g. bridge to the 1Password app on Windows via npiperelay, or use a local ssh-agent).
+
+> Note: Hammerspoon, Karabiner, and Ghostty configs are macOS-only and are not symlinked on Linux. `autohotkey.ahk` is the Windows-side analog of the Karabiner Hyper layer — load it manually with AutoHotkey on the Windows host.
 
 ## What's configured
 
