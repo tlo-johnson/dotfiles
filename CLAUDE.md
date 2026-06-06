@@ -59,6 +59,14 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 
 **Karabiner** (`karabiner.json`) — Caps Lock remapped as Hyper key (tap = Escape). Defines the Hyper layer and all modal sublayers (windows, apps, projects, config, keypad).
 
+**AutoHotkey** (`autohotkey/`) — Windows-host equivalent of Karabiner + Hammerspoon for WSL (the macOS stack runs at OS level, so its WSL analog runs on Windows, not inside WSL). AutoHotkey v2, loaded via `main.ahk`, which `#Include`s per-feature modules paralleling the Hammerspoon ones:
+- `hyper.ahk` — Caps=Hyper layer + Alt→Ctrl + shift-toggle-caps (≈ `karabiner.json`)
+- `windows.ahk` + `vda.ahk` — window tiling (halves/quarters/maximize) + virtual-desktop "spaces" via VirtualDesktopAccessor.dll (≈ `windows.lua`)
+- `apps.ahk` — app launcher (≈ `apps.lua`); `keypad.ahk` — numpad (≈ `keypad.lua`); `mic.ahk` — mic toggle + indicator (≈ `mic.lua`)
+- `projects.ahk` — Hyper+R chooser GUI (≈ `projects.lua`/`hs.chooser`), backed by the WSL-side `bin/tlo-projects` (`--list`/`--switch`)
+
+Sub-modes are sticky AHK globals (`mode`) instead of Karabiner's F13–F18 → Hammerspoon modal indirection. Layout is Dvorak: triggers bind the Dvorak char on the intended physical key (table in `hyper.ahk`). Not symlinked by `setup` — loaded manually on the Windows host. `bin/tlo-projects` is symlinked to `~/.local/bin`.
+
 ## Project switcher config format
 
 `~/.config/tlo/projects/dirs` uses ini-style sections:

@@ -1,0 +1,134 @@
+#!/usr/bin/env zsh
+# tlo-projects — WSL project switcher (port of hammerspoon/projects.lua).
+#
+# Reads ~/.config/tlo/projects/dirs (same ini format as macOS) and switches to /
+# creates a project's tmux session.
+#
+# Modes:
+#   tlo-projects              interactive fzf picker (standalone / tmux popup use)
+#   tlo-projects --list       print "name<TAB>path" per project (for the AHK chooser)
+#   tlo-projects --switch P   record recent + switch/create the tmux session for path P
+#
+# The Windows-side AutoHotkey Hyper+R renders its own chooser GUI, calling
+# `--list` to populate it and `--switch` on selection (see autohotkey/projects.ahk).
+#
+# dirs format:
+#   [directories]
+#   $HOME/code        scan one level deep for subdirectories
+#   =$HOME/dotfiles   add this path directly
+#   !node_modules     ignore directories matching this name
+#   $HOME/work -> 2   (the "-> N" macOS space hint is parsed but ignored here)
+
+set -o pipefail
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/tlo/projects"
+DIRS="$CONFIG/dirs"
+RECENTS="$CONFIG/recents"
+mkdir -p "$CONFIG"
+
+# ---- Build the candidate project list into the `cands` array ---------------
+typeset -a cands
+build_candidates() {
+  if [[ ! -f "$DIRS" ]]; then
+    print -u2 "tlo-projects: no $DIRS — create it (see README)."
+    return 1
+  fi
+
+  typeset -a parents direct ignore
+  local section="" raw line path
+  while IFS= read -r raw; do
+    line="${raw#"${raw%%[![:space:]]*}"}"     # ltrim
+    line="${line%"${line##*[![:space:]]}"}"    # rtrim
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    if [[ "$line" == \[*\] ]]; then
+      section="${line#\[}"; section="${section%\]}"; continue
+    fi
+    [[ "$section" == "directories" ]] || continue
+    line="${line//\$HOME/$HOME}"
+    if [[ "$line" == \!* ]]; then
+      ignore+=("${line#!}"); continue
+    fi
+    path="${line%%->*}"                         # strip "-> N" space hint
+    path="${path%"${path##*[![:space:]]}"}"     # rtrim
+    if [[ "$path" == \=* ]]; then direct+=("${path#=}")
+    else parents+=("$path"); fi
+  done < "$DIRS"
+
+  typeset -A seen
+  local p parent child pat
+  is_ignored() {
+    for pat in "${ignore[@]}"; do
+      [[ "/$1/" == *"/$pat/"* ]] && return 0
+    done
+    return 1
+  }
+  add() {
+    [[ -z "$1" || -n "${seen[$1]:-}" || ! -d "$1" ]] && return
+    is_ignored "$1" && return
+    seen[$1]=1
+    cands+=("$1")
+  }
+
+  if [[ -f "$RECENTS" ]]; then
+    while IFS= read -r p; do add "$p"; done < "$RECENTS"
+  fi
+  for p in "${direct[@]}"; do add "$p"; done
+  for parent in "${parents[@]}"; do
+    for child in "$parent"/*(/N); do add "$child"; done
+  done
+}
+
+# ---- Record a recent (prepend, dedupe, cap 50) -----------------------------
+record_recent() {
+  {
+    print -r -- "$1"
+    [[ -f "$RECENTS" ]] && grep -vxF -- "$1" "$RECENTS"
+  } | head -n 50 > "$RECENTS.tmp" && mv "$RECENTS.tmp" "$RECENTS"
+}
+
+# ---- Switch to / create a project's tmux session ---------------------------
+do_switch() {
+  local path="$1" name
+  [[ -d "$path" ]] || { print -u2 "tlo-projects: not a directory: $path"; return 1; }
+  record_recent "$path"
+  name="${path:t}"
+  name="${name//./_}"
+  tmux has-session -t "=$name" 2>/dev/null || tmux new-session -ds "$name" -c "$path"
+  if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "$name"
+  else
+    # Called detached (e.g. from the AHK chooser): retarget the attached client
+    # if there is one, else just leave the session created for the terminal.
+    tmux switch-client -t "$name" 2>/dev/null || true
+  fi
+}
+
+# ---- Dispatch --------------------------------------------------------------
+case "${1:-}" in
+  --list)
+    build_candidates || exit 1
+    for p in "${cands[@]}"; do
+      printf '%s\t%s\n' "${p:t}" "$p"
+    done
+    ;;
+  --switch)
+    [[ -n "${2:-}" ]] || { print -u2 "tlo-projects --switch: missing path"; exit 1; }
+    do_switch "$2"
+    ;;
+  "")
+    build_candidates || { sleep 2; exit 1; }
+    if (( ${#cands} == 0 )); then
+      print -u2 "tlo-projects: no projects found."; sleep 2; exit 1
+    fi
+    sel=$(
+      for p in "${cands[@]}"; do printf '%s\t%s\n' "${p:t}" "$p"; done \
+        | fzf --delimiter='\t' --with-nth=1 --nth=1 --scheme=path \
+              --prompt='project> ' --no-multi
+    ) || exit 0
+    [[ -n "$sel" ]] && do_switch "${sel#*$'\t'}"
+    ;;
+  *)
+    print -u2 "tlo-projects: unknown option '$1' (use --list, --switch <path>, or no args)"
+    exit 2
+    ;;
+esac

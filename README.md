@@ -43,7 +43,37 @@ After running `./setup`:
 2. **node / bun** — `sudo apt install nodejs npm`; bun via `curl -fsSL https://bun.sh/install | bash`.
 3. **SSH agent / signing** — Configure in `~/.zprofile.linux` and `~/.gitconfig.specific` (e.g. bridge to the 1Password app on Windows via npiperelay, or use a local ssh-agent).
 
-> Note: Hammerspoon, Karabiner, and Ghostty configs are macOS-only and are not symlinked on Linux. `autohotkey.ahk` is the Windows-side analog of the Karabiner Hyper layer — load it manually with AutoHotkey on the Windows host.
+> Note: Hammerspoon, Karabiner, and Ghostty configs are macOS-only and are not symlinked on Linux. The `autohotkey/` folder is the Windows-host equivalent of Karabiner + Hammerspoon — see below.
+
+### Windows host (WSL): AutoHotkey
+
+The macOS Karabiner + Hammerspoon stack lives at the OS level, so its WSL equivalent runs on the
+**Windows host**, not inside WSL. The `autohotkey/` folder is an [AutoHotkey v2](https://www.autohotkey.com/)
+port; the one piece that belongs inside WSL — the project switcher's tmux logic — is `bin/tlo-projects`.
+
+**Setup on the Windows host:**
+
+1. Install **AutoHotkey v2**.
+2. Load `autohotkey/main.ahk` (it `#Include`s the rest). The folder is reachable from Windows at
+   `\\wsl$\<distro>\home\<you>\dotfiles\autohotkey\`, or copy it Windows-side. For autostart, drop a
+   shortcut to `main.ahk` in `shell:startup`.
+3. **Virtual desktops ("spaces")** need [VirtualDesktopAccessor.dll](https://github.com/Ciantic/VirtualDesktopAccessor) —
+   download a build matching your Windows version and place it next to the scripts (or edit
+   `VDA.DllPath` in `autohotkey/vda.ahk`). Missing/incompatible DLL only disables desktop switching;
+   everything else still loads.
+4. **Mic toggle** (`autohotkey/mic.ahk`): set `MicDevice` to your recording device's name (Sound
+   settings → Input) if the default `"Microphone"` doesn't match. The on-screen "MIC IS ON" badge
+   works regardless.
+5. Adjust app exes in `autohotkey/apps.ahk` and `TERM_EXE` in `autohotkey/projects.ahk` to match your
+   installs. The layout is **Dvorak** (matches the macOS setup) — triggers are bound to the Dvorak
+   char on the intended physical key; see the table at the top of `autohotkey/hyper.ahk`.
+
+The **project switcher** (Hyper+R) renders an AHK chooser GUI (search box + filtered list, like the
+macOS `hs.chooser`), populated by `tlo-projects --list` over WSL; selecting an entry runs
+`tlo-projects --switch <path>` to switch/create the tmux session, then focuses the terminal. It reuses
+the same `~/.config/tlo/projects/dirs` format as macOS (the `-> N` space hints are ignored on WSL).
+`tlo-projects` (symlinked to `~/.local/bin`) also works standalone — run it in any tmux session for an
+fzf picker.
 
 ## What's configured
 
@@ -57,6 +87,8 @@ After running `./setup`:
 | Hammerspoon | `hammerspoon/` | PaperWM tiling, app launcher, project switcher, Bluetooth switching |
 | PaperWM | `~/development/PaperWM.spoon` | Scrollable tiling window manager, symlinked into Spoons/ |
 | Karabiner | `karabiner.json` | Caps Lock as Hyper + Esc, modal layers for windows/apps/projects |
+| AutoHotkey | `autohotkey/` | Windows-host equivalent of Karabiner + Hammerspoon (Hyper layer, window tiling, virtual desktops, app launcher, keypad, mic, project chooser) |
+| Project switcher | `bin/tlo-projects` | tmux project switcher (WSL); fzf standalone + `--list`/`--switch` for the AHK chooser |
 | Vimium | `vimium-options.json` | Browser keyboard navigation |
 
 ## Project switcher config
@@ -88,6 +120,11 @@ $HOME/code/myproject 1
 ```
 
 ## Key bindings
+
+The tables below describe the macOS (Karabiner + Hammerspoon) layout. The WSL/Windows
+`autohotkey/` port mirrors the same Hyper layer and sub-modes, except: window tiling uses
+Windows virtual desktops for "spaces" (Hyper+, then `1`–`9`), the app launcher targets Windows
+apps (`autohotkey/apps.ahk`), Hyper+Z reloads the AHK script, and Bluetooth switching is macOS-only.
 
 ### Hyper layer (Caps Lock)
 
