@@ -49,7 +49,9 @@ After running `./setup`:
 
 The macOS Karabiner + Hammerspoon stack lives at the OS level, so its WSL equivalent runs on the
 **Windows host**, not inside WSL. The `autohotkey/` folder is an [AutoHotkey v2](https://www.autohotkey.com/)
-port; the one piece that belongs inside WSL — the project switcher's tmux logic — is `bin/tlo-projects`.
+port. It deliberately does almost nothing inside WSL: even the project switcher reads its config and
+scans the filesystem from the Windows side, touching WSL only for the one action that must run there
+(the tmux session switch).
 
 **Setup on the Windows host:**
 
@@ -71,11 +73,14 @@ port; the one piece that belongs inside WSL — the project switcher's tmux logi
    char on the intended physical key; see the table at the top of `autohotkey/hyper.ahk`.
 
 The **project switcher** (Hyper+R) renders an AHK chooser GUI (search box + filtered list, like the
-macOS `hs.chooser`), populated by `tlo-projects --list` over WSL; selecting an entry runs
-`tlo-projects --switch <path>` to switch/create the tmux session, then focuses the terminal. It reuses
-the same `~/.config/tlo/projects/dirs` format as macOS (the `-> N` space hints are ignored on WSL).
-`tlo-projects` (symlinked to `~/.local/bin`) also works standalone — run it in any tmux session for an
-fzf picker.
+macOS `hs.chooser`). It reads **`Documents\autohotkey\projects.txt`** (a Windows-side file —
+`sync-ahk` seeds it from `projects.txt.example` on first run) and enumerates the listed folders over
+`\\wsl$\<distro>\…` using native Windows file APIs — no `wsl.exe` call to build the list. Selecting an
+entry makes the one unavoidable WSL call: `wsl.exe -d <distro> … tmux …` to switch/create that
+project's session, then focuses the terminal. Edit `projects.txt` to change what's listed (`bare line`
+= scan children, `=path` = direct, `!pattern` = ignore). Recents are tracked in
+`Documents\autohotkey\projects-recents.txt`. (`tmux switch-client` lands on your terminal when it
+already has tmux attached.)
 
 ## What's configured
 
@@ -89,8 +94,7 @@ fzf picker.
 | Hammerspoon | `hammerspoon/` | PaperWM tiling, app launcher, project switcher, Bluetooth switching |
 | PaperWM | `~/development/PaperWM.spoon` | Scrollable tiling window manager, symlinked into Spoons/ |
 | Karabiner | `karabiner.json` | Caps Lock as Hyper + Esc, modal layers for windows/apps/projects |
-| AutoHotkey | `autohotkey/` | Windows-host equivalent of Karabiner + Hammerspoon (Hyper layer, window tiling, virtual desktops, app launcher, keypad, mic, project chooser) |
-| Project switcher | `bin/tlo-projects` | tmux project switcher (WSL); fzf standalone + `--list`/`--switch` for the AHK chooser |
+| AutoHotkey | `autohotkey/` | Windows-host equivalent of Karabiner + Hammerspoon (Hyper layer, window tiling, virtual desktops, app launcher, keypad, mic, project chooser). Synced to Windows via `bin/sync-ahk` |
 | Vimium | `vimium-options.json` | Browser keyboard navigation |
 
 ## Project switcher config

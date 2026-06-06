@@ -57,9 +57,6 @@ link "$DOTFILES/.jjconfig.toml" "$HOME/.jjconfig.toml"
 link "$DOTFILES/.tmux.conf" "$HOME/.tmux.conf"
 link "$DOTFILES/nvim"       "$HOME/.config/nvim"
 
-# tmux project switcher (WSL Hyper+R target; also usable standalone / on macOS)
-link "$DOTFILES/bin/tlo-projects" "$HOME/.local/bin/tlo-projects"
-
 # OS-specific shell variants (sourced by .zshrc / .zprofile via $OSTYPE)
 link "$DOTFILES/.zshrc.$OS"    "$HOME/.zshrc.$OS"
 link "$DOTFILES/.zprofile.$OS" "$HOME/.zprofile.$OS"

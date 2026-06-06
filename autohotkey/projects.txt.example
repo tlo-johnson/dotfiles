@@ -1,0 +1,13 @@
+# Project chooser config — read on the Windows side by autohotkey/projects.ahk.
+# Copy to projects.txt (next to the .ahk scripts in Documents\autohotkey\) and edit.
+# sync-ahk bootstraps it for you on first run, and never overwrites your edits.
+#
+# Paths point into the WSL filesystem over \\wsl$\<distro>\...
+#   bare line   scan immediate subdirectories
+#   =path       add this path directly
+#   !pattern    ignore directories whose name matches
+#   # comment
+
+\\wsl$\Ubuntu\home\you\code
+=\\wsl$\Ubuntu\home\you\dotfiles
+!node_modules

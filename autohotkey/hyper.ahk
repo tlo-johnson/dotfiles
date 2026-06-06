@@ -42,6 +42,9 @@ HyperSend(key) {
         mods .= "^"
     if GetKeyState("Alt", "P")
         mods .= "!"
+    ; Send "loud" (level 1) so hyper-layer keys can drive our own context hotkeys
+    ; — e.g. Hyper+F -> Enter, Hyper+L/K -> Up/Down inside the project chooser.
+    SendLevel 1
     Send mods . key
 }
 

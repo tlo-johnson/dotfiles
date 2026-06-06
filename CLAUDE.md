@@ -63,9 +63,9 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 - `hyper.ahk` — Caps=Hyper layer + Alt→Ctrl + shift-toggle-caps (≈ `karabiner.json`)
 - `windows.ahk` + `vda.ahk` — window tiling (halves/quarters/maximize) + virtual-desktop "spaces" via VirtualDesktopAccessor.dll (≈ `windows.lua`)
 - `apps.ahk` — app launcher (≈ `apps.lua`); `keypad.ahk` — numpad (≈ `keypad.lua`); `mic.ahk` — mic toggle + indicator (≈ `mic.lua`)
-- `projects.ahk` — Hyper+R chooser GUI (≈ `projects.lua`/`hs.chooser`), backed by the WSL-side `bin/tlo-projects` (`--list`/`--switch`)
+- `projects.ahk` — Hyper+R chooser GUI (≈ `projects.lua`/`hs.chooser`). Windows-native: reads `projects.txt` (Windows-side; template `projects.txt.example`) and scans the listed folders over `\\wsl$\<distro>\…` with Windows file APIs — no `wsl.exe` to list. Selecting fires one `wsl.exe … tmux` call to switch/create the session (the only WSL touch).
 
-Sub-modes are sticky AHK globals (`mode`) instead of Karabiner's F13–F18 → Hammerspoon modal indirection. Layout is Dvorak: triggers bind the Dvorak char on the intended physical key (table in `hyper.ahk`). Not symlinked by `setup` — loaded manually on the Windows host. `bin/tlo-projects` is symlinked to `~/.local/bin`.
+Sub-modes are sticky AHK globals (`mode`) instead of Karabiner's F13–F18 → Hammerspoon modal indirection. Layout is Dvorak: triggers bind the Dvorak char on the intended physical key (table in `hyper.ahk`). Not symlinked by `setup` — copied to the Windows host via `bin/sync-ahk` (finds the Windows Documents folder, copies `autohotkey/*.ahk` + bootstraps `projects.txt`).
 
 ## Project switcher config format
 

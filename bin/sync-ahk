@@ -31,6 +31,13 @@ fi
 DEST="$(wslpath "$docs_win")/autohotkey"
 mkdir -p "$DEST"
 cp "$SRC"/*.ahk "$DEST/"
+cp "$SRC/projects.txt.example" "$DEST/" 2>/dev/null || true
+
+# Bootstrap the Windows-side project list once; never clobber your edits.
+if [[ ! -e "$DEST/projects.txt" && -f "$SRC/projects.txt.example" ]]; then
+  cp "$SRC/projects.txt.example" "$DEST/projects.txt"
+  print "Created $DEST/projects.txt from template — edit it to list your projects."
+fi
 
 print "Synced ${SRC:t}/*.ahk -> $DEST"
 print "Load main.ahk on the Windows host (and drop VirtualDesktopAccessor.dll there for virtual desktops)."
