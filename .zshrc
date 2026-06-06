@@ -26,7 +26,8 @@ alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep
 [[ -f ~/ds/.zshrc ]] && source ~/ds/.zshrc
 
 # OS-specific config
+echo "os type: $OSTYPE"
 case "$OSTYPE" in
   darwin*) [[ -f "$HOME/.zshrc.mac"   ]] && source "$HOME/.zshrc.mac" ;;
-  linux*)  [[ -f "$HOME/.zshrc.linux" ]] && source "$HOME/.zshrc.linux" ;;
+  linux*)  [[ -f "$HOME/.zshrc.wsl" ]] && source "$HOME/.zshrc.wsl" ;;
 esac

@@ -6,7 +6,7 @@ DOTFILES="$(cd "$(dirname "$0")" && pwd)"
 # Detect OS
 case "$OSTYPE" in
   darwin*) OS=mac ;;
-  linux*)  OS=linux ;;
+  linux*)  OS=wsl ;;
   *) echo "Unsupported OS: $OSTYPE" >&2; exit 1 ;;
 esac
 echo "==> Detected OS: $OS"
@@ -53,6 +53,7 @@ echo "==> Creating symlinks..."
 link "$DOTFILES/.zshrc"     "$HOME/.zshrc"
 link "$DOTFILES/.zprofile"  "$HOME/.zprofile"
 link "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
+link "$DOTFILES/.jjconfig.toml" "$HOME/.jjconfig.toml"
 link "$DOTFILES/.tmux.conf" "$HOME/.tmux.conf"
 link "$DOTFILES/nvim"       "$HOME/.config/nvim"
 
