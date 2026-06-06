@@ -54,9 +54,11 @@ port; the one piece that belongs inside WSL — the project switcher's tmux logi
 **Setup on the Windows host:**
 
 1. Install **AutoHotkey v2**.
-2. Load `autohotkey/main.ahk` (it `#Include`s the rest). The folder is reachable from Windows at
-   `\\wsl$\<distro>\home\<you>\dotfiles\autohotkey\`, or copy it Windows-side. For autostart, drop a
-   shortcut to `main.ahk` in `shell:startup`.
+2. Copy the scripts Windows-side with **`./bin/sync-ahk`** (from WSL) — it finds your Windows
+   Documents folder and copies `autohotkey/*.ahk` to `Documents\autohotkey\`. Re-run it after editing
+   any `.ahk`. Then load `Documents\autohotkey\main.ahk` (it `#Include`s the rest); for autostart, drop
+   a shortcut to it in `shell:startup`. (Alternatively, load directly from `\\wsl$\<distro>\…\autohotkey\`
+   without copying.)
 3. **Virtual desktops ("spaces")** need [VirtualDesktopAccessor.dll](https://github.com/Ciantic/VirtualDesktopAccessor) —
    download a build matching your Windows version and place it next to the scripts (or edit
    `VDA.DllPath` in `autohotkey/vda.ahk`). Missing/incompatible DLL only disables desktop switching;

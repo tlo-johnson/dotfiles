@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+# sync-ahk — copy the AutoHotkey scripts to the Windows side so they can run.
+#
+# The AHK port (autohotkey/) must live on the Windows host to run with
+# AutoHotkey v2. Windows can't follow a WSL symlink, so we copy. Run this after
+# editing any autohotkey/*.ahk to re-sync. Only touches *.ahk — your manually
+# placed VirtualDesktopAccessor.dll in the destination is left alone.
+
+set -e
+
+DOTFILES="${0:A:h:h}"            # this script is bin/sync-ahk, so two dirs up
+SRC="$DOTFILES/autohotkey"
+
+if [[ ! -d "$SRC" ]]; then
+  print -u2 "sync-ahk: no $SRC"
+  exit 1
+fi
+
+# Resolve the Windows Documents folder (handles OneDrive-redirected Documents),
+# falling back to %USERPROFILE%\Documents if PowerShell isn't reachable.
+docs_win=$(powershell.exe -NoProfile -Command "[Environment]::GetFolderPath('MyDocuments')" 2>/dev/null | tr -d '\r')
+if [[ -z "$docs_win" ]]; then
+  profile=$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null | tr -d '\r')
+  docs_win="$profile\\Documents"
+fi
+if [[ -z "$docs_win" ]]; then
+  print -u2 "sync-ahk: couldn't determine the Windows Documents folder. Is this WSL?"
+  exit 1
+fi
+
+DEST="$(wslpath "$docs_win")/autohotkey"
+mkdir -p "$DEST"
+cp "$SRC"/*.ahk "$DEST/"
+
+print "Synced ${SRC:t}/*.ahk -> $DEST"
+print "Load main.ahk on the Windows host (and drop VirtualDesktopAccessor.dll there for virtual desktops)."
