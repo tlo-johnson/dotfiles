@@ -8,8 +8,7 @@
 
 set -e
 
-DOTFILES="${0:A:h:h}"            # this script is bin/sync-ahk, so two dirs up
-SRC="$DOTFILES/autohotkey"
+SRC="${0:A:h}/autohotkey"        # this script is wsl/sync-ahk; autohotkey/ is its sibling
 
 if [[ ! -d "$SRC" ]]; then
   print -u2 "sync-ahk: no $SRC"

@@ -1,0 +1,51 @@
+#!/usr/bin/env zsh
+# macOS setup. Run on macOS: ./mac/setup
+set -e
+
+REPO="${0:A:h:h}"   # mac/setup -> repo root
+
+if [[ "$OSTYPE" != darwin* ]]; then
+  echo "mac/setup is for macOS (OSTYPE=$OSTYPE). On WSL, run wsl/setup." >&2
+  exit 1
+fi
+
+# ---- Homebrew packages ----
+echo "==> Installing Homebrew packages..."
+if ! command -v brew &>/dev/null; then
+  echo "    Homebrew not found. Installing..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+brew bundle --file="$REPO/mac/Brewfile"
+
+echo "==> Configuring jenv..."
+eval "$(jenv init -)" 2>/dev/null || true
+jenv enable-plugin export 2>/dev/null || true
+
+# ---- Common configs (defines link(), symlinks shared dotfiles) ----
+source "$REPO/common/link.sh"
+
+# ---- macOS-only configs ----
+echo "==> Linking macOS configs..."
+link "$REPO/mac/.zprofile.mac"  "$HOME/.zprofile.mac"
+link "$REPO/mac/ghostty"        "$HOME/.config/ghostty"
+link "$REPO/mac/hammerspoon"    "$HOME/.hammerspoon"
+link "$REPO/mac/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
+
+# ---- Manual steps ----
+echo ""
+echo "==> Done. A few manual steps remain:"
+echo "    * Edit ~/.gitconfig.specific (email + 1Password signing key)"
+echo "    1. Open 1Password > Settings > Developer > enable SSH agent"
+echo "    2. Open Hammerspoon > grant Accessibility permission > enable 'Launch at Login'"
+echo "    3. Open Karabiner-Elements and enable it"
+echo "    4. Import mac/vimium-options.json in the Vimium browser extension"
+echo "    5. Sign in to 1Password CLI: 'op signin'"
+echo "    6. System Settings > Desktop & Dock > Mission Control:"
+echo "       - Uncheck 'Automatically rearrange Spaces based on most recent use'"
+echo "       - Check 'Displays have separate Spaces'"
+echo "    7. Create ~/.config/tlo/projects/dirs with directories to index"
+echo "    8. Install JDKs (e.g. brew install openjdk@17 openjdk@21), then:"
+echo "       jenv add /opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+echo "       jenv add /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home"
+echo "       jenv global 21"

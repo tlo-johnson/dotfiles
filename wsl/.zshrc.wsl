@@ -1,0 +1,5 @@
+# WSL-only zsh config. Sourced by common/.zshrc when $OSTYPE is linux*
+# (symlinked to ~/.zshrc.wsl by wsl/setup).
+
+# Put the repo's wsl/ scripts (e.g. sync-ahk) on PATH so they're runnable by name.
+[[ -d "$HOME/dotfiles/wsl" ]] && export PATH="$HOME/dotfiles/wsl:$PATH"

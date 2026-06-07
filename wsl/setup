@@ -1,0 +1,44 @@
+#!/usr/bin/env zsh
+# WSL setup. Run inside WSL: ./wsl/setup
+set -e
+
+REPO="${0:A:h:h}"   # wsl/setup -> repo root
+
+if [[ "$OSTYPE" != linux* ]]; then
+  echo "wsl/setup is for WSL/Linux (OSTYPE=$OSTYPE). On macOS, run mac/setup." >&2
+  exit 1
+fi
+
+# ---- apt packages ----
+echo "==> Installing apt packages..."
+sudo apt update
+sudo apt install -y \
+  git neovim tmux ripgrep jq wget tree dos2unix fzf \
+  build-essential curl unzip
+# jj, node, and bun are not in the default apt repos — see manual steps below.
+
+# ---- Common configs (defines link(), symlinks shared dotfiles) ----
+source "$REPO/common/link.sh"
+
+# ---- WSL-only shell config ----
+echo "==> Linking WSL configs..."
+link "$REPO/wsl/.zshrc.wsl" "$HOME/.zshrc.wsl"
+
+# ---- WSL/Windows: push AutoHotkey scripts to the Windows host ----
+# (guarded so it no-ops on plain, non-WSL Linux). Re-run wsl/sync-ahk by hand
+# after editing any .ahk.
+if grep -qiE "microsoft|wsl" /proc/version 2>/dev/null; then
+  echo "==> Syncing AutoHotkey scripts to Windows..."
+  "$REPO/wsl/sync-ahk" || echo "    sync-ahk failed (skipping)"
+fi
+
+# ---- Manual steps ----
+echo ""
+echo "==> Done. A few manual steps remain:"
+echo "    * Edit ~/.gitconfig.specific (email + commit signing key)"
+echo "    1. Install jj (jujutsu): cargo install --locked jj-cli  (or download a release binary)"
+echo "    2. Install node + bun if needed: 'sudo apt install nodejs npm' and 'curl -fsSL https://bun.sh/install | bash'"
+echo "    3. Configure SSH agent / commit signing in ~/.zprofile.wsl and ~/.gitconfig.specific"
+echo "       (e.g. bridge to the 1Password app on Windows, or use a local ssh-agent)"
+echo "    4. On the Windows host: install AutoHotkey v2 and load Documents\\autohotkey\\main.ahk"
+echo "       (see README.md > Windows host for VirtualDesktopAccessor.dll + projects.txt)"
