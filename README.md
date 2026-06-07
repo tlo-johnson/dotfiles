@@ -56,11 +56,11 @@ scans the filesystem from the Windows side, touching WSL only for the one action
 **Setup on the Windows host:**
 
 1. Install **AutoHotkey v2**.
-2. Copy the scripts Windows-side with **`./bin/sync-ahk`** (from WSL) — it finds your Windows
-   Documents folder and copies `autohotkey/*.ahk` to `Documents\autohotkey\`. Re-run it after editing
-   any `.ahk`. Then load `Documents\autohotkey\main.ahk` (it `#Include`s the rest); for autostart, drop
-   a shortcut to it in `shell:startup`. (Alternatively, load directly from `\\wsl$\<distro>\…\autohotkey\`
-   without copying.)
+2. Copy the scripts Windows-side. `./setup` does this automatically on WSL; to re-sync after editing
+   any `.ahk`, run **`./bin/sync-ahk`** (from WSL) — it finds your Windows Documents folder and copies
+   `autohotkey/*.ahk` to `Documents\autohotkey\`. Then load `Documents\autohotkey\main.ahk` (it
+   `#Include`s the rest); for autostart, drop a shortcut to it in `shell:startup`. (Alternatively, load
+   directly from `\\wsl$\<distro>\…\autohotkey\` without copying.)
 3. **Virtual desktops ("spaces")** need [VirtualDesktopAccessor.dll](https://github.com/Ciantic/VirtualDesktopAccessor) —
    download a build matching your Windows version and place it next to the scripts (or edit
    `VDA.DllPath` in `autohotkey/vda.ahk`). Missing/incompatible DLL only disables desktop switching;

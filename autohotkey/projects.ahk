@@ -29,9 +29,11 @@ global projChoices := []      ; array of {name, unc, distro, linux}
 
 #HotIf hyperMode
 *p:: {
-    global hyperMode, hyperUsed
+    global hyperUsed
     hyperUsed := true
-    hyperMode := false
+    ; Leave hyperMode on: while Caps stays held the hyper layer keeps driving the
+    ; chooser (Hyper+L/K = up/down, Hyper+F = accept). The chooser sends no keys,
+    ; so there's nothing to clear it for.
     ShowProjectChooser()
 }
 #HotIf

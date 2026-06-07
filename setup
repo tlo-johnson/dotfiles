@@ -75,6 +75,14 @@ if [[ "$OS" == "mac" ]]; then
   link "$DOTFILES/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 fi
 
+# ---- WSL-only: push AutoHotkey scripts to the Windows host ----
+# (guarded so it no-ops on plain, non-WSL Linux). Re-run bin/sync-ahk by hand
+# after editing any .ahk.
+if [[ "$OS" == "wsl" ]] && grep -qiE "microsoft|wsl" /proc/version 2>/dev/null; then
+  echo "==> Syncing AutoHotkey scripts to Windows..."
+  "$DOTFILES/bin/sync-ahk" || echo "    sync-ahk failed (skipping)"
+fi
+
 # ---- Manual steps ----
 echo ""
 echo "==> Done. A few manual steps remain:"

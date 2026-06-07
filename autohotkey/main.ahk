@@ -69,3 +69,7 @@ ActivateOrRun(exe, cmd) {
 #Include %A_ScriptDir%\keypad.ahk
 #Include %A_ScriptDir%\projects.ahk
 #Include %A_ScriptDir%\mic.ahk
+
+; ---- Loaded -----------------------------------------------------------------
+; Notify once all modules are registered (mirrors Hammerspoon's init.lua notify).
+TrayTip "AutoHotkey loaded"
