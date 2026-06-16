@@ -91,13 +91,10 @@ Link-Config "$RepoRoot\common\nvim"           "$HOME\AppData\Local\nvim"
 # PowerShell 7 profile
 Link-Config "$RepoRoot\powershell\profile.ps1" $PROFILE
 
-# Windows Terminal settings (stable channel install path via winget)
-$wtDir = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState"
-if (Test-Path $wtDir) {
-    Link-Config "$RepoRoot\powershell\windows-terminal\settings.json" "$wtDir\settings.json"
-} else {
-    Write-Host "  [skip] Windows Terminal not found at expected path — re-run after installing"
-}
+# Windows Terminal — upsert color scheme
+Write-Host ""
+Write-Host "Configuring Windows Terminal..."
+& "$PSScriptRoot\windows-terminal.ps1"
 
 # ─── Bootstrap ~/.gitconfig.specific ─────────────────────────────────────────
 
@@ -146,27 +143,24 @@ Write-Host @"
 
 Setup complete. Remaining manual steps:
 
-  1. Font
-     Install 'Monaspace Neon NF' from https://www.nerdfonts.com/font-downloads
-
-  2. SSH commit signing (1Password)
+  1. SSH commit signing (1Password)
      Install 1Password, then: Settings -> Developer -> SSH Agent -> Enable
      Fill in ~/.gitconfig.specific with your key details.
 
-  3. Virtual desktop switching (AHK)
+  2. Virtual desktop switching (AHK)
      Download VirtualDesktopAccessor.dll from:
        https://github.com/Ciantic/VirtualDesktopAccessor/releases
      Drop it in: $ahkDest
 
-  4. Projects switcher
+  3. Projects switcher
      projects.ahk requires WSL + tmux and will not work on this machine.
 
-  5. Windows Terminal
+  4. Windows Terminal
      Set PowerShell (pwsh.exe) as the default profile.
 
-  6. Vimium
+  5. Vimium
      Import settings from mac/vimium-options.json in the Vimium extension options.
 
-  7. Start AutoHotkey
+  6. Start AutoHotkey
      Run $ahkMain now, or restart to load it automatically from the startup folder.
 "@
