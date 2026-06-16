@@ -1,8 +1,13 @@
 local muted = false
 local currentDevice = hs.audiodevice.defaultInputDevice()
 local liveCanvas = nil
+local livePulseTimer = nil
 
 local function updateLiveAlert(isMuted)
+  if livePulseTimer then
+    livePulseTimer:stop()
+    livePulseTimer = nil
+  end
   if liveCanvas then
     liveCanvas:delete()
     liveCanvas = nil
@@ -34,6 +39,13 @@ local function updateLiveAlert(isMuted)
       }
     )
     liveCanvas:show()
+
+    local visible = true
+    livePulseTimer = hs.timer.doEvery(0.8, function()
+      if not liveCanvas then return end
+      visible = not visible
+      if visible then liveCanvas:show() else liveCanvas:hide() end
+    end)
   end
 end
 
