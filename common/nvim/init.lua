@@ -95,6 +95,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.cmd("iabbrev <buffer> -- - [ ]")
+  end,
+})
 
 -- Transparent background
 vim.cmd [[
