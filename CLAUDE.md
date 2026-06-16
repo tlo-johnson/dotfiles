@@ -55,7 +55,7 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 ## Key components
 
 **Hammerspoon** (`mac/hammerspoon/`) — Lua automation for macOS. `init.lua` loads all modules. Key modules:
-- `windows.lua` — PaperWM tiling (wraps `~/development/PaperWM.spoon`, symlinked into `mac/hammerspoon/Spoons/`)
+- `windows.lua` — custom window tiling (move/resize focused window into halves/quadrants)
 - `projects.lua` — project switcher (Hyper+R); reads `~/.config/tlo/projects/dirs`, manages tmux sessions and space switching
 - `apps.lua` — app launcher (Hyper+Space)
 - `bluetooth.lua` — Bluetooth device switcher (Hyper+N)
