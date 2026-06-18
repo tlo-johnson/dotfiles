@@ -2,7 +2,6 @@ local apps = {
   c = "com.openai.chat",
   f = "com.apple.finder",
   w = "net.whatsapp.WhatsApp",
-  s = "com.tinyspeck.slackmacgap"
 }
 
 local utils = require("utils")
