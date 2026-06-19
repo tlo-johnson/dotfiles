@@ -1,5 +1,14 @@
 require("config.lazy")
 
+if vim.fn.has('win32') == 1 then
+  vim.opt.shell = 'powershell'
+  vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+  vim.opt.shellquote = ''
+  vim.opt.shellxquote = ''
+  vim.opt.shellpipe = '| Out-File -Encoding UTF8 %s'
+  vim.opt.shellredir = '| Out-File -Encoding UTF8 %s'
+end
+
 -- Settings
 vim.opt.expandtab = true
 vim.opt.hidden = true
