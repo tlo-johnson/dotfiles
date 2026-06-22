@@ -17,11 +17,11 @@ for key, app in pairs(apps) do
 end
 
 appLauncher:bind({}, "b", function()
+  print(hs.application.frontmostApplication():bundleID())
   local browserIds = { "com.google.Chrome", "org.mozilla.firefox" }
   local currentSpace = hs.spaces.focusedSpace()
   for _, bundleId in ipairs(browserIds) do
-    local app = hs.application.get(bundleId)
-    if app then
+    for _, app in ipairs(hs.application.applicationsForBundleID(bundleId)) do
       for _, win in ipairs(app:allWindows()) do
         for _, ws in ipairs(hs.spaces.windowSpaces(win) or {}) do
           if ws == currentSpace then
