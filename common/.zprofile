@@ -6,4 +6,4 @@ case "$OSTYPE" in
   linux*)  [[ -f "$HOME/.zprofile.wsl" ]] && source "$HOME/.zprofile.wsl" ;;
 esac
 
-export PATH="$HOME/ds/bin:$HOME/bin:$HOME/bin/ds:$PATH"
+export PATH="$HOME/ds/bin:$HOME/ds/bin/api-calls:$HOME/bin:$HOME/bin/ds:$PATH"
