@@ -22,5 +22,6 @@ export PATH="$HOME/.local/bin:$PATH"
 alias g=git
 alias j=jj
 alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
+alias claude-cap='CLAUDE_CONFIG_DIR=~/.claude-cap claude --allowedTools "Read,Grep,Glob"'
 
 [[ -f "$HOME/.config/op/plugins.sh" ]] && source "$HOME/.config/op/plugins.sh"
