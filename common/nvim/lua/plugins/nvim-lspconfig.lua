@@ -10,7 +10,7 @@ local mason = {
 local masonLspConfig = {
   "mason-org/mason-lspconfig.nvim",
   opts = {
-      ensure_installed = { "lua_ls", "kotlin_language_server" },
+      ensure_installed = { "lua_ls" },
   },
   dependencies = mason,
 }
