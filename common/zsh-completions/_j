@@ -11,6 +11,12 @@ _j_pair_aliases() {
   _describe 'pair alias' completions
 }
 
+_j_bookmarks() {
+  local -a bookmarks
+  bookmarks=(${(f)"$(jj bookmark list -T 'name ++ "\n"' 2>/dev/null)"})
+  _describe 'bookmark' bookmarks
+}
+
 _j() {
   if [[ "${words[2]}" == "m" ]]; then
     _arguments \
@@ -19,7 +25,8 @@ _j() {
       ':commit message:'
   elif [[ "${words[2]}" == "ps" ]]; then
     _arguments \
-      '--bookmark[Bookmark to create/update and push]:bookmark:_default'
+      '--bookmark[Bookmark to create/update and push]:bookmark:_j_bookmarks' \
+      '::'
   else
     words[1]='jj'
     _jj
