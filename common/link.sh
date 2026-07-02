@@ -26,6 +26,7 @@ link "$COMMON/.gitconfig"      "$HOME/.gitconfig"
 link "$COMMON/.jjconfig.toml"  "$HOME/.jjconfig.toml"
 link "$COMMON/.tmux.conf"      "$HOME/.tmux.conf"
 link "$COMMON/nvim"            "$HOME/.config/nvim"
+link "$COMMON/zsh-completions/_j" "$HOME/bin/_j"
 
 # Bootstrap machine-specific git config (email + commit signing) from template.
 if [[ ! -e "$HOME/.gitconfig.specific" ]]; then

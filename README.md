@@ -145,7 +145,7 @@ Caps Lock acts as a Hyper key. Tap alone = Escape.
 |----------|--------|
 | Hyper+Space | App launcher |
 | Hyper+, | Window manager |
-| Hyper+R | Project switcher |
+| Hyper+R | Project / tabs switcher, then P (projects) or . (browser tabs) |
 | Hyper+N | Bluetooth switcher |
 | Hyper+Z | Config layer |
 | Hyper+A | Keypad layer |
