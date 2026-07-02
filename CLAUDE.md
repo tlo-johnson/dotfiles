@@ -58,7 +58,7 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 - `windows.lua` — custom window tiling (move/resize focused window into halves/quadrants)
 - `projects.lua` — project switcher; reads `~/.config/tlo/projects/dirs`, manages tmux sessions and space switching
 - `tabs.lua` / `browser-tab-store.lua` — browser tab switcher; store is fed live by browser extensions, `tabs.lua` renders the chooser
-- `switcher.lua` — Hyper+R modal: P opens the project switcher, `.` opens the browser tab switcher
+- `switcher.lua` — Hyper+R opens the project switcher, Hyper+E opens the browser tab switcher
 - `apps.lua` — app launcher (Hyper+Space)
 - `bluetooth.lua` — Bluetooth device switcher (Hyper+N)
 - `mic.lua` — mic mute toggle
