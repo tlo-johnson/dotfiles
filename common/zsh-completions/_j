@@ -17,6 +17,9 @@ _j() {
       '--pair[Co-author alias]:alias:_j_pair_aliases' \
       '--pair-alias[Create new alias (alias=Name <email>)]:definition:' \
       ':commit message:'
+  elif [[ "${words[2]}" == "ps" ]]; then
+    _arguments \
+      '--bookmark[Bookmark to create/update and push]:bookmark:_default'
   else
     words[1]='jj'
     _jj
