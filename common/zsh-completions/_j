@@ -1,0 +1,26 @@
+#compdef j
+
+_j_pair_aliases() {
+  local -a completions
+  local aliases_file="${HOME}/.config/jj-pair/aliases"
+  if [[ -f "$aliases_file" ]]; then
+    while IFS='=' read -r key value; do
+      completions+=("${key}:${value}")
+    done < "$aliases_file"
+  fi
+  _describe 'pair alias' completions
+}
+
+_j() {
+  if [[ "${words[2]}" == "m" ]]; then
+    _arguments \
+      '--pair[Co-author alias]:alias:_j_pair_aliases' \
+      '--pair-alias[Create new alias (alias=Name <email>)]:definition:' \
+      ':commit message:'
+  else
+    words[1]='jj'
+    _jj
+  fi
+}
+
+_j "$@"
