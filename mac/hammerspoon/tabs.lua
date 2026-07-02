@@ -40,6 +40,7 @@ function M.showTabChooser()
     M.activate(pending[choice.uuid])
   end)
   chooser:choices(chooserChoices)
+  chooser:searchSubText(true)
   chooser:placeholderText("Search browser tabs…")
   chooser:show()
 end
