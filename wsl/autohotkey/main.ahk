@@ -18,7 +18,6 @@
 ;   Hammerspoon keypad.lua  (F17 / Hyper+A)         -> keypad.ahk
 ;   Hammerspoon projects.lua(F18 / Hyper+R)         -> projects.ahk (-> WSL tlo-projects)
 ;   Hammerspoon config.lua  (F16 / Hyper+Z)         -> Reload (in hyper.ahk)
-;   Hammerspoon mic.lua     (Cmd+Shift+M)           -> mic.ahk (Ctrl+Shift+M)
 ; ============================================================
 
 ; ---- Shared state ----------------------------------------------------------
@@ -68,7 +67,6 @@ ActivateOrRun(exe, cmd) {
 #Include %A_ScriptDir%\apps.ahk
 #Include %A_ScriptDir%\keypad.ahk
 #Include %A_ScriptDir%\projects.ahk
-#Include %A_ScriptDir%\mic.ahk
 
 ; ---- Loaded -----------------------------------------------------------------
 ; Notify once all modules are registered (mirrors Hammerspoon's init.lua notify).

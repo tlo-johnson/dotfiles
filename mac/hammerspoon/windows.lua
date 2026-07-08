@@ -52,6 +52,14 @@ windowManager:bind({}, "f", function()
   windowManager:exit()
 end)
 
+windowManager:bind({"shift"}, "f", function()
+  local win = hs.window.focusedWindow()
+  if win then
+    win:setFullScreen(not win:isFullScreen())
+  end
+  windowManager:exit()
+end)
+
 local function getSpaces()
   return hs.spaces.spacesForScreen(hs.screen.mainScreen())
 end

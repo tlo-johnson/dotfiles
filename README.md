@@ -1,3 +1,7 @@
+# Choices
+
+Font: [Fantasque Sans Mono](https://github.com/belluzj/fantasque-sans)
+
 # dotfiles
 
 Works on both **macOS** and **Linux / WSL**, with the two implementations kept separate:
@@ -70,10 +74,7 @@ scans the filesystem from the Windows side, touching WSL only for the one action
    download a build matching your Windows version and place it next to the scripts (or edit
    `VDA.DllPath` in `wsl/autohotkey/vda.ahk`). Missing/incompatible DLL only disables desktop switching;
    everything else still loads.
-4. **Mic toggle** (`wsl/autohotkey/mic.ahk`): set `MicDevice` to your recording device's name (Sound
-   settings → Input) if the default `"Microphone"` doesn't match. The on-screen "MIC IS ON" badge
-   works regardless.
-5. Adjust app exes in `wsl/autohotkey/apps.ahk` and `TERM_EXE` in `wsl/autohotkey/projects.ahk` to match
+4. Adjust app exes in `wsl/autohotkey/apps.ahk` and `TERM_EXE` in `wsl/autohotkey/projects.ahk` to match
    your installs. The layout is **Dvorak** (matches the macOS setup) — triggers are bound to the Dvorak
    char on the intended physical key; see the table at the top of `wsl/autohotkey/hyper.ahk`.
 
@@ -99,7 +100,7 @@ already has tmux attached.)
 | Hammerspoon | `mac/hammerspoon/` | PaperWM tiling, app launcher, project switcher, Bluetooth switching |
 | PaperWM | `~/development/PaperWM.spoon` | Scrollable tiling window manager, symlinked into Spoons/ |
 | Karabiner | `mac/karabiner.json` | Caps Lock as Hyper + Esc, modal layers for windows/apps/projects |
-| AutoHotkey | `wsl/autohotkey/` | Windows-host equivalent of Karabiner + Hammerspoon (Hyper layer, window tiling, virtual desktops, app launcher, keypad, mic, project chooser). Synced to Windows via `wsl/sync-ahk` |
+| AutoHotkey | `wsl/autohotkey/` | Windows-host equivalent of Karabiner + Hammerspoon (Hyper layer, window tiling, virtual desktops, app launcher, keypad, project chooser). Synced to Windows via `wsl/sync-ahk` |
 | Vimium | `mac/vimium-options.json` | Browser keyboard navigation |
 
 ## Project switcher config

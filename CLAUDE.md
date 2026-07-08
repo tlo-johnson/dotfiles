@@ -61,7 +61,6 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 - `switcher.lua` — Hyper+R opens the project switcher, Hyper+E opens the browser tab switcher
 - `apps.lua` — app launcher (Hyper+Space)
 - `bluetooth.lua` — Bluetooth device switcher (Hyper+N)
-- `mic.lua` — mic mute toggle
 - `config.lua` — config reload layer (Hyper+Z)
 - `keypad.lua` — modal numpad layer (Hyper+A)
 
@@ -82,7 +81,7 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 **AutoHotkey** (`wsl/autohotkey/`) — Windows-host equivalent of Karabiner + Hammerspoon for WSL (the macOS stack runs at OS level, so its WSL analog runs on Windows, not inside WSL). AutoHotkey v2, loaded via `main.ahk`, which `#Include`s per-feature modules paralleling the Hammerspoon ones:
 - `hyper.ahk` — Caps=Hyper layer + Alt→Ctrl + shift-toggle-caps (≈ `karabiner.json`)
 - `windows.ahk` + `vda.ahk` — window tiling (halves/quarters/maximize) + virtual-desktop "spaces" via VirtualDesktopAccessor.dll (≈ `windows.lua`)
-- `apps.ahk` — app launcher (≈ `apps.lua`); `keypad.ahk` — numpad (≈ `keypad.lua`); `mic.ahk` — mic toggle + indicator (≈ `mic.lua`)
+- `apps.ahk` — app launcher (≈ `apps.lua`); `keypad.ahk` — numpad (≈ `keypad.lua`)
 - `projects.ahk` — Hyper+R chooser GUI (≈ `projects.lua`/`hs.chooser`). Windows-native: reads `projects.txt` (Windows-side; template `projects.txt.example`) and scans the listed folders over `\\wsl$\<distro>\…` with Windows file APIs — no `wsl.exe` to list. Selecting fires one `wsl.exe … tmux` call to switch/create the session (the only WSL touch).
 
 Sub-modes are sticky AHK globals (`mode`) instead of Karabiner's F13–F18 → Hammerspoon modal indirection. Layout is Dvorak: triggers bind the Dvorak char on the intended physical key (table in `hyper.ahk`). Not symlinked — copied to the Windows host via `wsl/sync-ahk` (finds the Windows Documents folder, copies `wsl/autohotkey/*.ahk` + bootstraps `projects.txt`); `wsl/setup` runs it automatically.
