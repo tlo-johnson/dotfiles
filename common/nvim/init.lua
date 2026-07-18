@@ -100,6 +100,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end)
     end, "Previous diagnostic")
     map('gf', vim.lsp.buf.format, "Format code")
+
+    -- kotlin-lsp never sends workspace/diagnostic/refresh for cross-file
+    -- changes (resultId/relatedDocuments are hardcoded null, LSP-237 TODO in
+    -- its source), so a buffer's pull diagnostics can go stale forever after
+    -- an edit elsewhere. Force a re-pull whenever a buffer regains focus.
+    vim.api.nvim_create_autocmd("BufEnter", {
+      buf = bufnr,
+      callback = function()
+        vim.lsp.diagnostic._refresh(bufnr)
+      end,
+    })
   end,
 })
 
