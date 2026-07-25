@@ -29,6 +29,7 @@ source "$REPO/common/link.sh"
 echo "==> Linking macOS configs..."
 link "$REPO/mac/.zprofile.mac"  "$HOME/.zprofile.mac"
 link "$REPO/mac/ghostty"        "$HOME/.config/ghostty"
+link "$REPO/mac/wezterm"        "$HOME/.config/wezterm"
 link "$REPO/mac/hammerspoon"    "$HOME/.hammerspoon"
 link "$REPO/mac/karabiner.json" "$HOME/.config/karabiner/karabiner.json"
 
