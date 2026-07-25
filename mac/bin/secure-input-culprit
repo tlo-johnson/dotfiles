@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+# secure-input-culprit — find which process is holding macOS Secure Input.
+#
+# Secure Input blocks global hotkey event taps system-wide (Hammerspoon,
+# Karabiner, Alfred, ...) until it's released — usually a browser tab that
+# left a password field focused. kCGSSessionSecureInputPID only appears in
+# ioreg's session dict while Secure Input is actually active.
+
+pid=$(ioreg -l -w0 | grep -o '"kCGSSessionSecureInputPID"=[0-9]*' | grep -o '[0-9]*')
+
+if [[ -n "$pid" ]]; then
+  ps -p "$pid" -o pid,ppid,user,lstart,command
+else
+  echo "no process is currently holding secure input"
+fi

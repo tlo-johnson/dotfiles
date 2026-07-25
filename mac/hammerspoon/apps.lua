@@ -1,5 +1,5 @@
 local apps = {
-  c = "com.openai.chat",
+  c = "com.openai.codex",
   f = "com.apple.finder",
   w = "net.whatsapp.WhatsApp",
 }

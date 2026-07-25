@@ -27,6 +27,7 @@ vim.opt.list = true
 vim.opt.listchars = "trail:·,tab:·┈"
 vim.opt.hlsearch = false
 vim.opt.winborder = 'rounded'
+vim.opt.completeopt = 'menuone,noinsert,popup'
 
 local opts = { silent = true }
 

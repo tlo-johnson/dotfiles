@@ -11,7 +11,7 @@ If today's date is more than one month after the last updated date above, prompt
 Personal cross-platform dotfiles for Tolu A. — runs on **macOS** and **Linux / WSL**, with the two implementations kept fully separate. Top-level layout:
 
 - `common/` — configs shared by both OSes (`nvim/`, `.zshrc`, `.zprofile`, `.gitconfig`, `.tmux.conf`, `.jjconfig.toml`) plus `link.sh`, a shared symlink helper sourced by both setups.
-- `mac/` — macOS only: `Brewfile`, `hammerspoon/`, `karabiner.json`, `ghostty/`, `vimium-options.json`, `.zprofile.mac`, and `mac/setup`.
+- `mac/` — macOS only: `Brewfile`, `hammerspoon/`, `karabiner.json`, `ghostty/`, `vimium-options.json`, `.zprofile.mac`, `bin/` (put on PATH by `.zprofile.mac`), and `mac/setup`.
 - `wsl/` — WSL/Windows only: `autohotkey/` (the AutoHotkey port), `sync-ahk`, and `wsl/setup`.
 
 All config files are symlinked into place by the per-OS setup. No build steps, tests, or CI — changes take effect immediately after the symlinks resolve.
