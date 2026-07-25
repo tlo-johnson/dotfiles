@@ -19,15 +19,10 @@ config.window_padding = {
 config.line_height = 1.75
 
 -- Cursor
-config.default_cursor_style = 'BlinkingBar'
+config.default_cursor_style = 'SteadyBlock'
 config.cursor_blink_rate = 500
 
 -- Scrollback
 config.scrollback_lines = 10000
-
--- Keybindings
-config.keys = {
-  { key = 'Enter', mods = 'CMD', action = wezterm.action.ToggleFullScreen },
-}
 
 return config
