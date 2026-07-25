@@ -35,15 +35,31 @@ Snap(fx, fy, fw, fh) {
     ExitMode()
 }
 
+; Nudge the active window by a few pixels (windows.lua NUDGE). Mode stays
+; active afterward so repeated/held presses keep walking the window.
+Nudge(dx, dy) {
+    hwnd := WinExist("A")
+    if !hwnd
+        return
+    WinGetPos(&x, &y, , , hwnd)
+    WinMove(x + dx, y + dy, , , hwnd)
+}
+
 #HotIf (mode = "window")
 
 Escape:: ExitMode()
 
-; Halves
-Left::  Snap(0,   0,   0.5, 1)
-Right:: Snap(0.5, 0,   0.5, 1)
-Up::    Snap(0,   0,   1,   0.5)
-Down::  Snap(0,   0.5, 1,   0.5)
+; Halves (shift+arrow)
++Left::  Snap(0,   0,   0.5, 1)
++Right:: Snap(0.5, 0,   0.5, 1)
++Up::    Snap(0,   0,   1,   0.5)
++Down::  Snap(0,   0.5, 1,   0.5)
+
+; Nudge by 10px (plain arrow); does not exit the mode
+Left::  Nudge(-10, 0)
+Right:: Nudge(10, 0)
+Up::    Nudge(0, -10)
+Down::  Nudge(0, 10)
 
 ; Quarters  (physical J ; L K -> Dvorak h s n t, matching windows.lua)
 h:: Snap(0,   0,   0.5, 0.5)

@@ -11,10 +11,32 @@ local function moveWindow(unit)
   windowManager:exit()
 end
 
-windowManager:bind({}, "left",  function() moveWindow({x=0,   y=0,   w=0.5, h=1  }) end)
-windowManager:bind({}, "right", function() moveWindow({x=0.5, y=0,   w=0.5, h=1  }) end)
-windowManager:bind({}, "up",    function() moveWindow({x=0,   y=0,   w=1,   h=0.5}) end)
-windowManager:bind({}, "down",  function() moveWindow({x=0,   y=0.5, w=1,   h=0.5}) end)
+windowManager:bind({"shift"}, "left",  function() moveWindow({x=0,   y=0,   w=0.5, h=1  }) end)
+windowManager:bind({"shift"}, "right", function() moveWindow({x=0.5, y=0,   w=0.5, h=1  }) end)
+windowManager:bind({"shift"}, "up",    function() moveWindow({x=0,   y=0,   w=1,   h=0.5}) end)
+windowManager:bind({"shift"}, "down",  function() moveWindow({x=0,   y=0.5, w=1,   h=0.5}) end)
+
+local NUDGE = 10
+
+local function nudgeWindow(dx, dy)
+  local win = hs.window.focusedWindow()
+  if win then
+    local f = win:frame()
+    f.x = f.x + dx
+    f.y = f.y + dy
+    win:setFrame(f)
+  end
+end
+
+local function bindNudge(key, dx, dy)
+  local fn = function() nudgeWindow(dx, dy) end
+  windowManager:bind({}, key, fn, nil, fn)
+end
+
+bindNudge("left",  -NUDGE, 0)
+bindNudge("right",  NUDGE, 0)
+bindNudge("up",    0, -NUDGE)
+bindNudge("down",  0,  NUDGE)
 windowManager:bind({}, "h", function() moveWindow({x=0,   y=0,   w=0.5, h=0.5}) end)
 windowManager:bind({}, "s", function() moveWindow({x=0.5, y=0,   w=0.5, h=0.5}) end)
 windowManager:bind({}, "n", function() moveWindow({x=0,   y=0.5, w=0.5, h=0.5}) end)
