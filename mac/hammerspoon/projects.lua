@@ -95,8 +95,8 @@ local function switchToSpace(n)
   if spaces and spaces[n] then hs.spaces.gotoSpace(spaces[n]) end
 end
 
-local function ghosttyWindowOnCurrentSpace()
-  local apps = hs.application.applicationsForBundleID("com.mitchellh.ghostty")
+local function weztermWindowOnCurrentSpace()
+  local apps = hs.application.applicationsForBundleID("com.github.wez.wezterm")
   local currentSpace = hs.spaces.focusedSpace()
   for _, app in ipairs(apps) do
     for _, win in ipairs(app:allWindows()) do
@@ -131,7 +131,7 @@ local function switchToProject(path)
   )}):start()
 
   local function focus()
-    local win = ghosttyWindowOnCurrentSpace()
+    local win = weztermWindowOnCurrentSpace()
     if win then
       win:focus()
       local function doSwitch()
@@ -146,13 +146,13 @@ local function switchToProject(path)
       if sessionReady then doSwitch() else pendingFocus = doSwitch end
     else
       local wf
-      wf = hs.window.filter.new({"Ghostty"}):subscribe(hs.window.filter.windowCreated, function(win)
+      wf = hs.window.filter.new({"WezTerm"}):subscribe(hs.window.filter.windowCreated, function(win)
         wf:unsubscribeAll()
         win:focus()
         hs.eventtap.keyStrokes("tmux attach-session -t " .. name)
         hs.eventtap.keyStroke({}, "return")
       end)
-      hs.execute("open -na /Applications/Ghostty.app")
+      hs.execute("open -na /Applications/WezTerm.app")
     end
   end
 
@@ -253,5 +253,5 @@ return {
   show             = show,
   buildChoices     = buildChoices,
   activate         = function(choice) switchToProject(choice.path) end,
-  ghosttyWindowOnCurrentSpace = ghosttyWindowOnCurrentSpace,
+  weztermWindowOnCurrentSpace = weztermWindowOnCurrentSpace,
 }

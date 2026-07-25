@@ -37,11 +37,11 @@ appLauncher:bind({}, "b", function()
 end)
 
 appLauncher:bind({}, "t", function()
-  local win = projects.ghosttyWindowOnCurrentSpace()
+  local win = projects.weztermWindowOnCurrentSpace()
   if win then
     win:focus()
   else
-    hs.application.launchOrFocusByBundleID("com.mitchellh.ghostty")
+    hs.application.launchOrFocusByBundleID("com.github.wez.wezterm")
   end
   appLauncher:exit()
 end)
