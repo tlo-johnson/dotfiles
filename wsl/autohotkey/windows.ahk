@@ -45,6 +45,16 @@ Nudge(dx, dy) {
     WinMove(x + dx, y + dy, , , hwnd)
 }
 
+; Resize like dragging the bottom-right corner: right/down grow the window,
+; left/up shrink it (windows.lua resizeWindow). Mode stays active afterward.
+Resize(dw, dh) {
+    hwnd := WinExist("A")
+    if !hwnd
+        return
+    WinGetPos(, , &w, &h, hwnd)
+    WinMove(, , Max(w + dw, 20), Max(h + dh, 20), hwnd)
+}
+
 #HotIf (mode = "window")
 
 Escape:: ExitMode()
@@ -55,11 +65,17 @@ Escape:: ExitMode()
 +Up::    Snap(0,   0,   1,   0.5)
 +Down::  Snap(0,   0.5, 1,   0.5)
 
-; Nudge by 10px (plain arrow); does not exit the mode
-Left::  Nudge(-10, 0)
-Right:: Nudge(10, 0)
-Up::    Nudge(0, -10)
-Down::  Nudge(0, 10)
+; Nudge by 20px (plain arrow); does not exit the mode
+Left::  Nudge(-20, 0)
+Right:: Nudge(20, 0)
+Up::    Nudge(0, -20)
+Down::  Nudge(0, 20)
+
+; Resize by 20px (cmd/win+arrow); does not exit the mode
+#Left::  Resize(-20, 0)
+#Right:: Resize(20, 0)
+#Up::    Resize(0, -20)
+#Down::  Resize(0, 20)
 
 ; Quarters  (physical J ; L K -> Dvorak h s n t, matching windows.lua)
 h:: Snap(0,   0,   0.5, 0.5)

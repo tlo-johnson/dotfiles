@@ -16,7 +16,7 @@ windowManager:bind({"shift"}, "right", function() moveWindow({x=0.5, y=0,   w=0.
 windowManager:bind({"shift"}, "up",    function() moveWindow({x=0,   y=0,   w=1,   h=0.5}) end)
 windowManager:bind({"shift"}, "down",  function() moveWindow({x=0,   y=0.5, w=1,   h=0.5}) end)
 
-local NUDGE = 10
+local NUDGE = 20
 
 local function nudgeWindow(dx, dy)
   local win = hs.window.focusedWindow()
@@ -37,6 +37,29 @@ bindNudge("left",  -NUDGE, 0)
 bindNudge("right",  NUDGE, 0)
 bindNudge("up",    0, -NUDGE)
 bindNudge("down",  0,  NUDGE)
+
+-- Resize like dragging the bottom-right corner: right/down grow the window,
+-- left/up shrink it.
+local function resizeWindow(dw, dh)
+  local win = hs.window.focusedWindow()
+  if win then
+    local f = win:frame()
+    f.w = math.max(f.w + dw, NUDGE)
+    f.h = math.max(f.h + dh, NUDGE)
+    win:setFrame(f)
+  end
+end
+
+local function bindResize(key, dw, dh)
+  local fn = function() resizeWindow(dw, dh) end
+  windowManager:bind({"cmd"}, key, fn, nil, fn)
+end
+
+bindResize("left",  -NUDGE, 0)
+bindResize("right",  NUDGE, 0)
+bindResize("up",    0, -NUDGE)
+bindResize("down",  0,  NUDGE)
+
 windowManager:bind({}, "h", function() moveWindow({x=0,   y=0,   w=0.5, h=0.5}) end)
 windowManager:bind({}, "s", function() moveWindow({x=0.5, y=0,   w=0.5, h=0.5}) end)
 windowManager:bind({}, "n", function() moveWindow({x=0,   y=0.5, w=0.5, h=0.5}) end)
