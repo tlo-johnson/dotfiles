@@ -33,6 +33,7 @@ local opts = { silent = true }
 
 -- Keymaps
 vim.keymap.set("n", "<leader>x", ":bdelete<cr>", opts)
+vim.keymap.set("n", "<leader>X", ":cclose<cr>", opts)
 vim.keymap.set("n", "<leader><leader>", "<c-^>", opts)
 
 vim.keymap.set({ "n", "v" }, "<leader>p", '"+p', opts)
@@ -40,6 +41,24 @@ vim.keymap.set({ "n", "v" }, "<leader>P", '"+P', opts)
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', opts)
 
 vim.keymap.set("n", "-", ":update<cr>", opts)
+
+-- Diagnostics: jump and open the float in one step (overrides stock ]d/[d)
+vim.keymap.set("n", "]d", function()
+  vim.diagnostic.jump({
+    count = 1,
+    on_jump = function()
+      vim.diagnostic.open_float(nil, { focusable = false })
+    end,
+  })
+end, { silent = true, desc = "Next diagnostic" })
+vim.keymap.set("n", "[d", function()
+  vim.diagnostic.jump({
+    count = -1,
+    on_jump = function()
+      vim.diagnostic.open_float(nil, { focusable = false })
+    end,
+  })
+end, { silent = true, desc = "Previous diagnostic" })
 -- vim.keymap.set("n", "<c-h>", "<c-w>h", opts)
 -- vim.keymap.set("n", "<c-t>", "<c-w>j", opts)
 -- vim.keymap.set("n", "<c-n>", "<c-w>k", opts)
@@ -81,25 +100,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local map = function(lhs, rhs, desc)
       vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
     end
-    local telescope = require("telescope.builtin")
-
-    map('ga', vim.lsp.buf.code_action, "Code action")
-    map('gd', vim.lsp.buf.definition, "Goto definition")
-    map('gi', vim.lsp.buf.implementation, "Goto definition")
-    map('gr', vim.lsp.buf.rename, "Rename")
-    map('gu', telescope.lsp_references, "Find references")
-    map('g]', function()
-      vim.diagnostic.jump({ count = 1 })
-      vim.schedule(function()
-        vim.diagnostic.open_float(nil, { focusable = false })
-      end)
-    end, "Next diagnostic")
-    map('g[', function()
-      vim.diagnostic.jump({ count = -1 })
-      vim.schedule(function()
-        vim.diagnostic.open_float(nil, { focusable = false })
-      end)
-    end, "Previous diagnostic")
     map('gf', vim.lsp.buf.format, "Format code")
 
     -- kotlin-lsp never sends workspace/diagnostic/refresh for cross-file
