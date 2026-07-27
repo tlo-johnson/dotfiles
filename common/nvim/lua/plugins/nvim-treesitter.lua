@@ -7,7 +7,7 @@ return {
   },
   config = function()
     require("nvim-treesitter").setup({
-      ensure_installed = { "java", "kotlin" },
+      ensure_installed = { "java", "kotlin", "c_sharp" },
     })
 
     require("nvim-treesitter-textobjects").setup({
