@@ -243,6 +243,6 @@ end
 
 bluetoothModal:bind({}, "a", function() switchToAirPods() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "m", function() switchToBuiltIn() ; bluetoothModal:exit() end)
-bluetoothModal:bind({}, "s", function() selectAudioDevice() ; bluetoothModal:exit() end)
+bluetoothModal:bind({}, "space", function() selectAudioDevice() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "p", function() pairNewDevice() ; bluetoothModal:exit() end)
 bluetoothModal:bind({}, "escape", function() bluetoothModal:exit() end)
