@@ -37,3 +37,6 @@ d = ["diff"]
 bc = ["bookmark", "create"]
 bt = ["bookmark", "track"]
 bs = ["bookmark", "set", "--allow-backwards"]
+
+[colors."diff token"]
+underline = false
