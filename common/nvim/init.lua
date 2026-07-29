@@ -27,7 +27,7 @@ vim.opt.list = true
 vim.opt.listchars = "trail:·,tab:·┈"
 vim.opt.hlsearch = false
 vim.opt.winborder = 'rounded'
-vim.opt.completeopt = 'menuone,noinsert,popup'
+vim.opt.completeopt = 'menu,popup,menuone,noinsert,noselect'
 
 local opts = { silent = true }
 
@@ -100,6 +100,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local map = function(lhs, rhs, desc)
       vim.keymap.set("n", lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
     end
+    local telescope = require("telescope.builtin")
+
+    map('gd', telescope.lsp_definitions, "Goto definition")
+    map('gri', telescope.lsp_implementations, "Goto implementation")
+    map('grr', telescope.lsp_references, "Find references")
+    map('grt', telescope.lsp_type_definitions, "Goto type definition")
+    map('gO', telescope.lsp_document_symbols, "Document symbols")
     map('gf', vim.lsp.buf.format, "Format code")
 
     -- kotlin-lsp never sends workspace/diagnostic/refresh for cross-file

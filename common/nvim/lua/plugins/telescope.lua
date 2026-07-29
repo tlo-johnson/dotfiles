@@ -3,7 +3,7 @@
 return {
   'nvim-telescope/telescope.nvim',
   -- tag = 'v0.1.9',
-  dependencies = { 'nvim-lua/plenary.nvim' },
+  dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-ui-select.nvim' },
   keys = {
     { "<leader>e", "<cmd>Telescope find_files<cr>",  desc = "Telescope find files" },
     { '<leader>g', "<cmd>Telescope live_grep<cr>",   { desc = 'Telescope live grep' } },
@@ -13,6 +13,15 @@ return {
   opts = {
     defaults = {
       layout_strategy = 'vertical',
-    }
-  }
+    },
+    extensions = {
+      ["ui-select"] = {
+        require("telescope.themes").get_dropdown(),
+      },
+    },
+  },
+  config = function(_, opts)
+    require("telescope").setup(opts)
+    require("telescope").load_extension("ui-select")
+  end,
 }
