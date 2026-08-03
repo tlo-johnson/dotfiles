@@ -25,4 +25,5 @@ alias claude-cp='CLAUDE_CONFIG_DIR=~/.claude-cap claude --allowedTools "Read,Gre
 
 [[ -f "$HOME/.config/op/plugins.sh" ]] && source "$HOME/.config/op/plugins.sh"
 eval "$(direnv hook zsh)"
+eval "$(fzf --zsh)"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
