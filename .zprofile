@@ -1,3 +1,5 @@
+EDITOR=nvim
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 alias obsidian="~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents"
@@ -20,5 +22,7 @@ export PATH="$PATH:/Users/tlo/Library/Application Support/Coursier/bin"
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
 
-# Put the repo's mac/bin scripts (e.g. secure-input-culprit) on PATH so they're runnable by name.
-[[ -d "$HOME/dotfiles/mac/bin" ]] && export PATH="$HOME/dotfiles/mac/bin:$PATH"
+# Put the repo's bin/ scripts (e.g. secure-input-culprit) on PATH so they're runnable by name.
+[[ -d "$HOME/dotfiles/bin" ]] && export PATH="$HOME/dotfiles/bin:$PATH"
+
+export PATH="$HOME/ds/bin:$HOME/ds/bin/api-calls:$HOME/bin:$HOME/bin/ds:$PATH"

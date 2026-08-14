@@ -19,7 +19,7 @@ bindkey "^[[B" down-line-or-beginning-search
 export PATH="$HOME/.local/bin:$PATH"
 
 alias g=git
-source ~/dotfiles/common/jj.zsh
+source ~/dotfiles/jj.zsh
 alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
 alias claude-cp='CLAUDE_CONFIG_DIR=~/.claude-cap claude --allowedTools "Read,Grep,Glob"'
 

@@ -116,8 +116,7 @@
                                     {
                                         "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 },
-                                            { "vendor_id": 10730, "product_id": 866 }
+                                            { "vendor_id": 7504, "product_id": 24926 }
                                         ]
                                     }
                                 ],
@@ -154,8 +153,7 @@
                                     {
                                         "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 },
-                                            { "vendor_id": 10730, "product_id": 866 }
+                                            { "vendor_id": 7504, "product_id": 24926 }
                                         ]
                                     }
                                 ],
@@ -168,8 +166,7 @@
                                     {
                                         "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 },
-                                            { "vendor_id": 10730, "product_id": 866 }
+                                            { "vendor_id": 7504, "product_id": 24926 }
                                         ]
                                     }
                                 ],
@@ -187,8 +184,7 @@
                                     {
                                         "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 },
-                                            { "vendor_id": 10730, "product_id": 866 }
+                                            { "vendor_id": 7504, "product_id": 24926 }
                                         ]
                                     }
                                 ],
@@ -201,8 +197,7 @@
                                     {
                                         "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 },
-                                            { "vendor_id": 10730, "product_id": 866 }
+                                            { "vendor_id": 7504, "product_id": 24926 }
                                         ]
                                     }
                                 ],
@@ -802,16 +797,6 @@
                         "product_id": 50894,
                         "vendor_id": 12951
                     }
-                },
-                {
-                    "identifiers": {
-                        "is_keyboard": true,
-                        "is_pointing_device": true,
-                        "product_id": 866,
-                        "vendor_id": 10730
-                    },
-                    "ignore": false,
-                    "ignore_vendor_events": true
                 },
                 {
                     "identifiers": {
