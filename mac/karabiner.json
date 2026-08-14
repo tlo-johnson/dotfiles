@@ -717,7 +717,7 @@
                         ]
                     },
                     {
-                        "description": "Shift alone (tap) = one-shot Control for next key",
+                        "description": "Left Shift alone (tap) = one-shot sticky Control (tap again to cancel)",
                         "manipulators": [
                             {
                                 "type": "basic",
@@ -729,7 +729,12 @@
                                 "to_if_alone": [
                                     { "sticky_modifier": { "left_control": "on" } }
                                 ]
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Right Shift alone (tap) = one-shot sticky Control (tap again to cancel)",
+                        "manipulators": [
                             {
                                 "type": "basic",
                                 "from": {
@@ -738,7 +743,7 @@
                                 },
                                 "to": [{ "key_code": "right_shift" }],
                                 "to_if_alone": [
-                                    { "sticky_modifier": { "left_control": "on" } }
+                                    { "sticky_modifier": { "right_control": "on" } }
                                 ]
                             }
                         ]

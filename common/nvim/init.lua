@@ -103,6 +103,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local telescope = require("telescope.builtin")
 
     map('gd', telescope.lsp_definitions, "Goto definition")
+    map('grd', telescope.lsp_definitions, "Goto definition")
     map('gri', telescope.lsp_implementations, "Goto implementation")
     map('grr', telescope.lsp_references, "Find references")
     map('grt', telescope.lsp_type_definitions, "Goto type definition")
