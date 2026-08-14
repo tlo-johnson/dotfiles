@@ -79,11 +79,11 @@
                         ]
                     },
                     {
-                        "description": "Caps = Hyper Layer (variable) / Esc if alone",
+                        "description": "F = Hyper Layer (variable) / f if alone",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "caps_lock",
+                                    "key_code": "f",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
@@ -102,8 +102,21 @@
                                         }
                                     }
                                 ],
-                                "to_if_alone": [{ "key_code": "escape" }],
+                                "to_if_alone": [{ "key_code": "f" }],
                                 "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Caps Lock = Escape",
+                        "manipulators": [
+                            {
+                                "type": "basic",
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "escape" }]
                             }
                         ]
                     },
@@ -433,36 +446,6 @@
                         ]
                     },
                     {
-                        "description": "Hyper-layer: Enter",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "name": "app_mode",
-                                        "type": "variable_if",
-                                        "value": 0
-                                    },
-                                    {
-                                        "name": "hyper_mode",
-                                        "type": "variable_if",
-                                        "value": 1
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "f",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "return_or_enter",
-                                        "modifiers": ["any"]
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Hyper-layer: Backspace",
                         "manipulators": [
                             {
@@ -623,36 +606,6 @@
                         ]
                     },
                     {
-                        "description": "Hyper-layer: Home/End",
-                        "manipulators": [
-                            {
-                                "conditions": [
-                                    {
-                                        "name": "app_mode",
-                                        "type": "variable_if",
-                                        "value": 0
-                                    },
-                                    {
-                                        "name": "hyper_mode",
-                                        "type": "variable_if",
-                                        "value": 1
-                                    }
-                                ],
-                                "from": {
-                                    "key_code": "f",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [
-                                    {
-                                        "key_code": "end",
-                                        "modifiers": ["any"]
-                                    }
-                                ],
-                                "type": "basic"
-                            }
-                        ]
-                    },
-                    {
                         "description": "Home Row Scroll (Hyper + q = cmd+shift+j)",
                         "manipulators": [
                             {
@@ -758,6 +711,16 @@
                         "product_id": 50894,
                         "vendor_id": 12951
                     }
+                },
+                {
+                    "identifiers": {
+                        "is_keyboard": true,
+                        "is_pointing_device": true,
+                        "product_id": 24926,
+                        "vendor_id": 7504
+                    },
+                    "ignore": false,
+                    "ignore_vendor_events": true
                 }
             ],
             "name": "Default profile",
