@@ -79,11 +79,11 @@
                         ]
                     },
                     {
-                        "description": "F = Hyper Layer (variable) / f if alone",
+                        "description": "Caps = Hyper Layer (variable) / Esc if alone",
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "f",
+                                    "key_code": "caps_lock",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [
@@ -102,21 +102,8 @@
                                         }
                                     }
                                 ],
-                                "to_if_alone": [{ "key_code": "f" }],
+                                "to_if_alone": [{ "key_code": "escape" }],
                                 "type": "basic"
-                            }
-                        ]
-                    },
-                    {
-                        "description": "Caps Lock = Escape",
-                        "manipulators": [
-                            {
-                                "type": "basic",
-                                "from": {
-                                    "key_code": "caps_lock",
-                                    "modifiers": { "optional": ["any"] }
-                                },
-                                "to": [{ "key_code": "escape" }]
                             }
                         ]
                     },

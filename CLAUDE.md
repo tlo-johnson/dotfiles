@@ -25,7 +25,7 @@ All config files are symlinked into place by the per-OS setup. No build steps, t
 ./windows/setup.ps1  # on native Windows (PowerShell 7)
 ```
 
-There is no root dispatcher — each OS has its own self-contained setup. `mac/setup` and `wsl/setup` both `source common/link.sh` (which defines the `link()` helper, symlinks the shared `common/` configs, and bootstraps `~/.gitconfig.specific` from the template), then do their own: `mac/setup` installs Homebrew packages (Brewfile) + jenv and links the GUI configs (Hammerspoon, Karabiner, Ghostty, WezTerm, `.zprofile.mac`); `wsl/setup` installs core tools via apt and runs `wsl/sync-ahk` to push the AutoHotkey scripts to the Windows host. `windows/setup.ps1` is independent of `common/link.sh`: it installs packages via winget, symlinks `common/` configs + its own PowerShell profile/Windows Terminal scheme, and copies (not symlinks) the AutoHotkey scripts straight from `wsl/autohotkey/` to the Windows Documents folder.
+There is no root dispatcher — each OS has its own self-contained setup. `mac/setup` and `wsl/setup` both `source common/link.sh` (which defines the `link()` and `copy()` helpers, symlinks the shared `common/` configs, and bootstraps `~/.gitconfig.specific` from the template), then do their own: `mac/setup` installs Homebrew packages (Brewfile) + jenv and links the GUI configs (Hammerspoon, Ghostty, WezTerm, `.zprofile.mac`) plus copies Karabiner's config (see below); `wsl/setup` installs core tools via apt and runs `wsl/sync-ahk` to push the AutoHotkey scripts to the Windows host. `windows/setup.ps1` is independent of `common/link.sh`: it installs packages via winget, symlinks `common/` configs + its own PowerShell profile/Windows Terminal scheme, and copies (not symlinks) the AutoHotkey scripts straight from `wsl/autohotkey/` to the Windows Documents folder.
 
 `common/.zshrc` / `common/.zprofile` source their OS variant via a `case "$OSTYPE"` branch (`$HOME/.zshrc.mac`/`.zprofile.mac` vs `.zshrc.wsl`/`.zprofile.wsl`). Present today: `mac/.zprofile.mac` and `wsl/.zshrc.wsl` (the latter puts `wsl/` scripts like `sync-ahk` on PATH). Native Windows doesn't participate in this branch at all — `windows/profile.ps1` is a separate, parallel reimplementation of the same shell setup (prompt, `$EDITOR`, vi-mode readline, history search, aliases) in PowerShell, not a consumer of `common/.zshrc`.
 
@@ -52,7 +52,8 @@ After setup, several manual steps are required (differ by OS — e.g. 1Password 
 | `mac/ghostty/` | `~/.config/ghostty` |
 | `mac/wezterm/` | `~/.config/wezterm` |
 | `mac/hammerspoon/` | `~/.hammerspoon` |
-| `mac/karabiner.json` | `~/.config/karabiner/karabiner.json` |
+
+`mac/karabiner.json` is **not** symlinked — `mac/setup` uses `common/link.sh`'s `copy()` helper to copy it to `~/.config/karabiner/karabiner.json` instead. Karabiner-Elements replaces a symlinked config with a real file on save, which silently breaks the link, so setup pushes a fresh copy each run rather than symlinking. This means edits made live in Karabiner-Elements are not reflected back in the repo automatically — copy the file back manually (or re-apply the change to `mac/karabiner.json` and rerun `mac/setup`).
 
 `windows/setup.ps1` (native Windows only — reimplements symlinking itself, doesn't call `common/link.sh`):
 
