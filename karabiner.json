@@ -766,7 +766,7 @@
                                 },
                                 "to": [{ "key_code": "left_shift" }],
                                 "to_if_alone": [
-                                    { "sticky_modifier": { "left_control": "on" } }
+                                    { "sticky_modifier": { "left_control": "toggle" } }
                                 ]
                             }
                         ]
@@ -782,7 +782,7 @@
                                 },
                                 "to": [{ "key_code": "right_shift" }],
                                 "to_if_alone": [
-                                    { "sticky_modifier": { "right_control": "on" } }
+                                    { "sticky_modifier": { "right_control": "toggle" } }
                                 ]
                             }
                         ]
