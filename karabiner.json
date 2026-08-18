@@ -7,17 +7,23 @@
                         "description": "Ducky One2 Mini: Escape = Tilde/Grave",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 1046, "product_id": 291 }
-                                        ]
+                                            {
+                                                "product_id": 291,
+                                                "vendor_id": 1046
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "escape", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "grave_accent_and_tilde" }]
+                                "from": {
+                                    "key_code": "escape",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "grave_accent_and_tilde" }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -25,56 +31,80 @@
                         "description": "Ducky One2 Mini: Swap Windows/Alt to match Mac layout",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 1046, "product_id": 291 }
-                                        ]
+                                            {
+                                                "product_id": 291,
+                                                "vendor_id": 1046
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "left_option", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "left_command" }]
+                                "from": {
+                                    "key_code": "left_option",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_command" }],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 1046, "product_id": 291 }
-                                        ]
+                                            {
+                                                "product_id": 291,
+                                                "vendor_id": 1046
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "left_command", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "left_option" }]
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_option" }],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 1046, "product_id": 291 }
-                                        ]
+                                            {
+                                                "product_id": 291,
+                                                "vendor_id": 1046
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "right_option", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "right_command" }]
+                                "from": {
+                                    "key_code": "right_option",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_command" }],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 1046, "product_id": 291 }
-                                        ]
+                                            {
+                                                "product_id": 291,
+                                                "vendor_id": 1046
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "right_command", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "right_option" }]
+                                "from": {
+                                    "key_code": "right_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_option" }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -111,13 +141,15 @@
                         "description": "Advantage Pro: Escape = Hyper Layer (variable) / Esc if alone",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 }
-                                        ]
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
                                 "from": {
@@ -140,7 +172,8 @@
                                         }
                                     }
                                 ],
-                                "to_if_alone": [{ "key_code": "escape" }]
+                                "to_if_alone": [{ "key_code": "escape" }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -148,30 +181,42 @@
                         "description": "Advantage Pro: Ctrl = Command",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 }
-                                        ]
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "left_control", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "left_command" }]
+                                "from": {
+                                    "key_code": "left_control",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_command" }],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 }
-                                        ]
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "right_control", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "right_command" }]
+                                "from": {
+                                    "key_code": "right_control",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_command" }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -179,172 +224,184 @@
                         "description": "Advantage Pro: Command = Alt",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 }
-                                        ]
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "left_command", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "left_option" }]
+                                "from": {
+                                    "key_code": "left_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_option" }],
+                                "type": "basic"
                             },
                             {
-                                "type": "basic",
                                 "conditions": [
                                     {
-                                        "type": "device_if",
                                         "identifiers": [
-                                            { "vendor_id": 7504, "product_id": 24926 }
-                                        ]
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
                                     }
                                 ],
-                                "from": { "key_code": "right_command", "modifiers": { "optional": ["any"] } },
-                                "to": [{ "key_code": "right_option" }]
+                                "from": {
+                                    "key_code": "right_command",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_option" }],
+                                "type": "basic"
                             }
                         ]
                     },
                     {
-                      "description": "Hyper + Space = App Layer, Space alone still types space",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "spacebar",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + Space = App Layer, Space alone still types space",
+                        "manipulators": [
                             {
-                              "key_code": "f13"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "spacebar",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f13" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + R = Projects",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "r",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + R = Projects",
+                        "manipulators": [
                             {
-                              "key_code": "f18"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "r",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f18" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + E = Tabs",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "e",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + E = Tabs",
+                        "manipulators": [
                             {
-                              "key_code": "f19"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "e",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f19" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + , = Window Layer",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "comma",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + , = Window Layer",
+                        "manipulators": [
                             {
-                              "key_code": "f14"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "comma",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f14" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + A = Keypad Layer",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "a",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + A = Keypad Layer",
+                        "manipulators": [
                             {
-                              "key_code": "f17"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f17" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + Z = Config Layer",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "z",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + Z = Config Layer",
+                        "manipulators": [
                             {
-                              "key_code": "f16"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "z",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f16" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
-                      "description": "Hyper + N = Bluetooth Layer",
-                      "manipulators": [
-                        {
-                          "type": "basic",
-                          "conditions": [
-                            { "type": "variable_if", "name": "hyper_mode", "value": 1 }
-                          ],
-                          "from": {
-                            "key_code": "n",
-                            "modifiers": { "optional": ["any"] }
-                          },
-                          "to": [
+                        "description": "Hyper + N = Bluetooth Layer",
+                        "manipulators": [
                             {
-                              "key_code": "f15"
+                                "conditions": [
+                                    {
+                                        "name": "hyper_mode",
+                                        "type": "variable_if",
+                                        "value": 1
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "n",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "f15" }],
+                                "type": "basic"
                             }
-                          ]
-                        }
-                      ]
+                        ]
                     },
                     {
                         "description": "Hyper-layer: Brackets & symbols",
@@ -720,9 +777,9 @@
                         "description": "Fn to Control",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "from": { "apple_vendor_top_case_key_code": "keyboard_fn" },
-                                "to": [{ "key_code": "left_control" }]
+                                "to": [{ "key_code": "left_control" }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -759,15 +816,13 @@
                         "description": "Left Shift alone (tap) = one-shot sticky Control (tap again to cancel)",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "left_shift",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "left_shift" }],
-                                "to_if_alone": [
-                                    { "sticky_modifier": { "left_control": "toggle" } }
-                                ]
+                                "to_if_alone": [{ "sticky_modifier": { "left_control": "toggle" } }],
+                                "type": "basic"
                             }
                         ]
                     },
@@ -775,15 +830,13 @@
                         "description": "Right Shift alone (tap) = one-shot sticky Control (tap again to cancel)",
                         "manipulators": [
                             {
-                                "type": "basic",
                                 "from": {
                                     "key_code": "right_shift",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "right_shift" }],
-                                "to_if_alone": [
-                                    { "sticky_modifier": { "right_control": "toggle" } }
-                                ]
+                                "to_if_alone": [{ "sticky_modifier": { "right_control": "toggle" } }],
+                                "type": "basic"
                             }
                         ]
                     }
@@ -813,6 +866,7 @@
             "selected": true,
             "virtual_hid_keyboard": {
                 "country_code": 0,
+                "indicate_sticky_modifier_keys_state": false,
                 "keyboard_type_v2": "ansi"
             }
         }
