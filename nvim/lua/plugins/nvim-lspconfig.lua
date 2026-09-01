@@ -19,4 +19,13 @@ local masonLspConfig = {
 return {
   "neovim/nvim-lspconfig",
   dependencies = masonLspConfig,
+  config = function()
+    vim.lsp.config("csharp_ls", {
+      cmd_env = {
+        DOTNET_ROOT = "/opt/homebrew/opt/dotnet/libexec",
+        PATH = "/opt/homebrew/opt/dotnet/bin:" .. vim.env.PATH,
+      },
+    })
+    vim.lsp.enable("csharp_ls")
+  end,
 }

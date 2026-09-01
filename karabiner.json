@@ -109,6 +109,30 @@
                         ]
                     },
                     {
+                        "description": "Advantage Pro: Caps Lock = Control",
+                        "manipulators": [
+                            {
+                                "conditions": [
+                                    {
+                                        "identifiers": [
+                                            {
+                                                "product_id": 24926,
+                                                "vendor_id": 7504
+                                            }
+                                        ],
+                                        "type": "device_if"
+                                    }
+                                ],
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_control" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Caps = Hyper Layer (variable) / Esc if alone",
                         "manipulators": [
                             {

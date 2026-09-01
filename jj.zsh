@@ -1,5 +1,33 @@
 command -v jj &>/dev/null && source <(jj util completion zsh)
 
+if command -v jj &>/dev/null; then
+  # Wraps jj's generated `_jj` completion so `j` completes both the real
+  # jj subcommands and the pl/ps/m shortcuts defined below (dispatching
+  # pl -> git fetch, ps -> git push, m -> describe for the rest of the line).
+  _j() {
+    if (( CURRENT == 2 )); then
+      local -a custom_cmds
+      custom_cmds=(
+        'pl:jj-pull shortcut (git fetch + switch to updated bookmark)'
+        'ps:jj-push shortcut (create/update bookmark + push)'
+        'm:describe shortcut (supports --pair/--pair-alias)'
+      )
+      _describe -t j-shortcuts 'j shortcuts' custom_cmds
+      _jj_commands
+      return
+    fi
+
+    case ${words[2]} in
+      pl) words[2,2]=(git fetch); (( CURRENT += 1 )) ;;
+      ps) words[2,2]=(git push); (( CURRENT += 1 )) ;;
+      m)  words[2,2]=(describe) ;;
+    esac
+
+    _jj
+  }
+  compdef _j j
+fi
+
 jj-pull() {
   local is_empty
   is_empty=$(jj log -r '@' --no-graph -T 'if(empty, "yes", "no")' 2>/dev/null)

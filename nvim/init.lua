@@ -1,4 +1,5 @@
 require("config.lazy")
+require("config.context_peek").setup()
 
 if vim.fn.has('win32') == 1 then
   vim.opt.shell = 'powershell'
@@ -102,13 +103,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
     local telescope = require("telescope.builtin")
 
-    map('gd', telescope.lsp_definitions, "Goto definition")
     map('grd', telescope.lsp_definitions, "Goto definition")
     map('gri', telescope.lsp_implementations, "Goto implementation")
     map('grr', telescope.lsp_references, "Find references")
     map('grt', telescope.lsp_type_definitions, "Goto type definition")
-    map('gO', telescope.lsp_document_symbols, "Document symbols")
-    map('gf', vim.lsp.buf.format, "Format code")
+    map('grs', telescope.lsp_document_symbols, "Document symbols")
+    map('grf', vim.lsp.buf.format, "Format code")
 
     -- kotlin-lsp never sends workspace/diagnostic/refresh for cross-file
     -- changes (resultId/relatedDocuments are hardcoded null, LSP-237 TODO in
