@@ -49,7 +49,7 @@ After setup, several manual steps are required (1Password SSH agent, Hammerspoon
 - `projects.lua` — project switcher; reads `~/.config/tlo/projects/dirs`, manages tmux sessions (via WezTerm) and space switching
 - `tabs.lua` / `browser-tab-store.lua` — browser tab switcher; store is fed live by browser extensions, `tabs.lua` renders the chooser
 - `switcher.lua` — Hyper+R opens the project switcher, Hyper+E opens the browser tab switcher
-- `apps.lua` — app launcher (Hyper+Space), including a "capture note" action that shells out to `hammerspoon/scripts/capture`
+- `apps.lua` — app launcher (Hyper+F), including a "capture note" action that shells out to `hammerspoon/scripts/capture`
 - `bluetooth.lua` — Bluetooth device switcher (Hyper+N)
 - `config.lua` — config reload layer (Hyper+Z)
 - `keypad.lua` — modal numpad layer (Hyper+A)

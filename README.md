@@ -69,7 +69,7 @@ triggers the Hyper layer, in addition to Caps Lock.)
 
 | Shortcut | Action |
 |----------|--------|
-| Hyper+Space | App launcher |
+| Hyper+F | App launcher |
 | Hyper+, | Window manager |
 | Hyper+R | Project switcher |
 | Hyper+E | Browser tab switcher |
@@ -77,7 +77,7 @@ triggers the Hyper layer, in addition to Caps Lock.)
 | Hyper+Z | Config layer |
 | Hyper+A | Keypad layer |
 
-### App launcher (Hyper+Space, then...)
+### App launcher (Hyper+F, then...)
 
 | Key | App |
 |-----|-----|

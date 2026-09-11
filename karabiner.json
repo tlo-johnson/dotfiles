@@ -288,7 +288,7 @@
                         ]
                     },
                     {
-                        "description": "Hyper + Space = App Layer, Space alone still types space",
+                        "description": "Hyper + F = App Layer",
                         "manipulators": [
                             {
                                 "conditions": [
@@ -299,7 +299,7 @@
                                     }
                                 ],
                                 "from": {
-                                    "key_code": "spacebar",
+                                    "key_code": "f",
                                     "modifiers": { "optional": ["any"] }
                                 },
                                 "to": [{ "key_code": "f13" }],

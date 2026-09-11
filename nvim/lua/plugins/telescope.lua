@@ -10,16 +10,18 @@ return {
     { '<leader>/', "<cmd>Telescope grep_string<cr>", { desc = 'Telescope grep string' } },
     { '<leader>b', "<cmd>Telescope buffers<cr>",     { desc = 'Telescope buffers' } },
   },
-  opts = {
-    defaults = {
-      layout_strategy = 'vertical',
-    },
-    extensions = {
-      ["ui-select"] = {
-        require("telescope.themes").get_dropdown(),
+  opts = function()
+    return {
+      defaults = {
+        layout_strategy = 'vertical',
       },
-    },
-  },
+      extensions = {
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown(),
+        },
+      },
+    }
+  end,
   config = function(_, opts)
     local actions = require 'telescope.actions'
 
