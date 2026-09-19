@@ -1,7 +1,5 @@
 # enable tab-completion (required for jj, git, etc.)
-fpath=(~/bin $fpath)
-[[ -d ~/ds/bin ]] && fpath=(~/ds/bin $fpath)
-[[ -d ~/ds/bin/api-calls ]] && fpath=(~/ds/bin/api-calls $fpath)
+fpath=(~/dotfiles/completions $fpath)
 autoload -Uz compinit && compinit -u
 
 PROMPT='%F{green}%~ %f-> '
@@ -20,8 +18,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 alias g=git
 source ~/dotfiles/jj.zsh
-alias claude-ds='CLAUDE_CONFIG_DIR=~/.claude-ds claude --allowedTools "Read,Grep,Glob"'
-alias claude-cp='CLAUDE_CONFIG_DIR=~/.claude-cap claude --allowedTools "Read,Grep,Glob"'
 
 [[ -f "$HOME/.config/op/plugins.sh" ]] && source "$HOME/.config/op/plugins.sh"
 eval "$(direnv hook zsh)"
