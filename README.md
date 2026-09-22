@@ -38,7 +38,7 @@ After running `./setup`:
 | Neovim | `nvim/` | lazy.nvim, LSP (jdtls, gopls, lua), completion, treesitter |
 | Zsh | `.zshrc`, `.zprofile` | vi mode, prompt, history search |
 | Git | `.gitconfig` | SSH commit signing via 1Password, aliases, rebase on pull |
-| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching |
+| Tmux | `.tmux.conf` | vim-style navigation, smart pane switching, Catppuccin Mocha theme via tpm |
 | Ghostty | `ghostty/config` | Terminal with Monaspace font |
 | WezTerm | `wezterm/wezterm.lua` | Active default terminal (Catppuccin Mocha) |
 | Hammerspoon | `hammerspoon/` | Custom window tiler, app launcher, project switcher, Bluetooth switching |

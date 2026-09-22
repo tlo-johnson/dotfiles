@@ -60,6 +60,12 @@ link "$REPO/wezterm"            "$HOME/.config/wezterm"
 link "$REPO/hammerspoon"        "$HOME/.hammerspoon"
 copy "$REPO/karabiner.json"     "$HOME/.config/karabiner/karabiner.json"
 
+echo "==> Installing tmux plugins (tpm + catppuccin)..."
+if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
+fi
+"$HOME/.tmux/plugins/tpm/bin/install_plugins"
+
 # Bootstrap machine-specific git config (email + commit signing) from template.
 if [[ ! -e "$HOME/.gitconfig.specific" ]]; then
   cp "$REPO/.gitconfig.specific.template" "$HOME/.gitconfig.specific"
