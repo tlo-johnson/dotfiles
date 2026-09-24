@@ -25,4 +25,7 @@ config.cursor_blink_rate = 500
 -- Scrollback
 config.scrollback_lines = 10000
 
+-- Bell
+config.audible_bell = 'Disabled'
+
 return config

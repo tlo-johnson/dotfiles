@@ -23,3 +23,5 @@ source ~/dotfiles/jj.zsh
 eval "$(direnv hook zsh)"
 eval "$(fzf --zsh)"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+
+source ~/.zshrc-*
