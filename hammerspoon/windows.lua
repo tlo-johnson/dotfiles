@@ -65,7 +65,7 @@ windowManager:bind({}, "s", function() moveWindow({x=0.5, y=0,   w=0.5, h=0.5}) 
 windowManager:bind({}, "n", function() moveWindow({x=0,   y=0.5, w=0.5, h=0.5}) end)
 windowManager:bind({}, "t", function() moveWindow({x=0.5, y=0.5, w=0.5, h=0.5}) end)
 
-windowManager:bind({}, "c", function() moveWindow({x=0.1, y=0.075, w=0.8, h=0.85}) end)
+windowManager:bind({}, "c", function() moveWindow({x=0.25, y=0.075, w=0.5, h=0.85}) end)
 
 windowManager:bind({}, "v", function()
   local wins = hs.window.orderedWindows()
