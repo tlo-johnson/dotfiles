@@ -1,0 +1,10 @@
+onboarding = false
+
+[keys]
+prefix = "ctrl+space"
+focus_pane_left = "ctrl+h"
+focus_pane_right = "ctrl+s"
+focus_pane_up = "ctrl+n"
+focus_pane_down = "ctrl+t"
+split_horizontal = "prefix+-"
+split_vertical = "prefix+\\"
