@@ -38,24 +38,34 @@ local function findOutputDevice(namePart)
   end
 end
 
+-- Bluetooth audio devices have their MAC in the CoreAudio UID (e.g. "80-95-3A-F1-89-E0:output"),
+-- which, unlike the name, survives the device being renamed
+local function findOutputDeviceByAddress(address)
+  local mac = address:gsub(":", "-"):upper()
+  for _, d in ipairs(hs.audiodevice.allOutputDevices()) do
+    if d:uid():upper():find(mac, 1, true) then return d end
+  end
+end
+
 local function switchToDevice(d)
   log("Switching to " .. d:name())
   d:setDefaultOutputDevice()
   hs.notify.new({title="Bluetooth", informativeText="Audio switched to " .. d:name()}):send()
 end
 
-local function waitForAudioDevice(namePart, attempts, callback)
+local function waitForAudioDevice(find, attempts, callback)
   if attempts <= 0 then callback(nil) ; return end
-  local d = findOutputDevice(namePart)
+  local d = find()
   if d then callback(d) ; return end
-  hs.timer.doAfter(1, function() waitForAudioDevice(namePart, attempts - 1, callback) end)
+  hs.timer.doAfter(1, function() waitForAudioDevice(find, attempts - 1, callback) end)
 end
 
 local function switchToAirPods()
-  local d = findOutputDevice("airpods")
-  if d then switchToDevice(d) ; return end
-
   local AIRPODS_MAC_ADDRESS = "80:95:3A:F1:89:E0"
+  local function findAirPods() return findOutputDeviceByAddress(AIRPODS_MAC_ADDRESS) end
+
+  local d = findAirPods()
+  if d then switchToDevice(d) ; return end
 
   log("AirPods not in CoreAudio, connecting via blueutil (" .. AIRPODS_MAC_ADDRESS .. ")")
   hs.notify.new({title="Bluetooth", informativeText="Connecting AirPods..."}):send()
@@ -63,7 +73,7 @@ local function switchToAirPods()
     log("blueutil exit=" .. code .. " stdout=" .. stdout .. " stderr=" .. stderr)
     if code ~= 0 then notifyError("Failed to connect AirPods: " .. stderr) ; return end
 
-    waitForAudioDevice("airpods", 10, function(found)
+    waitForAudioDevice(findAirPods, 10, function(found)
       if found then switchToDevice(found)
       else notifyError("AirPods connected but never appeared as audio device") end
     end)
@@ -109,7 +119,8 @@ local function selectAudioDevice()
     hs.task.new("/opt/homebrew/bin/blueutil", function(code, _, stderr)
       log("blueutil connect exit=" .. code .. " stderr=" .. stderr)
       if code ~= 0 then notifyError("Failed to connect " .. name .. ": " .. stderr) ; return end
-      waitForAudioDevice(name, 10, function(found)
+      local function find() return findOutputDeviceByAddress(address) or findOutputDevice(name) end
+      waitForAudioDevice(find, 10, function(found)
         if found then switchToDevice(found)
         else notifyError(name .. " connected but never appeared as audio device") end
       end)
