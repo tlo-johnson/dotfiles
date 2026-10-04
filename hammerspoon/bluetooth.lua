@@ -162,8 +162,9 @@ local function selectAudioDevice()
     local btMacs = {}
     local choices = {}
     for _, dev in ipairs(btDevices) do
-      local name = dev.name or dev.address
       local audioDevice = findAudioDevice(dev)
+      -- blueutil's name can be stale after a rename; CoreAudio's is current
+      local name = (audioDevice and audioDevice:name()) or dev.name or dev.address
       local isCurrent = audioDevice and audioDevice:uid() == currentUID
       local addr = dev.address:lower():gsub("-", ":")
       btMacs[addr] = true
