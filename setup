@@ -58,6 +58,7 @@ link "$REPO/zsh-completions/_j" "$HOME/bin/_j"
 link "$REPO/ghostty"            "$HOME/.config/ghostty"
 link "$REPO/wezterm"            "$HOME/.config/wezterm"
 link "$REPO/hammerspoon"        "$HOME/.hammerspoon"
+link "$REPO/herdr.config.toml"  "$HOME/.config/herdr/config.toml"
 copy "$REPO/karabiner.json"     "$HOME/.config/karabiner/karabiner.json"
 
 echo "==> Installing tmux plugins (tpm + catppuccin)..."

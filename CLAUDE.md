@@ -37,6 +37,7 @@ After setup, several manual steps are required (1Password SSH agent, Hammerspoon
 | `ghostty/` | `~/.config/ghostty` |
 | `wezterm/` | `~/.config/wezterm` |
 | `hammerspoon/` | `~/.hammerspoon` |
+| `herdr.config.toml` | `~/.config/herdr/config.toml` |
 
 `karabiner.json` is **not** symlinked — `setup` uses its `copy()` helper to copy it to `~/.config/karabiner/karabiner.json` instead. Karabiner-Elements replaces a symlinked config with a real file on save, which silently breaks the link, so setup pushes a fresh copy each run rather than symlinking. This means edits made live in Karabiner-Elements are not reflected back in the repo automatically — copy the file back manually (or re-apply the change to `karabiner.json` and rerun `./setup`).
 
