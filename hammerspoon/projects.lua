@@ -108,6 +108,34 @@ local function weztermWindowOnCurrentSpace()
   return nil
 end
 
+local WEZTERM = "/Applications/WezTerm.app/Contents/MacOS/wezterm"
+
+local function decodeJson(cmd)
+  local ok, data = pcall(hs.json.decode, hs.execute(cmd .. " 2>/dev/null") or "")
+  return ok and data or nil
+end
+
+-- Returns pane id and tty of the pane focused in the WezTerm GUI with this pid.
+local function weztermFocusedPane(pid)
+  local paneId
+  for _, c in ipairs(decodeJson(WEZTERM .. " cli list-clients --format json") or {}) do
+    if c.pid == pid then paneId = c.focused_pane_id end
+  end
+  if not paneId then return nil end
+  for _, p in ipairs(decodeJson(WEZTERM .. " cli list --format json") or {}) do
+    if p.pane_id == paneId then return paneId, p.tty_name end
+  end
+  return paneId, nil
+end
+
+local function isTmuxClient(tty)
+  local clients = hs.execute("/bin/zsh -lc \"tmux list-clients -F '#{client_tty}' 2>/dev/null\"")
+  for line in clients:gmatch("[^\n]+") do
+    if line == tty then return true end
+  end
+  return false
+end
+
 local function switchToProject(path)
   local recentsFile = CONFIG .. "/recents"
   local seen, result = { [path] = true }, { path }
@@ -135,13 +163,19 @@ local function switchToProject(path)
     if win then
       win:focus()
       local function doSwitch()
-        local pid = win:application():pid()
-        local ttyOut = hs.execute(string.format(
-          "ps -eo ppid,tty | awk '$1 == %d && $2 != \"??\" {print $2; exit}'", pid
-        ))
-        local tty = ttyOut:match("(ttys%d+)")
-        local clientArg = tty and ("-c /dev/" .. tty .. " ") or ""
-        hs.execute("/bin/zsh -lc 'tmux switch-client " .. clientArg .. "-t " .. name .. "'")
+        local paneId, tty = weztermFocusedPane(win:application():pid())
+        if tty and isTmuxClient(tty) then
+          hs.execute(string.format("/bin/zsh -lc \"tmux switch-client -c %s -t '=%s'\"", tty, name))
+        elseif paneId then
+          -- No tmux in the focused pane: attach there instead of switching some other client.
+          hs.execute(string.format(
+            "printf \"tmux attach-session -t '%s'\\r\" | %s cli send-text --no-paste --pane-id %d",
+            name, WEZTERM, paneId
+          ))
+        else
+          hs.eventtap.keyStrokes("tmux attach-session -t '" .. name .. "'")
+          hs.eventtap.keyStroke({}, "return")
+        end
       end
       if sessionReady then doSwitch() else pendingFocus = doSwitch end
     else
