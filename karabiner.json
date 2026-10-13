@@ -961,6 +961,24 @@
                         ]
                     },
                     {
+                        "description": "Ctrl + M = Ctrl + Fn + F2",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "m",
+                                    "modifiers": { "mandatory": ["control"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "f2",
+                                        "modifiers": ["left_control", "fn"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Fn to Control",
                         "manipulators": [
                             {
